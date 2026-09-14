@@ -4,13 +4,11 @@ require('dotenv').config();
 
 // Cấu hình kết nối
 const dbConfig = {
-    host: process.env.DB_HOST,     // Hostname lấy từ Aiven Console (ví dụ: mysql-abcxyz-group-dormitory.a.aivencloud.com)
-    port: process.env.DB_PORT,     // Port (ví dụ: 10471)
-    user: process.env.DB_USER,     // Username (thường là avnadmin)
+    host: process.env.DB_HOST,     // Hostname 
+    port: process.env.DB_PORT,     // Port 
+    user: process.env.DB_USER,     // Username 
     password: process.env.DB_PASSWORD, // Password
-    database: process.env.DB_NAME,     // Tên database (ví dụ: Dormitory_Management)
-    
-    // Aiven Database thường yêu cầu SSL. Bạn cần tải file ca.pem từ Aiven Console
+    database: process.env.DB_NAME,     // Tên database     
     ssl: {
         ca: fs.readFileSync('./ca.pem') 
     }
@@ -23,10 +21,10 @@ const pool = mysql.createPool(dbConfig);
 async function testConnection() {
     try {
         const connection = await pool.getConnection();
-        console.log('✅ Kết nối tới Aiven Database thành công!');
+        console.log('Kết nối thành công!');
         connection.release();
     } catch (error) {
-        console.error('❌ Lỗi kết nối tới Aiven Database:', error.message);
+        console.error('Lỗi kết nối:', error.message);
     }
 }
 
