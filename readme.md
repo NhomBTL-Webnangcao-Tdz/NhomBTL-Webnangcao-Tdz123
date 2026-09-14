@@ -24,7 +24,7 @@ Xây dựng và vận hành hệ thống quản lý ký túc xá sinh viên
 * *Student - Contract:* 1 - N (Một sinh viên có thể gia hạn hoặc ký nhiều hợp đồng qua các học kỳ/năm học).
 * *Room - UtilityBill:* 1 - N (Mỗi tháng, một phòng sẽ phát sinh một hóa đơn điện nước mới).
 * *Contract - Payment:* 1 - N (Một hợp đồng thuê phòng có thể được thanh toán chia làm nhiều đợt khác nhau).
-* 
+
 ### 3.3. UML Class Diagram
 
 ```mermaid
@@ -76,3 +76,5 @@ classDiagram
     Room "1" --> "*" UtilityBill : Phát sinh
     Contract "1" --> "*" Payment : Thanh toán
 ```
+
+
