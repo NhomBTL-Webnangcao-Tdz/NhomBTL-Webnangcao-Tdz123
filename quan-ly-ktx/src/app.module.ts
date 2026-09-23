@@ -4,7 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { StudentModule } from './modules/student/student.entity';
-import { RoomModule } from './modules/room/room.entity';
+import { RoomModule } from './modules/room/room.module';
 import { ContractModule } from './modules/contract/contract.entity';
 import { UtilityBillModule } from './modules/utility-bill/utility-bill.entity';
 import { PaymentModule } from './modules/payment/payment.entity';

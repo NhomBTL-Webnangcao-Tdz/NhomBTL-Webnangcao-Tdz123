@@ -1,8 +1,10 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+// src/modules/room/room.entity.ts
+import { Entity, Column } from 'typeorm';
 import { BaseEntity } from '../../common/base.entity';
-@Entity()
+
+@Entity('rooms') 
 export class Room extends BaseEntity {
-    @Column({ name: 'room_number' })
+  @Column({ name: 'room_number' })
   roomNumber: string;
 
   @Column()
