@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 import { Contract } from '../contract/contract.entity';
+import { Role } from '../../common/role.enum';
 
 @Entity()
 export class Student {
@@ -17,4 +18,11 @@ export class Student {
 
   @OneToMany(() => Contract, (contract) => contract.student)
   contracts: Contract[];
+  
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.STUDENT,
+  })
+  role: Role;
 }
