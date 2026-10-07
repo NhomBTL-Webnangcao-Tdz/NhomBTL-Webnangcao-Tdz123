@@ -16,7 +16,7 @@ export class Payment {
   @Column({ length: 50 })
   payment_type: string;
 
-  @ManyToOne(() => Contract, (contract) => contract.payments)
+  @ManyToOne(() => Contract)
   @JoinColumn({ name: 'contract_id' })
   contract: Contract;
 }
