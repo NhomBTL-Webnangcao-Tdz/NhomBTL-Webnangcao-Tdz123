@@ -1,5 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Room } from './room.entity';
 import { CreateRoomDto } from './dto/create-room.dto';
@@ -8,16 +7,17 @@ import { UpdateRoomDto } from './dto/update-room.dto';
 @Injectable()
 export class RoomService {
   constructor(
-    @InjectRepository(Room)
+    @Inject('ROOM_REPOSITORY')
     private readonly roomRepository: Repository<Room>,
   ) {}
 
-  // them 
+  // Thêm
   async create(createRoomDto: CreateRoomDto): Promise<Room> {
     const newRoom = this.roomRepository.create(createRoomDto);
     return await this.roomRepository.save(newRoom);
   }
-  // doc
+
+  // Đọc tất cả
   async findAll(): Promise<Room[]> {
     return await this.roomRepository.find();
   }
@@ -29,13 +29,15 @@ export class RoomService {
     }
     return room;
   }
-  // sua
+
+  // Sửa
   async update(id: string, updateRoomDto: UpdateRoomDto): Promise<Room> {
-    const room = await this.findOne(id); 
+    const room = await this.findOne(id);
     Object.assign(room, updateRoomDto);
     return await this.roomRepository.save(room);
   }
-  // xoa
+
+  // Xóa
   async remove(id: string): Promise<void> {
     const room = await this.findOne(id);
     await this.roomRepository.remove(room);

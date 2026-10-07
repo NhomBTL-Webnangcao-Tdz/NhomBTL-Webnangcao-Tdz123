@@ -1,13 +1,16 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Room } from './room.entity';
+import { DatabaseModule } from '../../database/database.module';
+import { roomProviders } from './room.provider';
 import { RoomService } from './room.service';
 import { RoomController } from './room.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Room])], 
+  imports: [DatabaseModule], // Dùng DatabaseModule (DataSource pattern) thay vì TypeOrmModule.forFeature
   controllers: [RoomController],
-  providers: [RoomService],
+  providers: [
+    ...roomProviders, // ROOM_REPOSITORY
+    RoomService,
+  ],
   exports: [RoomService],
 })
 export class RoomModule {}
