@@ -1,115 +1,74 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import AppLayout from './components/layout/AppLayout';
+import RoleBasedRoute from './components/guards/RoleBasedRoute';
+import { AuthProvider } from './context/AuthContext';
+import BillsPage from './pages/admin/BillsPage';
+import ContractsPage from './pages/admin/ContractsPage';
+import DashboardPage from './pages/admin/DashboardPage';
+import RoomsPage from './pages/admin/RoomsPage';
+import SettingsPage from './pages/admin/SettingsPage';
+import StudentsPage from './pages/admin/StudentsPage';
+import UtilitiesPage from './pages/admin/UtilitiesPage';
+import LoginPage from './pages/auth/LoginPage';
+import StudentPortalPage from './pages/student/StudentPortalPage';
+import { getHashRoute } from './utils/hashRoute';
 
-const navigationItems = [
-  { id: 'overview', label: 'Tổng quan', mark: 'TQ', description: 'Tổng quan và truy cập nhanh các chức năng quản lý ký túc xá.' },
-  { id: 'rooms', label: 'Phòng ở', mark: 'P', description: 'Quản lý phòng, tòa nhà, sức chứa và tình trạng lưu trú.' },
-  { id: 'students', label: 'Sinh viên', mark: 'SV', description: 'Quản lý hồ sơ sinh viên đang và đã lưu trú tại ký túc xá.' },
-  { id: 'contracts', label: 'Hợp đồng', mark: 'HD', description: 'Theo dõi hợp đồng thuê phòng và thời hạn lưu trú.' },
-  { id: 'utility-bills', label: 'Hóa đơn điện nước', mark: 'ĐN', description: 'Theo dõi chỉ số điện nước và hóa đơn theo từng phòng.' },
-];
+const ADMIN_ROLES = ['ADMIN', 'MANAGER'];
+const aliases = {
+  home: 'overview',
+  dashboard: 'overview',
+  'utility-bills': 'invoices',
+};
 
-function getCurrentPage() {
-  const pageId = window.location.hash.slice(1);
-  return navigationItems.some(({ id }) => id === pageId) ? pageId : 'overview';
-}
-
-function App() {
-  const [currentPage, setCurrentPage] = useState(getCurrentPage);
-  const currentItem = navigationItems.find(({ id }) => id === currentPage);
+function RoutedContent() {
+  const [route, setRoute] = useState(getHashRoute);
 
   useEffect(() => {
-    const handleHashChange = () => setCurrentPage(getCurrentPage());
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    const handleRouteChange = () => setRoute(getHashRoute());
+    window.addEventListener('hashchange', handleRouteChange);
+    return () => window.removeEventListener('hashchange', handleRouteChange);
   }, []);
 
-  return (
-    <div className="app-shell">
-      <aside className="sidebar" aria-label="Điều hướng chính">
-        <a className="brand" href="#overview" aria-label="KTX Care - Tổng quan">
-          <span className="brand-mark" aria-hidden="true">K</span>
-          <span className="brand-copy">
-            <strong>KTX Care</strong>
-            <small>QUẢN LÝ KÝ TÚC XÁ</small>
-          </span>
-        </a>
+  const currentPage = aliases[route.page] || route.page;
+  const adminPage = (() => {
+    switch (currentPage) {
+      case 'overview': return <DashboardPage />;
+      case 'rooms': return <RoomsPage segments={route.segments} params={route.params} />;
+      case 'students': return <StudentsPage params={route.params} />;
+      case 'contracts': return <ContractsPage />;
+      case 'invoices': return <BillsPage />;
+      case 'utilities': return <UtilitiesPage />;
+      case 'settings': return <SettingsPage />;
+      default: return null;
+    }
+  })();
 
-        <div className="nav-label">MENU</div>
-        <nav className="main-nav">
-          {navigationItems.map(({ id, label, mark }) => (
-            <a
-              className={`nav-link${currentPage === id ? ' active' : ''}`}
-              href={`#${id}`}
-              key={id}
-              aria-current={currentPage === id ? 'page' : undefined}
-            >
-              <span className="nav-mark" aria-hidden="true">{mark}</span>
-              <span>{label}</span>
-              {currentPage === id && <span className="active-indicator" aria-hidden="true" />}
-            </a>
-          ))}
-        </nav>
+  let content;
+  if (currentPage === 'login') {
+    content = <LoginPage />;
+  } else if (adminPage) {
+    content = <RoleBasedRoute roles={ADMIN_ROLES}>{adminPage}</RoleBasedRoute>;
+  } else if (['my-profile', 'my-room', 'my-bills'].includes(currentPage)) {
+    content = <RoleBasedRoute roles={['STUDENT']}><StudentPortalPage page={currentPage} /></RoleBasedRoute>;
+  } else {
+    content = (
+      <section className="access-card">
+        <span className="access-icon">404</span>
+        <h2>Không tìm thấy trang</h2>
+        <p>Đường dẫn này không tồn tại trong hệ thống quản lý.</p>
+        <a className="button button-primary" href="#overview">Về tổng quan</a>
+      </section>
+    );
+  }
 
-        <div className="sidebar-note">
-          <span className="status-dot" aria-hidden="true" />
-          <span>Hệ thống quản lý KTX</span>
-        </div>
-      </aside>
-
-      <main className="main-area">
-        <header className="topbar">
-          <div className="breadcrumb">
-            <span>Quản lý ký túc xá</span>
-            <span className="breadcrumb-divider" aria-hidden="true">/</span>
-            <strong>{currentItem.label}</strong>
-          </div>
-          <div className="admin-badge">
-            <span className="admin-avatar" aria-hidden="true">QL</span>
-            <span className="admin-label">Quản trị viên</span>
-          </div>
-        </header>
-
-        <section className="page-content" aria-live="polite">
-          <div className="page-heading">
-            <div>
-              <p className="eyebrow">KHÔNG GIAN QUẢN LÝ</p>
-              <h1>{currentPage === 'overview' ? 'Chào mừng đến với KTX Care' : currentItem.label}</h1>
-              <p className="page-description">
-                {currentPage === 'overview'
-                  ? 'Chọn một chức năng từ menu để bắt đầu quản lý ký túc xá.'
-                  : currentItem.description}
-              </p>
-            </div>
-            <span className="heading-decoration" aria-hidden="true">K</span>
-          </div>
-
-          {currentPage === 'overview' ? (
-            <div className="module-grid" aria-label="Các chức năng quản lý">
-              {navigationItems.filter(({ id }) => id !== 'overview').map(({ id, label, mark, description }) => (
-                <a className="module-card" href={`#${id}`} key={id}>
-                  <span className="module-mark" aria-hidden="true">{mark}</span>
-                  <span className="module-card-title">{label}</span>
-                  <span className="module-card-description">{description}</span>
-                  <span className="module-card-action">Mở chức năng <span aria-hidden="true">→</span></span>
-                </a>
-              ))}
-            </div>
-          ) : (
-            <div className="empty-module">
-              <span className="empty-module-mark" aria-hidden="true">{currentItem.mark}</span>
-              <h2>Khu vực {currentItem.label.toLowerCase()}</h2>
-              <p>
-                Menu điều hướng đã sẵn sàng. Giao diện dữ liệu của chức năng này sẽ hiển thị
-                khi frontend được kết nối với API tương ứng.
-              </p>
-              <a className="back-link" href="#overview">← Trở về tổng quan</a>
-            </div>
-          )}
-        </section>
-      </main>
-    </div>
-  );
+  return <AppLayout currentPage={currentPage}>{content}</AppLayout>;
 }
 
-export default App;
+export default function App() {
+  return (
+    <AuthProvider>
+      <RoutedContent />
+    </AuthProvider>
+  );
+}

@@ -5,6 +5,12 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    origin: process.env.FRONTEND_URL
+      ? [process.env.FRONTEND_URL]
+      : ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  });
+
   // Bật validation pipe global để class-validator hoạt động với DTOs
   app.useGlobalPipes(
     new ValidationPipe({
