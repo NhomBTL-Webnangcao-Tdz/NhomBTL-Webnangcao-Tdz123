@@ -11,7 +11,7 @@ export default function SettingsPage() {
         <div className="settings-row"><span>Tài khoản</span><strong>{user?.username || '—'}</strong></div>
         <div className="settings-row"><span>Vai trò</span><strong>{user?.role || '—'}</strong></div>
         <div className="settings-row"><span>Máy chủ API</span><strong>{getApiBaseUrl()}</strong></div>
-        <p className="settings-note">Để đổi địa chỉ backend, cấu hình biến môi trường <code>REACT_APP_API_URL</code> trước khi chạy frontend.</p>
+        <p className="settings-note">Backend mặc định dùng cổng 5001 để tránh xung đột với AirPlay Receiver trên macOS. Có thể đổi địa chỉ bằng biến môi trường <code>REACT_APP_API_URL</code> trước khi chạy frontend.</p>
       </section>
     </>
   );

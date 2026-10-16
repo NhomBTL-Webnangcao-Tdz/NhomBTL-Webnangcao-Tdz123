@@ -13,6 +13,7 @@ const pageNames = {
   'my-room': 'Phòng của tôi',
   'my-bills': 'Hóa đơn của tôi',
   login: 'Đăng nhập',
+  register: 'Đăng ký tài khoản',
 };
 
 export default function Header({ currentPage }) {

@@ -21,13 +21,23 @@ afterEach(() => {
   localStorage.clear();
 });
 
-test('renders the dashboard shell and requires authentication for management pages', async () => {
+test('opens a standalone login page when entering without an authenticated session', async () => {
   render(<App />);
 
-  expect(await screen.findByRole('heading', { name: 'Vui lòng đăng nhập' })).toBeInTheDocument();
-  expect(screen.getByRole('navigation', { name: 'Điều hướng chính' })).toBeInTheDocument();
-  expect(screen.getByRole('heading', { name: 'Chào mừng trở lại' })).toBeInTheDocument();
-  expect(screen.getByRole('contentinfo')).toHaveTextContent('KTX Care');
+  expect(await screen.findByRole('heading', { name: 'Đăng nhập hệ thống' })).toBeInTheDocument();
+  expect(screen.queryByRole('navigation', { name: 'Điều hướng chính' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('heading', { name: 'Chào mừng trở lại' })).not.toBeInTheDocument();
+  expect(screen.getByRole('contentinfo')).toHaveTextContent('Hệ thống quản lý ký túc xá');
+});
+
+test('opens registration as a standalone authentication screen, not an app navigation page', async () => {
+  window.history.replaceState({}, '', '/#register');
+
+  render(<App />);
+
+  expect(await screen.findByRole('heading', { name: 'Tạo tài khoản sinh viên' })).toBeInTheDocument();
+  expect(screen.queryByRole('navigation', { name: 'Điều hướng chính' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('heading', { name: 'Chào mừng trở lại' })).not.toBeInTheDocument();
 });
 
 test('signs in and loads dashboard data from the API', async () => {
@@ -42,18 +52,39 @@ test('signs in and loads dashboard data from the API', async () => {
   });
 
   render(<App />);
-  fireEvent.click(screen.getByRole('link', { name: 'Đăng nhập', exact: true }));
   fireEvent.change(await screen.findByLabelText('Tên đăng nhập'), { target: { value: 'manager' } });
   fireEvent.change(screen.getByLabelText('Mật khẩu'), { target: { value: 'password' } });
   fireEvent.click(screen.getByRole('button', { name: 'Đăng nhập' }));
 
   expect(await screen.findByRole('heading', { name: 'Bảng điều khiển' })).toBeInTheDocument();
   await waitFor(() => expect(global.fetch).toHaveBeenCalledWith(
-    'http://localhost:5000/student',
+    'http://localhost:5001/student',
     expect.objectContaining({ headers: expect.any(Headers) }),
   ));
   expect(screen.getByText('Sinh viên lưu trú').parentElement).toHaveTextContent('1');
   expect(localStorage.getItem('ktx_access_token')).toBe('test-token');
+});
+
+test('registers a student account through the backend API', async () => {
+  global.fetch.mockResolvedValue(jsonResponse({
+    message: 'Đăng ký thành công!',
+    user: { id: 3, username: 'new.student', role: 'STUDENT' },
+  }));
+  window.history.replaceState({}, '', '/#register');
+
+  render(<App />);
+
+  fireEvent.change(await screen.findByLabelText('Tên đăng nhập'), { target: { value: 'new.student' } });
+  fireEvent.change(screen.getByLabelText('Mật khẩu'), { target: { value: 'strong-pass-123' } });
+  fireEvent.change(screen.getByLabelText('Xác nhận mật khẩu'), { target: { value: 'strong-pass-123' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Đăng ký' }));
+
+  expect(await screen.findByRole('status')).toHaveTextContent('Tạo tài khoản thành công');
+  expect(global.fetch).toHaveBeenCalledWith('http://localhost:5001/auth/register', expect.objectContaining({
+    method: 'POST',
+    body: JSON.stringify({ username: 'new.student', password: 'strong-pass-123' }),
+  }));
+  expect(localStorage.getItem('ktx_access_token')).toBeNull();
 });
 
 test('loads student records in the students module and searches those returned by the API', async () => {
