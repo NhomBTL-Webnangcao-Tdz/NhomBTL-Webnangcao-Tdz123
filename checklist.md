@@ -5,7 +5,8 @@ Tạo: 19/10/2026 (commit `998ef9c`). Cập nhật: 19/10/2026 theo mã nguồn 
 **Quy ước**
 - `[x]` xong · `[ ]` chưa làm · `[~]` làm một phần (ghi rõ còn thiếu gì).
 - Cột phụ trách: **FE** = frontend, **BE** = backend, **Nhóm** = cần cả nhóm quyết hoặc cùng làm.
-- Mỗi mục khi làm có một file log trong `logs/` (Mục tiêu → Đã làm → File thay đổi → Kiểm thử → Lưu ý), `logs/readme.md` là mục lục kèm mã commit.
+- Mỗi mục khi làm có một file log trong `docs/` (Mục tiêu → Đã làm → File thay đổi → Kiểm thử → Lưu ý), `docs/readme.md` là mục lục kèm mã commit.
+- Thiết kế đích (luồng nghiệp vụ, dữ liệu, API, giao diện) ở [ke-hoach.md](ke-hoach.md).
 - Mục BE chỉ là đề xuất từ phía FE; người phụ trách backend quyết định cách làm.
 
 ---
@@ -39,10 +40,13 @@ Tạo: 19/10/2026 (commit `998ef9c`). Cập nhật: 19/10/2026 theo mã nguồn 
 | 1.1 | [~] **Khẩn**: đổi mật khẩu DB Aiven. Code đã bỏ giá trị mặc định (commit `1c56b71`), nhưng mật khẩu cũ **vẫn còn trong lịch sử git** nên vẫn phải đổi | Nhóm / BE |
 | 1.2 | [~] Chuyển cấu hình sang `.env`: đã xong (commit `1c56b71`). Còn thiếu `backend/.env.example` (mẫu tạm có trong readme mục 7.2); `JWT_EXPIRES_IN` không còn được đọc, thời hạn token cố định 1 giờ | BE |
 | 1.3 | [~] Đã xóa `App 2.js`, `logo.svg`, `reportWebVitals.js` (commit `1c56b71`). Còn: thêm `frontend/.env.example` (`REACT_APP_API_URL`); quyết định bỏ hay dùng Bootstrap/React-Bootstrap đang cài thừa | FE |
-| 1.4 | [x] Rà soát `readme.md` cho khớp code hiện tại (cây thư mục, route, cài đặt `.env`, API chưa có guard, ghi chú UML, bảo mật). Readme bản cuối làm ở 2.7 và 10.1 — log: `logs/1.4-ra-soat-readme.md` | FE |
-| 1.5 | [x] Tạo thư mục `logs/` + `logs/readme.md` (mục lục log), làm cùng 1.4 | FE |
+| 1.4 | [x] Rà soát `readme.md` cho khớp code hiện tại (cây thư mục, route, cài đặt `.env`, API chưa có guard, ghi chú UML, bảo mật). Readme bản cuối làm ở 2.7 và 10.1 — log: `docs/1.4-ra-soat-readme.md` | FE |
+| 1.5 | [x] Tạo thư mục log + mục lục, làm cùng 1.4 (sau đó chuyển từ `logs/` sang `docs/`) | FE |
+| 1.6 | [x] Viết `ke-hoach.md`: thiết kế đích (vai trò, luồng nghiệp vụ, quy tắc R1–R10, mô hình dữ liệu, API, giao diện) — bản đề xuất làm cơ sở cho mục 2 — log: `docs/1.6-ke-hoach.md` | FE |
 
 ## 2. Chốt thiết kế dữ liệu (cả nhóm thống nhất trước khi code tiếp)
+
+Các đề xuất cho từng mục dưới đây có trong [ke-hoach.md](ke-hoach.md) (đánh dấu **[Chốt 2.x]**).
 
 | # | Việc | Phụ trách |
 |---|---|---|
@@ -52,7 +56,7 @@ Tạo: 19/10/2026 (commit `998ef9c`). Cập nhật: 19/10/2026 theo mã nguồn 
 | 2.4 | [ ] Trạng thái hóa đơn: `UNPAID | PAID` (hoặc giữ `is_paid`), có/không chia hóa đơn điện nước theo đầu người | Nhóm |
 | 2.5 | [ ] Đơn giá điện/nước lưu ở đâu (bảng `Setting` hay hằng số) | Nhóm |
 | 2.6 | [ ] Có làm phần mở rộng không: đơn đăng ký ở, yêu cầu sửa chữa, thông báo (quyết định phạm vi mục 7) | Nhóm |
-| 2.7 | [ ] Cập nhật UML trong readme theo thiết kế đã chốt | Nhóm |
+| 2.7 | [ ] Cập nhật `ke-hoach.md` và UML trong readme theo thiết kế đã chốt | Nhóm |
 
 ## 3. Backend: hoàn thiện nền tảng
 

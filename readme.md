@@ -64,7 +64,8 @@ NhomBTL-Webnangcao-Tdz123/
 ├── .gitignore                          # Cấu hình bỏ qua git ở thư mục gốc
 ├── baocao-bt-th-2.md                   # Báo cáo thực hành số 2 (Phân tích bài toán, thực thể, UML)
 ├── checklist.md                        # Danh sách việc cần làm và tiến độ dự án
-├── logs/                               # Log từng mục checklist (mục lục: logs/readme.md)
+├── docs/                               # Log từng mục checklist (mục lục: docs/readme.md)
+├── ke-hoach.md                         # Thiết kế đích (bản đề xuất, chờ nhóm duyệt)
 ├── readme.md                           # Tài liệu hướng dẫn và mô tả cấu trúc dự án (File này)
 │
 └── quan-ly-ktx/                        # Thư mục mã nguồn chính của ứng dụng
@@ -481,5 +482,5 @@ Chưa có API. Hiện mới có entity `Payment` và repository provider.
 
 ## 🗺 9. Kế Hoạch Phát Triển Tiếp Theo (Roadmap)
 
-Danh sách việc đầy đủ và tiến độ từng mục được theo dõi tại [checklist.md](checklist.md). Log chi tiết của từng mục nằm trong thư mục [logs/](logs/readme.md).
+Danh sách việc đầy đủ và tiến độ từng mục được theo dõi tại [checklist.md](checklist.md). Log chi tiết của từng mục nằm trong thư mục [docs/](docs/readme.md). Thiết kế đích của hệ thống (bản đề xuất) xem tại [ke-hoach.md](ke-hoach.md).
 
