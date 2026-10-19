@@ -16,14 +16,16 @@
 
 ## 📖 2. Tổng Quan Dự Án
 
-Hệ thống **KTX Care** là giải pháp phần mềm quản lý ký túc xá toàn diện dành cho các trường đại học, cao đẳng. Hệ thống hỗ trợ ban quản lý ký túc xá và sinh viên thực hiện các quy trình nghiệp vụ lưu trú một cách tự động, minh bạch và chính xác:
+Hệ thống **KTX Care** là giải pháp phần mềm quản lý ký túc xá dành cho các trường đại học, cao đẳng. Hệ thống hỗ trợ ban quản lý ký túc xá và sinh viên thực hiện các quy trình nghiệp vụ lưu trú một cách minh bạch và chính xác.
+
+> Dự án đang phát triển. Tiến độ chi tiết từng phần xem tại [checklist.md](checklist.md).
 
 - **Quản lý phòng ở:** Quản lý danh mục phòng, tòa nhà, sức chứa tối đa, số lượng người đang lưu trú và định mức giá thuê.
 - **Quản lý hồ sơ sinh viên:** Theo dõi thông tin cá nhân, mã sinh viên, email, số điện thoại của sinh viên nội trú.
 - **Quản lý hợp đồng thuê phòng:** Lập và theo dõi hợp đồng lưu trú, thời hạn hợp đồng, tiền đặt cọc và trạng thái hiệu lực.
-- **Quản lý hóa đơn điện nước:** Ghi nhận chỉ số điện nước đầu kỳ, cuối kỳ của từng phòng, tự động tính tổng tiền và theo dõi thanh toán.
-- **Quản lý thanh toán:** Ghi nhận các đợt đóng tiền cọc, tiền phòng của sinh viên gắn liền với hợp đồng.
-- **Xác thực và Phân quyền (Auth & RBAC):** Đăng ký, đăng nhập bảo mật bằng JWT và Bcrypt, phân quyền chặt chẽ giữa Quản trị viên (`ADMIN`), Quản lý (`MANAGER`), và Sinh viên (`STUDENT`).
+- **Quản lý hóa đơn điện nước:** Ghi nhận chỉ số điện nước đầu kỳ, cuối kỳ của từng phòng và theo dõi thanh toán *(hiện tổng tiền còn nhập tay, chưa tự tính)*.
+- **Quản lý thanh toán:** Ghi nhận các đợt đóng tiền cọc, tiền phòng của sinh viên gắn liền với hợp đồng *(đã có bảng dữ liệu, chưa có API)*.
+- **Xác thực và Phân quyền (Auth & RBAC):** Đăng ký, đăng nhập bằng JWT và Bcrypt, phân quyền giữa Quản trị viên (`ADMIN`), Quản lý (`MANAGER`) và Sinh viên (`STUDENT`).
 
 ---
 
@@ -32,7 +34,8 @@ Hệ thống **KTX Care** là giải pháp phần mềm quản lý ký túc xá 
 ### 3.1. Backend
 - **Framework:** [NestJS v12](https://nestjs.com/) (Node.js framework xây dựng trên TypeScript, kiến trúc module hóa).
 - **ORM:** [TypeORM v1.1](https://typeorm.io/) (Data Source & Repository Pattern).
-- **Cơ sở dữ liệu:** MySQL 8+ (hỗ trợ triển khai Cloud qua Aiven Database hoặc Local MySQL Server).
+- **Cấu hình:** `@nestjs/config`, đọc biến môi trường từ file `quan-ly-ktx/backend/.env`.
+- **Cơ sở dữ liệu:** MySQL 8+ (MySQL cài trên máy hoặc Cloud như Aiven, hỗ trợ SSL kèm chứng chỉ CA).
 - **Authentication & Security:**
   - `@nestjs/jwt` cho việc cấp phát và thẩm định JSON Web Tokens.
   - `bcrypt` cho mã hóa/băm mật khẩu bảo mật một chiều.
@@ -46,9 +49,10 @@ Hệ thống **KTX Care** là giải pháp phần mềm quản lý ký túc xá 
 
 ### 3.2. Frontend
 - **Thư viện chính:** [React 19](https://react.dev/) (khởi tạo qua Create React App / `react-scripts`).
-- **Giao diện & UI Framework:** [Bootstrap 5](https://getbootstrap.com/) & [React-Bootstrap](https://react-bootstrap.netlify.app/).
-- **Kiến trúc điều hướng:** Single Page Application (SPA) với cơ chế Hash-based Routing (`#overview`, `#rooms`, `#students`, `#contracts`, `#utility-bills`).
-- **Styling:** CSS variables, Responsive Admin Shell layout với Sidebar, Topbar và Module cards hiện đại.
+- **Gọi API:** `fetch` qua hàm dùng chung `api/client.js`, tự gắn Bearer token; token lưu ở `localStorage`.
+- **Quản lý phiên đăng nhập:** React Context (`context/AuthContext.js`).
+- **Điều hướng:** Single Page Application (SPA) với Hash-based Routing tự viết (`utils/hashRoute.js`), danh sách route xem mục 7.3.
+- **Styling:** CSS tự viết (`App.css`, `index.css`) với CSS variables, layout quản trị có Sidebar, Header và các thẻ module. *Bootstrap 5 và React-Bootstrap đã cài trong `package.json` nhưng hiện chưa được dùng.*
 
 ---
 
@@ -59,31 +63,40 @@ NhomBTL-Webnangcao-Tdz123/
 │
 ├── .gitignore                          # Cấu hình bỏ qua git ở thư mục gốc
 ├── baocao-bt-th-2.md                   # Báo cáo thực hành số 2 (Phân tích bài toán, thực thể, UML)
+├── checklist.md                        # Danh sách việc cần làm và tiến độ dự án
+├── logs/                               # Log từng mục checklist (mục lục: logs/readme.md)
 ├── readme.md                           # Tài liệu hướng dẫn và mô tả cấu trúc dự án (File này)
 │
 └── quan-ly-ktx/                        # Thư mục mã nguồn chính của ứng dụng
     │
     ├── backend/                        # === BACKEND SOURCE (NestJS + TypeORM) ===
+    │   ├── certs/
+    │   │   └── ca.pem                  # Chứng chỉ CA dùng khi kết nối MySQL qua SSL (Aiven)
+    │   ├── database/
+    │   │   └── init.sql                # Script tạo database quan_ly_ktx và bảng users
     │   ├── src/
-    │   │   ├── main.ts                 # Điểm khởi chạy backend (khởi tạo app, ValidationPipe, cổng 5000)
-    │   │   ├── app.module.ts           # Root module kết nối Database, Auth và các feature modules
+    │   │   ├── main.ts                 # Điểm khởi chạy backend (CORS, ValidationPipe, cổng mặc định 5001)
+    │   │   ├── app.module.ts           # Root module: ConfigModule (.env), Database, Auth và các feature modules
     │   │   ├── app.controller.ts       # Controller mặc định kiểm tra trạng thái app
     │   │   ├── app.controller.spec.ts  # Unit test cho AppController
     │   │   ├── app.service.ts          # Service logic mặc định
     │   │   │
     │   │   ├── auth/                   # Phân hệ Xác thực & Phân quyền
-    │   │   │   ├── auth.module.ts      # Module xác thực, cấu hình JwtModule global
+    │   │   │   ├── auth.module.ts      # Module xác thực, JwtModule đọc JWT_SECRET từ .env (bắt buộc, >= 32 ký tự)
     │   │   │   ├── auth.controller.ts  # Endpoints: /auth/register, /auth/login, /auth/profile
-    │   │   │   ├── auth.service.ts     # Nghiệp vụ xử lý đăng ký, mã hóa mật khẩu, tạo token
+    │   │   │   ├── auth.service.ts     # Nghiệp vụ đăng ký, băm mật khẩu, tạo token
+    │   │   │   ├── auth.service.spec.ts# Unit test AuthService
     │   │   │   ├── dto/
-    │   │   │   │   ├── login.dto.ts    # DTO xác thực thông tin đăng nhập
-    │   │   │   │   └── register.dto.ts # DTO đăng ký tài khoản (validate length, string)
+    │   │   │   │   ├── login.dto.ts    # DTO đăng nhập
+    │   │   │   │   └── register.dto.ts # DTO đăng ký (username 3–100 ký tự, mật khẩu 6–72 ký tự)
     │   │   │   ├── entities/
     │   │   │   │   ├── user.entity.ts  # Thực thể User (id, username, password hash, role, timestamps)
     │   │   │   │   ├── user.provider.ts# Cung cấp USER_REPOSITORY qua DataSource
-    │   │   │   │   └── users.service.ts# Truy vấn database liên quan tới User
+    │   │   │   │   ├── users.service.ts# Truy vấn database liên quan tới User
+    │   │   │   │   └── users.service.spec.ts # Unit test UsersService
     │   │   │   └── guards/
-    │   │   │       └── jwt-auth.guard.ts # Custom Guard xác thực Bearer JWT từ Authorization header
+    │   │   │       ├── jwt-auth.guard.ts      # Custom Guard xác thực Bearer JWT từ Authorization header
+    │   │   │       └── jwt-auth.guard.spec.ts # Unit test JwtAuthGuard
     │   │   │
     │   │   ├── common/                 # Các tiện ích và cấu trúc dùng chung toàn hệ thống
     │   │   │   ├── base.entity.ts      # Abstract Base Entity (id UUID, created_at, updated_at)
@@ -93,7 +106,7 @@ NhomBTL-Webnangcao-Tdz123/
     │   │   │
     │   │   ├── database/               # Cấu hình kết nối cơ sở dữ liệu
     │   │   │   ├── database.module.ts  # Module export DATA_SOURCE provider
-    │   │   │   └── database.providers.ts # Thiết lập TypeORM DataSource kết nối MySQL (hỗ trợ SSL Aiven)
+    │   │   │   └── database.providers.ts # TypeORM DataSource kết nối MySQL, đọc cấu hình từ .env (DB_*, SSL)
     │   │   │
     │   │   └── modules/                # Các phân hệ nghiệp vụ chính của KTX
     │   │       ├── room/               # Module Quản lý Phòng
@@ -142,22 +155,47 @@ NhomBTL-Webnangcao-Tdz123/
     │   ├── tsconfig.json               # Cấu hình TypeScript compiler
     │   └── tsconfig.build.json         # Cấu hình TypeScript dành cho build production
     │
-    └── frontend/                       # === FRONTEND SOURCE (React 19 + Bootstrap) ===
+    └── frontend/                       # === FRONTEND SOURCE (React 19) ===
         ├── public/
-        │   ├── favicon.ico             # Favicon ứng dụng
+        │   ├── images/banner-ktx.png   # Ảnh banner
+        │   ├── favicon.ico, logo192.png, logo512.png
         │   ├── index.html              # Trang HTML gốc chứa thẻ <div id="root">
         │   ├── manifest.json           # Cấu hình PWA Web App Manifest
         │   └── robots.txt              # Cấu hình crawler web
         ├── src/
-        │   ├── components/             # Thư mục chứa các UI component tái sử dụng
-        │   ├── App.js                  # Component chính chứa Navigation Shell, Sidebar, Topbar, routing hash
-        │   ├── App.css                 # Giao diện chính của hệ thống quản lý KTX Care
-        │   ├── App.test.js             # Test cơ bản cho App component
-        │   ├── Footer.js               # Component chân trang
         │   ├── index.js                # Điểm khởi chạy React, gắn App vào DOM
-        │   ├── index.css               # Reset CSS và thiết lập typography toàn cục
-        │   ├── reportWebVitals.js      # Đo lường hiệu năng Web Vitals
-        │   └── setupTests.js           # Khởi tạo môi trường Jest DOM testing
+        │   ├── index.css               # Reset CSS và typography toàn cục
+        │   ├── App.js                  # Định tuyến theo hash, màn hình đăng nhập/đăng ký, phân trang theo vai trò
+        │   ├── App.css                 # Giao diện chính của KTX Care
+        │   ├── App.test.js             # Test App component
+        │   ├── setupTests.js           # Khởi tạo môi trường Jest DOM testing
+        │   │
+        │   ├── api/                    # Lớp gọi REST API
+        │   │   ├── client.js           # Hàm apiRequest dùng chung (base URL, Bearer token, xử lý lỗi)
+        │   │   └── auth.api.js, room.api.js, student.api.js, contract.api.js, bill.api.js
+        │   │
+        │   ├── context/
+        │   │   └── AuthContext.js      # Trạng thái đăng nhập: login, register, logout, profile
+        │   │
+        │   ├── hooks/
+        │   │   └── useApiResource.js   # Hook tải dữ liệu (đang tải / lỗi / làm mới)
+        │   │
+        │   ├── utils/
+        │   │   └── hashRoute.js        # Đọc/ghi route và query trên URL hash
+        │   │
+        │   ├── components/
+        │   │   ├── common/             # AsyncState, DataTable, Modal, PageHeading, StatusBadge, BillForm
+        │   │   ├── guards/
+        │   │   │   └── RoleBasedRoute.js # Chặn trang theo vai trò
+        │   │   └── layout/             # AppLayout, Header, Sidebar, Banner, Footer
+        │   │
+        │   └── pages/
+        │       ├── auth/               # LoginPage, RegisterPage
+        │       ├── admin/              # DashboardPage, RoomsPage, StudentsPage, ContractsPage,
+        │       │                       # BillsPage, UtilitiesPage, SettingsPage
+        │       └── student/
+        │           └── StudentPortalPage.js # Cổng sinh viên (hồ sơ, phòng, hóa đơn)
+        │
         ├── package.json                # Dependencies và npm scripts của frontend
         └── README.md                   # Tài liệu Create React App gốc
 ```
@@ -231,7 +269,15 @@ classDiagram
     Room "1" ..> "*" Contract : Lưu trú
     Room "1" ..> "*" UtilityBill : Phát sinh
     Contract "1" --> "*" Payment : Thanh toán
+    User "1" ..> "0..1" Student : Tài khoản của
 ```
+
+> **Ghi chú về sơ đồ (phản ánh code hiện tại):**
+> - Nét liền: quan hệ đã có khóa ngoại trong code. Nét đứt: quan hệ **dự kiến**, code chưa có (phần khai báo trong entity đang bị comment hoặc chưa viết).
+> - `User` (tài khoản đăng nhập) và `Student` (hồ sơ sinh viên) hiện chưa liên kết, nên cổng sinh viên chưa lấy được dữ liệu cá nhân.
+> - `Contract → Payment`: hiện chỉ có phía `Payment` khai báo khóa ngoại `contract_id`.
+> - Khóa chính và cách đặt tên chưa thống nhất: `Room` dùng UUID + camelCase, `Student` dùng mã chuỗi `sid`, các bảng khác dùng số tự tăng + snake_case. Cột `role` trong `Student` trùng với `User.role`.
+> - Thiết kế đích sẽ được nhóm chốt ở mục 2 của [checklist.md](checklist.md).
 
 ### 5.2. Danh sách các vai trò (Roles) trong hệ thống
 Được định nghĩa tại enum `Role` (`src/common/role.enum.ts`):
@@ -247,7 +293,7 @@ classDiagram
 | Method | Endpoint | Yêu cầu xác thực | Mô tả |
 | :--- | :--- | :--- | :--- |
 | `POST` | `/auth/register` | Công khai | Đăng ký tài khoản mới (mặc định vai trò `STUDENT`) |
-| `POST` | `/auth/login` | Công khai | Đăng nhập và nhận `access_token` (JWT) |
+| `POST` | `/auth/login` | Công khai | Đăng nhập, nhận `access_token` (JWT, hạn 1 giờ) và thông tin `user` (id, username, role) |
 | `GET` | `/auth/profile` | Bearer Token (`JwtAuthGuard`) | Lấy thông tin tài khoản người dùng đang đăng nhập |
 
 ### 6.2. Room Module (`/rooms`)
@@ -260,6 +306,8 @@ classDiagram
 | `GET` | `/rooms/:id` | `ADMIN`, `MANAGER` | Xem chi tiết thông tin một phòng theo ID |
 | `PATCH`| `/rooms/:id` | `ADMIN`, `MANAGER` | Cập nhật thông tin phòng |
 | `DELETE`| `/rooms/:id`| `ADMIN`, `MANAGER` | Xóa phòng khỏi hệ thống |
+
+> ⚠️ **Lưu ý:** Các module 6.3–6.5 (Student, Contract, Utility Bill) **hiện chưa gắn guard**: gọi được mà không cần đăng nhập, và body chưa có DTO nên chưa được kiểm tra dữ liệu. Giao diện frontend có chặn theo vai trò nhưng API thì chưa.
 
 ### 6.3. Student Module (`/student`)
 | Method | Endpoint | Mô tả |
@@ -288,12 +336,15 @@ classDiagram
 | `PUT` | `/utility-bill/:id` | Cập nhật số điện/nước hoặc trạng thái thanh toán (`is_paid`) |
 | `DELETE` | `/utility-bill/:id` | Xóa hóa đơn |
 
+### 6.6. Payment Module
+Chưa có API. Hiện mới có entity `Payment` và repository provider.
+
 ---
 
 ## 🚀 7. Hướng Dẫn Cài Đặt và Khởi Chạy
 
 ### 7.1. Yêu cầu tiên quyết (Prerequisites)
-- [Node.js](https://nodejs.org/) phiên bản `>= 18.x` hoặc `>= 20.x`.
+- [Node.js](https://nodejs.org/) bản LTS mới (máy phát triển đang dùng v24).
 - Trình quản lý gói `npm` (đi kèm Node.js).
 - MySQL Server cục bộ hoặc tài khoản MySQL trên Cloud (như [Aiven](https://aiven.io/)).
 
@@ -311,20 +362,36 @@ classDiagram
    npm install
    ```
 
-3. **Cấu hình biến môi trường (Tùy chọn):**
-   Mặc định hệ thống đã có cấu hình fallback kết nối MySQL database trên Cloud. Để tùy chỉnh theo môi trường riêng của bạn, có thể thiết lập các biến môi trường:
+3. **Chuẩn bị database:**
+   Với MySQL cài trên máy, có thể chạy `database/init.sql` để tạo database `quan_ly_ktx` và bảng `users`. Các bảng còn lại do TypeORM tự tạo khi `DB_SYNCHRONIZE` bật (mặc định bật khi `NODE_ENV` khác `production`).
+
+4. **Tạo file `quan-ly-ktx/backend/.env` (bắt buộc):**
+   File `.env` không được đưa lên git. Mỗi thành viên tự tạo theo mẫu dưới đây và tự điền giá trị thật:
    ```env
-   PORT=5000
+   PORT=5001
+   FRONTEND_URL=http://localhost:3000
+
    DB_HOST=localhost
    DB_PORT=3306
    DB_USERNAME=root
-   DB_PASSWORD=your_password
+   DB_PASSWORD=<mật khẩu MySQL của bạn>
    DB_NAME=quan_ly_ktx
-   JWT_SECRET=super-secret-jwt-key-quan-ly-ktx
-   JWT_EXPIRES_IN=1h
-   ```
+   # DB_SYNCHRONIZE=true
 
-4. **Khởi chạy máy chủ Backend:**
+   # Bật khi dùng MySQL Cloud (Aiven):
+   # DB_SSL=true
+   # DB_SSL_CA=certs/ca.pem
+   # DB_SSL_REJECT_UNAUTHORIZED=true
+
+   # Bắt buộc, ít nhất 32 ký tự, mỗi máy tự sinh chuỗi ngẫu nhiên riêng
+   JWT_SECRET=<chuỗi ngẫu nhiên tối thiểu 32 ký tự>
+   ```
+   - Thiếu `JWT_SECRET` hoặc ngắn hơn 32 ký tự thì backend sẽ dừng khi khởi động.
+   - Thời hạn token hiện cố định 1 giờ trong code.
+   - `FRONTEND_URL` có thể ghi nhiều địa chỉ, cách nhau bằng dấu phẩy. `localhost:3000` và `127.0.0.1:3000` luôn được cho phép.
+   - Không ghi mật khẩu hoặc secret thật vào readme, code hay bất kỳ file nào đưa lên git.
+
+5. **Khởi chạy máy chủ Backend:**
    - Chế độ phát triển (hot reload):
      ```bash
      npm run start:dev
@@ -335,8 +402,8 @@ classDiagram
      npm run start:prod
      ```
 
-5. **Kiểm tra trạng thái:**
-   Máy chủ backend sẽ chạy tại địa chỉ: `http://localhost:5000`
+6. **Kiểm tra trạng thái:**
+   Máy chủ backend chạy tại `http://localhost:5001` (cổng mặc định 5001 để tránh xung đột với AirPlay Receiver trên macOS; đổi bằng biến `PORT`).
 
 ---
 
@@ -352,19 +419,31 @@ classDiagram
    npm install
    ```
 
-3. **Khởi chạy ứng dụng React:**
+3. **Cấu hình địa chỉ backend (tùy chọn):**
+   Mặc định frontend gọi `http://localhost:5001`. Nếu backend chạy ở địa chỉ khác, tạo file `quan-ly-ktx/frontend/.env`:
+   ```env
+   REACT_APP_API_URL=http://localhost:5001
+   ```
+
+4. **Khởi chạy ứng dụng React:**
    ```bash
    npm start
    ```
 
-4. **Trải nghiệm giao diện:**
-   Mở trình duyệt truy cập: `http://localhost:3000`  
-   Giao diện quản lý KTX Care hỗ trợ điều hướng nhanh qua các menu chức năng:
-   - `#overview`: Bảng điều khiển tổng quan và truy cập nhanh.
-   - `#rooms`: Quản lý danh sách và trạng thái phòng ở.
-   - `#students`: Quản lý hồ sơ thông tin sinh viên nội trú.
-   - `#contracts`: Theo dõi hợp đồng và thời hạn lưu trú.
-   - `#utility-bills`: Quản lý chỉ số và hóa đơn tiền điện nước.
+5. **Các trang trong giao diện:**
+   Mở trình duyệt tại `http://localhost:3000`. Chưa đăng nhập thì chỉ xem được trang đăng nhập/đăng ký. Đăng nhập xong, `ADMIN`/`MANAGER` được chuyển tới `#overview`, `STUDENT` được chuyển tới `#my-profile`.
+
+   | Route | Trang | Vai trò |
+   | :--- | :--- | :--- |
+   | `#login`, `#register` | Đăng nhập, đăng ký | Chưa đăng nhập |
+   | `#overview` (alias `#home`, `#dashboard`) | Tổng quan | `ADMIN`, `MANAGER` |
+   | `#rooms` | Tòa nhà & Phòng | `ADMIN`, `MANAGER` |
+   | `#students` | Sinh viên | `ADMIN`, `MANAGER` |
+   | `#contracts` | Hợp đồng | `ADMIN`, `MANAGER` |
+   | `#invoices` (alias `#utility-bills`) | Hóa đơn | `ADMIN`, `MANAGER` |
+   | `#utilities` | Chỉ số điện nước | `ADMIN`, `MANAGER` |
+   | `#settings` | Cài đặt | `ADMIN`, `MANAGER` |
+   | `#my-profile`, `#my-room`, `#my-bills` | Cổng sinh viên | `STUDENT` |
 
 ---
 
@@ -387,7 +466,7 @@ classDiagram
 
 ## 🔒 8. Quy Ước Bảo Mật & Luồng Xác Thực
 
-1. **Mật khẩu người dùng:** Không bao giờ lưu dạng bản rõ (plaintext). Luôn được băm bằng thuật toán `bcrypt` với muối (salt) tự sinh trước khi ghi vào bảng `users`.
+1. **Mật khẩu người dùng:** Không bao giờ lưu dạng bản rõ (plaintext). Luôn được băm bằng `bcrypt` (muối tự sinh) trước khi ghi vào bảng `users`. Cột `password` không được trả về trong truy vấn mặc định (`select: false`). Mật khẩu giới hạn 72 byte (giới hạn của bcrypt). Username được cắt khoảng trắng và chuyển về chữ thường trước khi lưu và so sánh.
 2. **Xác thực JWT (Bearer Authentication):** Khi đăng nhập thành công qua `/auth/login`, client nhận về chuỗi JWT `access_token`. Client cần đính kèm token này vào header của các request tiếp theo:
    ```http
    Authorization: Bearer <access_token>
@@ -395,18 +474,12 @@ classDiagram
 3. **Kiểm soát truy cập (Guards & RBAC):**
    - `JwtAuthGuard`: Giải mã và xác thực chữ ký token. Nếu token hết hạn hoặc không hợp lệ, lập tức trả về `401 Unauthorized`.
    - `RolesGuard`: Đọc metadata quyền được gắn qua `@Roles(...)` và đối chiếu với vai trò của user. Nếu không đủ quyền, trả về `403 Forbidden`.
-4. **Validation Pipe Toàn Cục:** Bật `whitelist: true`, `forbidNonWhitelisted: true`, và `transform: true` giúp ngăn chặn triệt để tấn công Mass Assignment và kiểm soát chặt chẽ kiểu dữ liệu đầu vào.
+4. **Validation Pipe Toàn Cục:** Bật `whitelist: true`, `forbidNonWhitelisted: true` và `transform: true`. Cơ chế này chỉ có tác dụng với endpoint nhận body là **class DTO có decorator `class-validator`** (hiện là `auth` và `rooms`). Các endpoint Student, Contract, Utility Bill đang nhận `Partial<Entity>` nên dữ liệu đầu vào **chưa được kiểm tra** và vẫn có nguy cơ Mass Assignment, cần bổ sung DTO.
+5. **Cấu hình bí mật:** Thông tin kết nối database và `JWT_SECRET` chỉ đọc từ file `.env` (không đưa lên git), code không còn giá trị mặc định chứa thông tin thật.
 
 ---
 
 ## 🗺 9. Kế Hoạch Phát Triển Tiếp Theo (Roadmap)
 
-- [x] Phân tích mô hình thực thể và thiết kế CSDL (Student, Room, Contract, UtilityBill, Payment).
-- [x] Xây dựng Backend NestJS với kiến trúc module hóa và Database Providers.
-- [x] Xây dựng Authentication (JWT + Bcrypt) và RBAC (Roles Guard).
-- [x] Thiết kế giao diện ứng dụng quản lý ký túc xá (Admin Dashboard Shell, Responsive UI).
-- [ ] Tích hợp gọi REST API trực tiếp từ giao diện React frontend (Axios/Fetch + React Context/Zustand quản lý phiên đăng nhập).
-- [ ] Hoàn thiện quan hệ giữa các entity (liên kết khóa ngoại giữa `Room` với `Contract` và `UtilityBill`).
-- [ ] Xây dựng hoàn chỉnh Controller và Service cho phân hệ thanh toán `Payment`.
-- [ ] Bổ sung tính năng xuất báo cáo thống kê doanh thu, tỷ lệ lấp đầy phòng ở định dạng Excel/PDF.
+Danh sách việc đầy đủ và tiến độ từng mục được theo dõi tại [checklist.md](checklist.md). Log chi tiết của từng mục nằm trong thư mục [logs/](logs/readme.md).
 

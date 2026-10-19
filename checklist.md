@@ -1,6 +1,6 @@
 # Checklist dự án KTX Care — Hệ thống quản lý ký túc xá sinh viên
 
-Cập nhật lần đầu: 19/10/2026, dựa trên mã nguồn tại commit `998ef9c`.
+Tạo: 19/10/2026 (commit `998ef9c`). Cập nhật: 19/10/2026 theo mã nguồn sau merge `3e2376d` (commit "add login" của backend).
 
 **Quy ước**
 - `[x]` xong · `[ ]` chưa làm · `[~]` làm một phần (ghi rõ còn thiếu gì).
@@ -12,18 +12,20 @@ Cập nhật lần đầu: 19/10/2026, dựa trên mã nguồn tại commit `998
 
 ## 0. Đã có
 
-- [x] Phân tích bài toán: 5 thực thể, quan hệ, UML (`readme.md` — đang là bản tạm, xem 1.4)
-- [x] Khởi tạo backend NestJS + TypeORM + MySQL (Aiven), CORS, ValidationPipe toàn cục
-- [x] Auth: đăng ký, đăng nhập (JWT), `GET /auth/profile`, mật khẩu băm bcrypt
+- [x] Phân tích bài toán: 5 thực thể, quan hệ, UML (bản BTTH2 lưu ở `baocao-bt-th-2.md`; UML hiện trạng trong `readme.md`)
+- [x] Khởi tạo backend NestJS + TypeORM + MySQL (Aiven, SSL), CORS, ValidationPipe toàn cục
+- [x] Cấu hình qua `.env` bằng `@nestjs/config` (DB, SSL, `JWT_SECRET` bắt buộc ≥ 32 ký tự, `PORT` mặc định 5001); `database/init.sql` tạo DB + bảng `users`
+- [x] Auth: đăng ký (luôn là STUDENT), đăng nhập (JWT 1 giờ), `GET /auth/profile`, bcrypt, ẩn cột password, chuẩn hóa username
+- [x] Unit test backend cho `AuthService`, `UsersService`, `JwtAuthGuard`
 - [x] Phân quyền: enum `ADMIN | MANAGER | STUDENT`, `@Roles` + `RolesGuard`, `JwtAuthGuard`
 - [x] Room: CRUD có guard + DTO
 - [~] Student, Contract, UtilityBill: có CRUD nhưng **chưa guard, chưa DTO**
 - [~] Payment: mới có entity, chưa module/controller/service
-- [x] Khởi tạo frontend React (CRA) + Bootstrap, layout sidebar/header/footer/banner
-- [x] Hash-routing, `AuthContext`, `ProtectedRoute`, `RoleBasedRoute`, trang 404
+- [x] Khởi tạo frontend React (CRA), CSS tự viết, layout sidebar/header/footer/banner (Bootstrap đã cài nhưng chưa dùng)
+- [x] Hash-routing, `AuthContext`, `RoleBasedRoute`, trang 404; chưa đăng nhập thì chỉ thấy màn hình đăng nhập/đăng ký
 - [x] Lớp gọi API (`api/client.js` + các `*.api.js`), `useApiResource`
 - [x] Component dùng chung: `AsyncState`, `DataTable`, `Modal`, `PageHeading`, `StatusBadge`, `BillForm`
-- [x] Trang đăng nhập / đăng ký
+- [x] Trang đăng nhập (`LoginPage`) / đăng ký (`RegisterPage`); đăng nhập xong tự chuyển trang theo vai trò
 - [~] Trang admin đã gọi API thật: Tổng quan, Phòng, Sinh viên, Hợp đồng, Hóa đơn, Chỉ số điện nước (CRUD cơ bản, chưa kiểm thử đầy đủ, chưa có quan hệ phòng ↔ hợp đồng ↔ hóa đơn)
 - [~] Trang Cài đặt: chỉ hiển thị thông tin tài khoản + địa chỉ API
 - [~] Cổng sinh viên: Hồ sơ hiển thị thông tin tài khoản; Phòng/Hóa đơn của tôi mới là khung chờ backend
@@ -34,11 +36,11 @@ Cập nhật lần đầu: 19/10/2026, dựa trên mã nguồn tại commit `998
 
 | # | Việc | Phụ trách |
 |---|---|---|
-| 1.1 | [ ] **Khẩn**: đổi mật khẩu DB Aiven (mật khẩu thật đang nằm trong `backend/src/database/database.providers.ts` và lịch sử git); bỏ giá trị mặc định khỏi code | Nhóm / BE |
-| 1.2 | [ ] Chuyển cấu hình sang `.env` (DB, `JWT_SECRET`, `JWT_EXPIRES_IN`, `FRONTEND_URL`, `PORT`), thêm `backend/.env.example`; bỏ JWT secret mặc định trong `auth.module.ts` | BE |
-| 1.3 | [ ] Thêm `frontend/.env.example` (`REACT_APP_API_URL`); xóa file thừa `frontend/src/App 2.js`, `logo.svg` nếu không dùng | FE |
-| 1.4 | [ ] Rà soát `readme.md`: hiện trùng nội dung `baocao-bt-th-2.md` và lệch với code (VD readme ghi `student_id, full_name, status`, code dùng `sid, sname, is_active`; Room `base_price` ↔ `price`; UtilityBill `status` ↔ `is_paid`). Chốt thiết kế ở mục 2 rồi viết lại readme | Nhóm |
-| 1.5 | [ ] Tạo thư mục `logs/` + `logs/readme.md` (mục lục log) | FE |
+| 1.1 | [~] **Khẩn**: đổi mật khẩu DB Aiven. Code đã bỏ giá trị mặc định (commit `1c56b71`), nhưng mật khẩu cũ **vẫn còn trong lịch sử git** nên vẫn phải đổi | Nhóm / BE |
+| 1.2 | [~] Chuyển cấu hình sang `.env`: đã xong (commit `1c56b71`). Còn thiếu `backend/.env.example` (mẫu tạm có trong readme mục 7.2); `JWT_EXPIRES_IN` không còn được đọc, thời hạn token cố định 1 giờ | BE |
+| 1.3 | [~] Đã xóa `App 2.js`, `logo.svg`, `reportWebVitals.js` (commit `1c56b71`). Còn: thêm `frontend/.env.example` (`REACT_APP_API_URL`); quyết định bỏ hay dùng Bootstrap/React-Bootstrap đang cài thừa | FE |
+| 1.4 | [x] Rà soát `readme.md` cho khớp code hiện tại (cây thư mục, route, cài đặt `.env`, API chưa có guard, ghi chú UML, bảo mật). Readme bản cuối làm ở 2.7 và 10.1 — log: `logs/1.4-ra-soat-readme.md` | FE |
+| 1.5 | [x] Tạo thư mục `logs/` + `logs/readme.md` (mục lục log), làm cùng 1.4 | FE |
 
 ## 2. Chốt thiết kế dữ liệu (cả nhóm thống nhất trước khi code tiếp)
 
@@ -58,10 +60,10 @@ Cập nhật lần đầu: 19/10/2026, dựa trên mã nguồn tại commit `998
 |---|---|---|
 | 3.1 | [ ] Bỏ comment, nối quan hệ: Contract↔Room, Contract↔Payment, UtilityBill↔Room | BE |
 | 3.2 | [ ] Áp `JwtAuthGuard + RolesGuard` cho Student, Contract, UtilityBill | BE |
-| 3.3 | [ ] DTO + class-validator cho Student, Contract, UtilityBill, Payment (hiện `forbidNonWhitelisted` sẽ chặn body nếu không có DTO đúng) | BE |
+| 3.3 | [ ] DTO + class-validator cho Student, Contract, UtilityBill, Payment (hiện các endpoint này nhận `Partial<Entity>` nên body **không được kiểm tra**, còn nguy cơ mass assignment) | BE |
 | 3.4 | [ ] `PaymentModule`: CRUD, lọc theo hợp đồng | BE |
 | 3.5 | [ ] Trả lỗi nhất quán (404 khi không tìm thấy, 409 khi trùng, 400 khi sai dữ liệu) cho mọi module | BE |
-| 3.6 | [ ] Đăng ký mặc định là STUDENT; tài khoản ADMIN/MANAGER chỉ do ADMIN tạo (`POST /users`, `PATCH /users/:id/role`) | BE |
+| 3.6 | [ ] Đăng ký luôn là STUDENT (đã có). Còn: API để ADMIN tạo tài khoản cán bộ / đổi vai trò (`POST /users`, `PATCH /users/:id/role`) và cách tạo tài khoản ADMIN đầu tiên | BE |
 
 ## 4. Backend: nghiệp vụ
 
@@ -96,7 +98,7 @@ Cập nhật lần đầu: 19/10/2026, dựa trên mã nguồn tại commit `998
 | 6.1 | [ ] Hồ sơ cá nhân: hiển thị hồ sơ Student, sửa SĐT/email | FE |
 | 6.2 | [ ] Phòng của tôi: phòng, tòa, bạn cùng phòng, hợp đồng, ngày hết hạn | FE |
 | 6.3 | [ ] Hóa đơn của tôi: tiền phòng + điện nước, đã/chưa đóng, lịch sử thanh toán | FE |
-| 6.4 | [ ] Trang chủ sinh viên sau đăng nhập (thay vì về `#overview` của admin) | FE |
+| 6.4 | [~] Đăng nhập xong STUDENT đã được chuyển tới `#my-profile` (commit `1c56b71`). Còn: trang chủ sinh viên đúng nghĩa (tóm tắt phòng, hóa đơn chưa đóng) | FE |
 
 ## 7. Mở rộng (tùy phạm vi chốt ở 2.6)
 
