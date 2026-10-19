@@ -1,7 +1,8 @@
 # compiled output
 /dist
-/node_modules
+node_modules/
 /build
+/quan-ly-ktx/backend/storage/
 
 # TypeScript build cache
 *.tsbuildinfo
