@@ -55,7 +55,7 @@ export class UsersService {
           (error.driverError as { code?: string }).code || '',
         )
       ) {
-        throw new ConflictException('Tên đăng nhập đã được sử dụng.');
+        throw new ConflictException('Tên đăng nhập hoặc hồ sơ sinh viên đã được liên kết.');
       }
       throw error;
     }

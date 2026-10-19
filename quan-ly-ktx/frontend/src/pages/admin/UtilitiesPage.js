@@ -1,13 +1,17 @@
 import { useMemo, useState } from 'react';
 import { billApi } from '../../api/bill.api';
+import { roomApi } from '../../api/room.api';
 import BillForm from '../../components/common/BillForm';
 import DataTable from '../../components/common/DataTable';
 import Modal from '../../components/common/Modal';
 import PageHeading from '../../components/common/PageHeading';
+import MeterReadingsPanel from './MeterReadingsPanel';
 import useApiResource from '../../hooks/useApiResource';
+import './UtilitiesPage.css';
 
 export default function UtilitiesPage() {
   const { data: bills, isLoading, error, refresh } = useApiResource(billApi.list);
+  const { data: rooms } = useApiResource(roomApi.list);
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [year, setYear] = useState(new Date().getFullYear());
   const [activeBill, setActiveBill] = useState(null);
@@ -32,6 +36,7 @@ export default function UtilitiesPage() {
 
   const columns = [
     { key: 'bill_id', label: 'Mã hóa đơn', render: (bill) => `HD-${bill.bill_id}` },
+    { key: 'room', label: 'Phòng', render: (bill) => bill.room ? `${bill.room.building} · ${bill.room.roomNumber}` : 'Chưa gắn phòng' },
     { key: 'old_electric_index', label: 'Điện cũ (kWh)' },
     { key: 'new_electric_index', label: 'Điện mới (kWh)' },
     { key: 'electricUsage', label: 'Tiêu thụ điện', render: (bill) => `${Math.max(0, bill.new_electric_index - bill.old_electric_index)} kWh` },
@@ -44,15 +49,16 @@ export default function UtilitiesPage() {
   return (
     <>
       <PageHeading eyebrow="CHỐT CHỈ SỐ HÀNG THÁNG" title="Nhập chỉ số điện nước" description="Chọn kỳ ghi nhận và cập nhật số liệu công tơ." action={<button className="button button-primary" onClick={() => { setActiveBill({ month: Number(month), year: Number(year) }); setSaveError(''); }}>＋ Thêm chỉ số</button>} />
+      <MeterReadingsPanel />
       <section className="panel">
         <div className="table-toolbar">
           <div className="period-picker"><label>Tháng<select value={month} onChange={(event) => setMonth(Number(event.target.value))}>{Array.from({ length: 12 }, (_, index) => <option key={index + 1} value={index + 1}>{index + 1}</option>)}</select></label><label>Năm<input type="number" min="2000" value={year} onChange={(event) => setYear(Number(event.target.value))} /></label></div>
           <span className="toolbar-count">{selectedBills.length} bản ghi</span>
         </div>
-        <div className="inline-notice">Chỉ số cũ được điền từ bản ghi đã lưu nếu có. Backend hiện chưa hỗ trợ nhập hàng loạt theo tòa, cảnh báo tăng đột biến hoặc liên kết công tơ với phòng.</div>
+        <div className="inline-notice">Chỉ số cũ được điền từ bản ghi đã lưu nếu có. Chọn phòng và hạn thanh toán khi lưu hóa đơn để sinh viên có thể theo dõi hóa đơn cá nhân.</div>
         <DataTable columns={columns} rows={selectedBills} rowKey={(bill) => bill.bill_id} isLoading={isLoading} error={error} onRetry={refresh} emptyMessage="Chưa có bản ghi chỉ số trong kỳ này." />
       </section>
-      {activeBill && <Modal title={activeBill.bill_id ? `Cập nhật chỉ số · HD-${activeBill.bill_id}` : 'Thêm chỉ số điện nước'} onClose={() => { setActiveBill(null); setSaveError(''); }} wide><BillForm value={activeBill} onSave={saveReadings} onCancel={() => { setActiveBill(null); setSaveError(''); }} saving={saving} error={saveError} /></Modal>}
+      {activeBill && <Modal title={activeBill.bill_id ? `Cập nhật chỉ số · HD-${activeBill.bill_id}` : 'Thêm chỉ số điện nước'} onClose={() => { setActiveBill(null); setSaveError(''); }} wide><BillForm value={activeBill} rooms={rooms} onSave={saveReadings} onCancel={() => { setActiveBill(null); setSaveError(''); }} saving={saving} error={saveError} /></Modal>}
     </>
   );
 }

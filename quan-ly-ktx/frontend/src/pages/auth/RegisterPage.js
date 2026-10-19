@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import './AuthPages.css';
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -95,7 +96,7 @@ export default function RegisterPage() {
           {isSubmitting ? 'Đang tạo tài khoản...' : 'Đăng ký'}
         </button>
       </form>}
-      {!isRegistered && <p className="auth-policy">Tài khoản tự đăng ký được cấp vai trò sinh viên. Quyền quản lý do quản trị viên cấp.</p>}
+      {!isRegistered && <p className="auth-policy">Tài khoản tự đăng ký được cấp vai trò sinh viên. Sau khi đăng nhập, hãy hoàn thiện hồ sơ cá nhân để sử dụng cổng sinh viên.</p>}
       <p className="auth-switch-copy">Đã có tài khoản? <a href="#login">Đăng nhập</a></p>
     </section>
   );

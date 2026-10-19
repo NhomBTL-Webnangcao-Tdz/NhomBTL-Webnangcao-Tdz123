@@ -1,0 +1,27 @@
+.meter-reading-panel {
+  margin-bottom: 16px;
+  padding: 16px;
+}
+
+.student-bills-panel {
+  padding: 17px 0 0;
+}
+
+.student-bills-table {
+  min-width: 620px;
+}
+
+.student-table-empty {
+  color: #87939b !important;
+  padding: 28px 13px !important;
+  text-align: center !important;
+}
+
+.student-data-note {
+  border-top: 1px solid #edf0f2;
+  color: #87939b;
+  font-size: 9px;
+  line-height: 1.6;
+  margin: 0;
+  padding: 12px 17px;
+}

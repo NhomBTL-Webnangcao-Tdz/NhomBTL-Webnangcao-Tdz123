@@ -1,0 +1,26 @@
+.student-contact-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.student-contact-card {
+  margin: 0;
+  padding: 20px;
+}
+
+.student-contact-card h3 {
+  margin: 13px 0 5px;
+}
+
+.student-contact-card p {
+  min-height: 34px;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 520px) {
+
+  .student-contact-grid {
+    grid-template-columns: 1fr;
+  }
+}

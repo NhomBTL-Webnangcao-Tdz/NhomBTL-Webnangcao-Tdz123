@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 import { Contract } from '../contract/contract.entity';
 import { Role } from '../../common/role.enum';
 
-@Entity()
+@Entity('student')
 export class Student {
   @PrimaryColumn({ length: 15 })
   sid: string;

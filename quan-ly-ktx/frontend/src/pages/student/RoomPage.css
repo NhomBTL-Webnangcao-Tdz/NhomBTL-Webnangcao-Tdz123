@@ -1,0 +1,119 @@
+
+
+.residence-request-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 7px;
+  max-width: 430px;
+  text-align: left;
+  width: 100%;
+}
+
+.residence-request-form label {
+  color: #65727a;
+  display: grid;
+  font-size: 9px;
+  font-weight: 650;
+  gap: 6px;
+}
+
+.residence-request-form textarea {
+  background: #fff;
+  border: 1px solid #dfe6e9;
+  border-radius: 6px;
+  color: #35444d;
+  font: inherit;
+  font-size: 10px;
+  outline: none;
+  padding: 9px 10px;
+  resize: vertical;
+  width: 100%;
+}
+
+.student-room-layout {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(180px, 0.75fr) minmax(0, 1.25fr);
+}
+
+.student-room-card {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0;
+  min-height: 210px;
+  padding: 22px;
+}
+
+.student-room-card .eyebrow {
+  margin: 0;
+}
+
+.student-room-number {
+  color: #087f83;
+  font-size: clamp(42px, 7vw, 68px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.1;
+  margin: 8px 0;
+}
+
+.student-room-building {
+  color: #65727a;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.student-roommates {
+  margin: 0;
+  padding: 16px 0 0;
+}
+
+.student-roommates ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 16px;
+}
+
+.student-roommates li {
+  align-items: center;
+  border-top: 1px solid #edf0f2;
+  display: flex;
+  gap: 10px;
+  min-height: 55px;
+}
+
+.student-roommates li > span:nth-child(2) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.student-roommates li strong {
+  color: #34434c;
+  font-size: 10px;
+}
+
+.student-roommates li small,
+.student-roommates li a {
+  color: #849198;
+  font-size: 9px;
+}
+
+.student-roommates li a {
+  text-decoration: none;
+}
+
+.student-roommates li a:hover {
+  color: var(--teal-dark);
+  text-decoration: underline;
+}
+
+@media (max-width: 520px) {
+
+  .student-room-layout {
+    grid-template-columns: 1fr;
+  }
+}

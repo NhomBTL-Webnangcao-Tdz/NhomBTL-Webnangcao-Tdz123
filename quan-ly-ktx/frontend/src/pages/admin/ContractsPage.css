@@ -1,0 +1,92 @@
+.contract-toolbar {
+  flex-wrap: wrap;
+}
+
+.wizard-form {
+  padding-bottom: 2px;
+}
+
+.wizard-steps {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 2px auto 20px;
+  max-width: 390px;
+}
+
+.wizard-steps > span {
+  align-items: center;
+  background: #eff2f3;
+  border-radius: 50%;
+  color: #829096;
+  display: inline-flex;
+  flex: 0 0 25px;
+  font-size: 9px;
+  height: 25px;
+  justify-content: center;
+  position: relative;
+}
+
+.wizard-steps > span small {
+  color: #87939a;
+  font-size: 8px;
+  left: 50%;
+  position: absolute;
+  top: 31px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.wizard-steps > span.current,
+.wizard-steps > span.complete {
+  background: #e2f3ef;
+  color: #167d73;
+}
+
+.wizard-steps > i {
+  background: #e1e7e9;
+  height: 1px;
+  width: 54px;
+}
+
+.wizard-steps .preview-step {
+  display: none;
+}
+
+.api-limit-notice {
+  background: #f4f8f8;
+  border-radius: 6px;
+  color: #75848a;
+  font-size: 9px;
+  line-height: 1.6;
+  padding: 10px;
+}
+
+.contract-preview {
+  background: #f8faf9;
+  border: 1px solid #ebefed;
+  border-radius: 7px;
+  color: #77847e;
+  display: grid;
+  font-size: 9px;
+  gap: 7px;
+  padding: 12px;
+}
+
+.contract-preview strong {
+  color: #384b46;
+  font-size: 10px;
+}
+
+.page-footnote {
+  margin: 8px 0;
+}
+
+@media (max-width: 520px) {
+
+  .contract-toolbar,
+  .contract-toolbar .compact-select {
+    align-items: flex-start;
+  }
+}

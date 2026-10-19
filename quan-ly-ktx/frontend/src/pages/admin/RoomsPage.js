@@ -6,6 +6,7 @@ import PageHeading from '../../components/common/PageHeading';
 import StatusBadge from '../../components/common/StatusBadge';
 import useApiResource from '../../hooks/useApiResource';
 import { setHashQuery } from '../../utils/hashRoute';
+import './RoomsPage.css';
 
 const emptyRoom = { roomNumber: '', building: '', maxCapacity: 1, price: 0 };
 

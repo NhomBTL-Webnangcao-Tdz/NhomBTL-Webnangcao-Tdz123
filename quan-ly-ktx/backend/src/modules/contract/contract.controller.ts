@@ -1,8 +1,14 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards } from '@nestjs/common';
 import { ContractService } from './contract.service';
 import { Contract } from './contract.entity';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../common/roles.guard';
+import { Roles } from '../../common/roles.decorator';
+import { Role } from '../../common/role.enum';
 
 @Controller('contract')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.ADMIN, Role.MANAGER)
 export class ContractController {
   constructor(private readonly contractService: ContractService) {}
 
@@ -27,6 +33,7 @@ export class ContractController {
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN)
   async remove(@Param('id') id: string): Promise<void> {
     return this.contractService.remove(+id);
   }

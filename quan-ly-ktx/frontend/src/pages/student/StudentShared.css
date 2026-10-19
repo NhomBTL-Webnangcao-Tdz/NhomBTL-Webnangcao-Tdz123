@@ -1,0 +1,50 @@
+.student-empty-panel {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+  padding: 34px 22px;
+  text-align: center;
+}
+
+.student-panel-heading {
+  padding: 0 17px 14px;
+}
+
+.student-panel-heading h3 {
+  margin: 0;
+}
+
+.student-panel-heading p {
+  margin: 5px 0 0;
+}
+.student-empty-icon,
+.student-contact-icon {
+  align-items: center;
+  background: #eaf5f2;
+  border-radius: 12px;
+  color: #16857b;
+  display: inline-flex;
+  font-size: 22px;
+  height: 48px;
+  justify-content: center;
+  width: 48px;
+}
+
+.student-empty-panel h3,
+.student-panel-heading h3,
+.student-contact-card h3 {
+  color: #31414a;
+  font-size: 14px;
+  margin: 15px 0 5px;
+}
+
+.student-empty-panel p,
+.student-panel-heading p,
+.student-contact-card p {
+  color: #87939b;
+  font-size: 10px;
+  line-height: 1.7;
+  margin: 0 0 14px;
+  max-width: 560px;
+}

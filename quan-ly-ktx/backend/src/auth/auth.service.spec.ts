@@ -45,6 +45,7 @@ describe('AuthService', () => {
     const storedPassword = usersService.createUser.mock.calls[0][1];
 
     expect(usersService.findByUsername).toHaveBeenCalledWith('student.one');
+    expect(usersService.createUser).toHaveBeenCalledWith('student.one', storedPassword);
     expect(storedPassword).not.toBe('strong-password');
     expect(await bcrypt.compare('strong-password', storedPassword)).toBe(true);
     expect(result.user).toEqual(expect.objectContaining({

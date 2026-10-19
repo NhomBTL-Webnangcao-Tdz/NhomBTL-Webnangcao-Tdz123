@@ -1,0 +1,50 @@
+.bill-share-list {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  min-width: 270px;
+  padding: 0;
+}
+
+.bill-share-list li {
+  align-items: flex-start;
+  border-bottom: 1px solid #edf0f2;
+  display: grid;
+  gap: 4px 8px;
+  padding: 8px 0;
+}
+
+.bill-share-list li:last-child {
+  border-bottom: 0;
+}
+
+.bill-share-list li > strong,
+.bill-share-list li > small {
+  grid-column: 1;
+}
+
+.bill-share-list li > small {
+  color: #87939b;
+  font-size: 10px;
+}
+
+.bill-share-list li > .status-badge {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  justify-self: start;
+}
+
+.bill-share-list .row-actions {
+  flex-wrap: wrap;
+  grid-column: 1 / -1;
+}
+
+.bill-description {
+  color: #87939b;
+  display: block;
+  font-size: 10px;
+  margin-top: 4px;
+  max-width: 260px;
+  white-space: normal;
+}

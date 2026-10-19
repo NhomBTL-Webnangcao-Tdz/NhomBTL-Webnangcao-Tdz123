@@ -8,6 +8,11 @@ import { Payment } from '../modules/payment/payment.entity';
 import { Room } from '../modules/room/room.entity';
 import { Student } from '../modules/student/student.entity';
 import { UtilityBill } from '../modules/utility-bill/utility-bill.entity';
+import { ResidenceRequest } from '../modules/student/residence-request.entity';
+import { Notification } from '../modules/notification/notification.entity';
+import { MeterReadingSubmission } from '../modules/meter-reading/meter-reading.entity';
+import { UtilityTariff } from '../modules/utility-bill/utility-tariff.entity';
+import { UtilityBillShare } from '../modules/utility-bill/utility-bill-share.entity';
 
 export const databaseProviders = [
   {
@@ -37,7 +42,10 @@ export const databaseProviders = [
         username: configService.get('DB_USERNAME', 'root'),
         password: configService.get('DB_PASSWORD', ''),
         database: configService.get('DB_NAME', 'quan_ly_ktx'),
-        entities: [User, Room, Student, Contract, UtilityBill, Payment],
+        entities: [
+          User, Room, Student, Contract, UtilityBill, Payment, ResidenceRequest, Notification,
+          MeterReadingSubmission, UtilityTariff, UtilityBillShare,
+        ],
         synchronize: synchronizeSetting
           ? synchronizeSetting === 'true'
           : configService.get('NODE_ENV') !== 'production',

@@ -8,27 +8,38 @@ import BillsPage from './pages/admin/BillsPage';
 import ContractsPage from './pages/admin/ContractsPage';
 import DashboardPage from './pages/admin/DashboardPage';
 import RoomsPage from './pages/admin/RoomsPage';
+import ResidenceRequestsPage from './pages/admin/ResidenceRequestsPage';
 import SettingsPage from './pages/admin/SettingsPage';
-import StudentsPage from './pages/admin/StudentsPage';
 import UtilitiesPage from './pages/admin/UtilitiesPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
+import LandingPage from './pages/landing/LandingPage';
 import StudentPortalPage from './pages/student/StudentPortalPage';
 import { getHashRoute } from './utils/hashRoute';
 
 const ADMIN_ROLES = ['ADMIN', 'MANAGER'];
+const LANDING_PAGES = ['welcome', 'gioi-thieu', 'lien-he'];
 const aliases = {
   home: 'overview',
   dashboard: 'overview',
   'utility-bills': 'invoices',
+  'residence-requests': 'requests',
 };
+const STUDENT_PAGES = ['my-profile', 'my-room', 'my-bills', 'my-contact'];
 
 function RoutedContent() {
   const [route, setRoute] = useState(getHashRoute);
+  const [isLandingRoute, setIsLandingRoute] = useState(() => (
+    !window.location.hash || LANDING_PAGES.includes(getHashRoute().page)
+  ));
   const { user, isReady } = useAuth();
 
   useEffect(() => {
-    const handleRouteChange = () => setRoute(getHashRoute());
+    const handleRouteChange = () => {
+      const nextRoute = getHashRoute();
+      setRoute(nextRoute);
+      setIsLandingRoute(LANDING_PAGES.includes(nextRoute.page));
+    };
     window.addEventListener('hashchange', handleRouteChange);
     return () => window.removeEventListener('hashchange', handleRouteChange);
   }, []);
@@ -41,6 +52,12 @@ function RoutedContent() {
       window.location.hash = user.role === 'STUDENT' ? '#my-profile' : '#overview';
     }
   }, [isReady, user, isAuthPage]);
+
+  useEffect(() => {
+    if (isReady && user?.role === 'STUDENT' && !STUDENT_PAGES.includes(currentPage)) {
+      window.location.hash = '#my-profile';
+    }
+  }, [isReady, user, currentPage]);
 
   if (!isReady) {
     return (
@@ -58,11 +75,14 @@ function RoutedContent() {
         </div>
       );
     }
+    if (isLandingRoute && !isAuthPage) {
+      return <LandingPage />;
+    }
     return (
       <div className="auth-screen">
         <div className="auth-brand">
-          <span className="brand-mark">K</span>
-          <span>KTX Care<small>QUẢN LÝ KÝ TÚC XÁ</small></span>
+          <a className="brand-mark" href="#welcome" aria-label="KTX Care - Trang giới thiệu">K</a>
+          <a className="auth-brand-name" href="#welcome">KTX Care<small>QUẢN LÝ KÝ TÚC XÁ</small></a>
         </div>
         <main className="auth-main">
           {currentPage === 'register' ? <RegisterPage /> : <LoginPage />}
@@ -76,7 +96,7 @@ function RoutedContent() {
     switch (currentPage) {
       case 'overview': return <DashboardPage />;
       case 'rooms': return <RoomsPage segments={route.segments} params={route.params} />;
-      case 'students': return <StudentsPage params={route.params} />;
+      case 'requests': return <ResidenceRequestsPage />;
       case 'contracts': return <ContractsPage />;
       case 'invoices': return <BillsPage />;
       case 'utilities': return <UtilitiesPage />;
@@ -86,17 +106,20 @@ function RoutedContent() {
   })();
 
   let content;
-  if (adminPage) {
-    content = <RoleBasedRoute roles={ADMIN_ROLES}>{adminPage}</RoleBasedRoute>;
-  } else if (['my-profile', 'my-room', 'my-bills'].includes(currentPage)) {
-    content = <RoleBasedRoute roles={['STUDENT']}><StudentPortalPage page={currentPage} /></RoleBasedRoute>;
+  if (user.role !== 'STUDENT' && adminPage) {
+    const roles = currentPage === 'settings' ? ['ADMIN'] : ADMIN_ROLES;
+    content = <RoleBasedRoute roles={roles}>{adminPage}</RoleBasedRoute>;
+  } else if (STUDENT_PAGES.includes(currentPage)) {
+    content = <RoleBasedRoute roles={['STUDENT']}><StudentPortalPage page={currentPage} params={route.params} /></RoleBasedRoute>;
   } else {
     content = (
       <section className="access-card">
         <span className="access-icon">404</span>
         <h2>Không tìm thấy trang</h2>
         <p>Đường dẫn này không tồn tại trong hệ thống quản lý.</p>
-        <a className="button button-primary" href="#overview">Về tổng quan</a>
+        <a className="button button-primary" href={user.role === 'STUDENT' ? '#my-profile' : '#overview'}>
+          {user.role === 'STUDENT' ? 'Về hồ sơ cá nhân' : 'Về tổng quan'}
+        </a>
       </section>
     );
   }

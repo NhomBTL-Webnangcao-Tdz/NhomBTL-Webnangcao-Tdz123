@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  BadRequestException,
-  ConflictException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, BadRequestException, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from './entities/users.service';
@@ -33,13 +28,13 @@ export class AuthService {
   // =========================================================
   /**
    * Đăng ký tài khoản người dùng mới
-   * @param registerDto - Chứa username và password từ request body
+   * @param registerDto - Chứa username và password
    * @returns Object thông báo thành công và thông tin user (không có password)
-   * @throws ConflictException nếu username đã tồn tại
+    * @throws ConflictException nếu username đã tồn tại
    */
-  async register(registerDto: RegisterDto) {
-    const username = registerDto.username.trim().toLowerCase();
-    const { password } = registerDto;
+   async register(registerDto: RegisterDto) {
+     const username = registerDto.username.trim().toLowerCase();
+     const { password } = registerDto;
     if (Buffer.byteLength(password, 'utf8') > 72) {
       throw new BadRequestException('Mật khẩu không được vượt quá 72 byte UTF-8.');
     }

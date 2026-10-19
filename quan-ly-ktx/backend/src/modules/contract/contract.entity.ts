@@ -1,9 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Student } from '../student/student.entity';
-// import { Room } from '../room/room.entity'; // (Gia su ban khac lam Room)
-// import { Payment } from '../payment/payment.entity'; // (Gia su ban khac lam Payment)
+import { Room } from '../room/room.entity';
 
-@Entity()
+@Entity('contract')
 export class Contract {
   @PrimaryGeneratedColumn()
   contract_id: number;
@@ -24,10 +23,7 @@ export class Contract {
   @JoinColumn({ name: 'sid' })
   student: Student;
 
-  // @ManyToOne(() => Room, (room) => room.contracts)
-  // @JoinColumn({ name: 'room_id' })
-  // room: Room;
-
-  // @OneToMany(() => Payment, (payment) => payment.contract)
-  // payments: Payment[];
+  @ManyToOne(() => Room, (room) => room.contracts, { nullable: true })
+  @JoinColumn({ name: 'room_id' })
+  room: Room | null;
 }

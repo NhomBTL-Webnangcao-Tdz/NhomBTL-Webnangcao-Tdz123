@@ -1,48 +1,66 @@
-import PageHeading from '../../components/common/PageHeading';
+import { useEffect, useState } from 'react';
+import { studentApi } from '../../api/student.api';
 import { useAuth } from '../../context/AuthContext';
+import BillsPage from './BillsPage';
+import ContactPage from './ContactPage';
+import ProfilePage from './ProfilePage';
+import RoomPage from './RoomPage';
+import './StudentShared.css';
 
-const portalContent = {
-  'my-room': {
-    title: 'Phòng của tôi',
-    description: 'Thông tin phòng và hợp đồng lưu trú hiện tại.',
-    limitation: 'Backend hiện chưa cung cấp endpoint để tra cứu phòng/hợp đồng theo tài khoản sinh viên.',
-  },
-  'my-bills': {
-    title: 'Hóa đơn của tôi',
-    description: 'Các khoản phí và lịch sử thanh toán cá nhân.',
-    limitation: 'Backend hiện chưa liên kết hóa đơn với tài khoản sinh viên hoặc cung cấp endpoint hóa đơn cá nhân.',
-  },
-};
-
-export default function StudentPortalPage({ page }) {
+export default function StudentPortalPage({ page, params }) {
   const { user } = useAuth();
-  if (page === 'my-profile') {
-    return (
-      <>
-        <PageHeading eyebrow="CỔNG SINH VIÊN" title="Hồ sơ cá nhân" description="Thông tin tài khoản sinh viên đã đăng nhập." />
-        <section className="panel profile-panel">
-          <span className="identity-avatar large">{user?.username?.slice(0, 1)?.toUpperCase() || 'S'}</span>
-          <dl className="detail-list">
-            <div><dt>Tên đăng nhập</dt><dd>{user?.username || '—'}</dd></div>
-            <div><dt>Mã tài khoản</dt><dd>{user?.id || '—'}</dd></div>
-            <div><dt>Vai trò</dt><dd>{user?.role || '—'}</dd></div>
-          </dl>
-          <p className="form-hint">API hồ sơ tài khoản hiện không chứa thông tin liên lạc hoặc hồ sơ sinh viên mở rộng.</p>
-        </section>
-      </>
-    );
-  }
+  const [portal, setPortal] = useState(null);
+  const [loading, setLoading] = useState(page !== 'my-contact');
+  const [error, setError] = useState('');
+  const [reloadKey, setReloadKey] = useState(0);
+  const retry = () => setReloadKey((key) => key + 1);
 
-  const content = portalContent[page] || portalContent['my-room'];
-  return (
-    <>
-      <PageHeading eyebrow="CỔNG SINH VIÊN" title={content.title} description={content.description} />
-      <section className="panel limitation-panel">
-        <span className="access-icon">i</span>
-        <h3>Chưa có dữ liệu cá nhân</h3>
-        <p>{content.limitation}</p>
-        <p>Phần này sẽ hiển thị dữ liệu ngay khi backend bổ sung quan hệ giữa tài khoản, sinh viên, phòng và hóa đơn.</p>
-      </section>
-    </>
-  );
+  useEffect(() => {
+    if (page === 'my-contact') return undefined;
+    let active = true;
+    let firstLoad = true;
+    let requestInFlight = false;
+    const loadPortal = async () => {
+      if (requestInFlight) return;
+      requestInFlight = true;
+      if (firstLoad) setLoading(true);
+      setError('');
+      try {
+        const result = await studentApi.portal();
+        if (active) setPortal(result);
+      } catch (requestError) {
+        if (active) setError(requestError.message || 'Không thể tải dữ liệu sinh viên.');
+      } finally {
+        requestInFlight = false;
+        firstLoad = false;
+        if (active) setLoading(false);
+      }
+    };
+
+    loadPortal();
+    const refreshInterval = page === 'my-bills'
+      ? window.setInterval(loadPortal, 15000)
+      : null;
+    return () => {
+      active = false;
+      if (refreshInterval !== null) window.clearInterval(refreshInterval);
+    };
+  }, [page, reloadKey]);
+
+  const saveProfile = (result) => setPortal(result);
+  const sendResidenceRequest = async (request) => {
+    await studentApi.requestResidence(request);
+    retry();
+  };
+
+  if (page === 'my-profile') {
+    return <ProfilePage user={user} portal={portal} loading={loading} error={error} retry={retry} onSaved={saveProfile} />;
+  }
+  if (page === 'my-room') {
+    return <RoomPage portal={portal} loading={loading} error={error} retry={retry} onRequest={sendResidenceRequest} />;
+  }
+  if (page === 'my-bills') {
+    return <BillsPage portal={portal} loading={loading} error={error} retry={retry} />;
+  }
+  return <ContactPage user={user} params={params} />;
 }

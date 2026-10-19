@@ -1,0 +1,249 @@
+.room-filter-bar {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  gap: 17px;
+}
+
+.room-map {
+  padding: 15px;
+}
+
+.room-overview-strip {
+  background: #f8fbfb;
+  border: 1px solid #edf1f2;
+  border-radius: 7px;
+  color: #859198;
+  display: flex;
+  font-size: 9px;
+  gap: 27px;
+  margin-bottom: 18px;
+  padding: 11px 13px;
+}
+
+.room-overview-strip strong {
+  color: #384951;
+  font-size: 12px;
+  margin-right: 4px;
+}
+
+.floor-group {
+  margin: 16px 0 22px;
+}
+
+.floor-heading {
+  align-items: center;
+  border-bottom: 1px solid #edf0f1;
+  display: flex;
+  gap: 11px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+}
+
+.floor-heading h3 {
+  color: #4a5961;
+  font-size: 11px;
+  margin: 0;
+}
+
+.floor-heading span {
+  color: #a0aaae;
+  font-size: 9px;
+}
+
+.room-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(164px, 1fr));
+}
+
+.room-card {
+  background: #fff;
+  border: 1px solid #e5ebed;
+  border-left: 3px solid #54b794;
+  border-radius: 8px;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  min-height: 140px;
+  padding: 11px;
+  text-align: left;
+  transition: box-shadow 130ms ease, transform 130ms ease;
+}
+
+.room-card:hover {
+  box-shadow: 0 5px 16px rgba(29, 61, 64, 0.08);
+  transform: translateY(-1px);
+}
+
+.room-occupied { border-left-color: #e6b650; }
+
+.room-full { border-left-color: #d86c64; }
+
+.room-maintenance { border-left-color: #a5afb4; }
+
+.room-card-top {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.room-door {
+  color: #8d9a9e;
+  font-size: 16px;
+}
+
+.room-number {
+  color: #34434b;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.room-occupancy {
+  color: #8a969b;
+  font-size: 9px;
+  margin-top: 4px;
+}
+
+.room-price {
+  color: #52616a;
+  font-size: 10px;
+  font-weight: 700;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.room-price small {
+  color: #98a3a7;
+  font-size: 8px;
+  font-weight: 400;
+}
+
+.building-grid {
+  display: grid;
+  gap: 13px;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  padding: 15px;
+}
+
+.building-card {
+  background: linear-gradient(135deg, #fff, #fcfefe);
+  border: 1px solid #e6ecee;
+  border-radius: 10px;
+  color: inherit;
+  padding: 17px;
+  text-decoration: none;
+  transition: border-color 130ms ease, box-shadow 130ms ease, transform 130ms ease;
+}
+
+.building-card:hover {
+  border-color: #b8dcd5;
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.building-card-heading {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.building-icon {
+  align-items: center;
+  background: #eaf5f2;
+  border-radius: 8px;
+  color: #16857b;
+  display: inline-flex;
+  font-size: 17px;
+  height: 37px;
+  justify-content: center;
+  width: 37px;
+}
+
+.building-arrow {
+  color: #a0abad;
+  font-size: 15px;
+}
+
+.building-card h3 {
+  color: #31414a;
+  font-size: 14px;
+  margin: 14px 0 4px;
+}
+
+.building-card > p {
+  color: #96a1a6;
+  font-size: 9px;
+  margin: 0 0 15px;
+}
+
+.building-progress-label,
+.building-stat-row {
+  align-items: center;
+  color: #7c898f;
+  display: flex;
+  font-size: 8px;
+  justify-content: space-between;
+}
+
+.building-progress-label strong {
+  color: #398577;
+  font-size: 9px;
+}
+
+.building-card .progress-track {
+  height: 6px;
+  margin: 7px 0 12px;
+}
+
+.building-stat-row {
+  border-top: 1px solid #eff2f2;
+  justify-content: flex-start;
+  gap: 13px;
+  padding-top: 10px;
+}
+
+.building-stat-row > span {
+  align-items: center;
+  display: flex;
+  gap: 5px;
+}
+
+.legend-dot {
+  border-radius: 50%;
+  height: 6px;
+  width: 6px;
+}
+
+.legend-dot.green { background: #4ab18b; }
+
+.legend-dot.blue { background: #74a4cc; }
+
+.secondary-panel {
+  margin-top: 18px;
+}
+
+.secondary-panel .panel-heading {
+  padding: 14px 15px 11px;
+}
+
+@media (max-width: 520px) {
+
+  .room-filter-bar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .room-overview-strip {
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
+
+  .room-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .building-grid {
+    grid-template-columns: 1fr;
+  }
+}

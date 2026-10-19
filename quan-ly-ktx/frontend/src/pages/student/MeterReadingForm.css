@@ -1,0 +1,39 @@
+.meter-reading-form {
+  display: grid;
+  gap: 12px;
+  padding-top: 12px;
+}
+
+.meter-reading-photo-grid {
+  display: grid;
+  gap: 11px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.meter-photo-input {
+  background: #fafcfc;
+  border: 1px dashed #cbd8da;
+  border-radius: 7px;
+  color: #52636a;
+  display: flex;
+  flex-direction: column;
+  font-size: 9px;
+  gap: 9px;
+  padding: 11px;
+}
+
+.meter-photo-input input {
+  font: inherit;
+  max-width: 100%;
+}
+
+.meter-photo-input img {
+  border-radius: 5px;
+  max-height: 190px;
+  object-fit: contain;
+  width: 100%;
+}
+
+.meter-reading-values {
+  margin-top: 2px;
+}

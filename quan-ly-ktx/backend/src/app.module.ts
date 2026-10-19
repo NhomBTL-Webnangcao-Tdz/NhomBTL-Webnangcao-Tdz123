@@ -9,6 +9,8 @@ import { UtilityBillModule } from './modules/utility-bill/utility-bill.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { resolve } from 'node:path';
+import { NotificationModule } from './modules/notification/notification.module';
+import { MeterReadingModule } from './modules/meter-reading/meter-reading.module';
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import { resolve } from 'node:path';
     RoomModule,
     ContractModule,
     UtilityBillModule,
+    NotificationModule,
+    MeterReadingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

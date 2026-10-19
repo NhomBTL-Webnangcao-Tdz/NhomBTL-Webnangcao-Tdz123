@@ -1,6 +1,7 @@
 import { getApiBaseUrl } from '../../api/client';
 import PageHeading from '../../components/common/PageHeading';
 import { useAuth } from '../../context/AuthContext';
+import './SettingsPage.css';
 
 export default function SettingsPage() {
   const { user } = useAuth();

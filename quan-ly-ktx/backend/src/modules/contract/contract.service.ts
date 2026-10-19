@@ -10,11 +10,14 @@ export class ContractService {
   ) {}
 
   async findAll(): Promise<Contract[]> {
-    return this.contractRepository.find();
+    return this.contractRepository.find({ relations: { student: true, room: true } });
   }
 
   async findOne(id: number): Promise<Contract | null> {
-    return this.contractRepository.findOneBy({ contract_id: id });
+    return this.contractRepository.findOne({
+      where: { contract_id: id },
+      relations: { student: true, room: true },
+    });
   }
 
   async create(contractData: Partial<Contract>): Promise<Contract> {
@@ -23,7 +26,10 @@ export class ContractService {
   }
 
   async update(id: number, contractData: Partial<Contract>): Promise<Contract | null> {
-    await this.contractRepository.update(id, contractData);
+    const contract = await this.contractRepository.findOneBy({ contract_id: id });
+    if (!contract) return null;
+    Object.assign(contract, contractData);
+    await this.contractRepository.save(contract);
     return this.findOne(id);
   }
 

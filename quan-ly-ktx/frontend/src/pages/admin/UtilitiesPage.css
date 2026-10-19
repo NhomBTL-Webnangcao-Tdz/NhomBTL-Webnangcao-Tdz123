@@ -1,0 +1,52 @@
+.utility-tariff-panel,
+.meter-review-panel {
+  margin-bottom: 16px;
+  padding: 15px;
+}
+
+.utility-tariff-form {
+  align-items: end;
+  margin-top: 14px;
+}
+
+.utility-tariff-form .form-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.meter-review-dialog > .form-hint {
+  margin-bottom: 12px;
+}
+
+.meter-review-photos {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 15px;
+}
+
+.meter-review-photos figure {
+  background: #f7f9f9;
+  border: 1px solid #e7eded;
+  border-radius: 7px;
+  margin: 0;
+  min-height: 130px;
+  padding: 9px;
+}
+
+.meter-review-photos figcaption {
+  color: #65747a;
+  font-size: 9px;
+  font-weight: 650;
+  margin-bottom: 8px;
+}
+
+.meter-review-photos img {
+  border-radius: 5px;
+  display: block;
+  max-height: 330px;
+  object-fit: contain;
+  width: 100%;
+}

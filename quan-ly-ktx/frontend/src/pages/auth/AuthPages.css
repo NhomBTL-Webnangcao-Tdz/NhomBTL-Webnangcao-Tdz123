@@ -1,0 +1,153 @@
+.auth-panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  margin: 0 auto;
+  max-width: 430px;
+  padding: 31px;
+  width: 100%;
+}
+
+.auth-screen {
+  align-items: center;
+  background:
+    radial-gradient(ellipse at 10% 5%, rgba(24, 183, 169, 0.12), transparent 33%),
+    radial-gradient(ellipse at 90% 92%, rgba(38, 126, 151, 0.1), transparent 34%),
+    #f4f8f8;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 34px 20px 20px;
+  position: relative;
+}
+
+.auth-brand {
+  align-items: center;
+  color: #293a43;
+  display: flex;
+  font-size: 16px;
+  font-weight: 750;
+  gap: 10px;
+  left: clamp(20px, 5vw, 64px);
+  position: absolute;
+  top: 25px;
+}
+
+.auth-brand > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.auth-brand small {
+  color: #94a0a7;
+  font-size: 8px;
+  font-weight: 750;
+  letter-spacing: 1px;
+}
+
+.auth-main {
+  margin: auto;
+  width: 100%;
+}
+
+.auth-footer {
+  color: #98a3a8;
+  font-size: 9px;
+  padding-top: 22px;
+  text-align: center;
+}
+
+.auth-symbol {
+  align-items: center;
+  background: linear-gradient(140deg, #0aa4a1, #08727b);
+  border-radius: 12px;
+  color: #fff;
+  display: flex;
+  font-size: 22px;
+  font-weight: 800;
+  height: 46px;
+  justify-content: center;
+  margin-bottom: 18px;
+  width: 46px;
+}
+
+.auth-panel h2 {
+  color: #293a43;
+  font-size: 19px;
+  margin: 0;
+}
+
+.auth-form {
+  display: grid;
+  gap: 13px;
+  margin-top: 19px;
+}
+
+.auth-form > label {
+  font-size: 10px;
+}
+
+.auth-form input {
+  min-height: 39px;
+}
+
+.auth-form .button {
+  margin-top: 3px;
+  min-height: 39px;
+}
+
+.registration-success {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.auth-switch-copy {
+  color: #849198;
+  font-size: 10px;
+  margin: 15px 0 0;
+  text-align: center;
+}
+
+.auth-switch-copy a {
+  color: #21817a;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.auth-switch-copy a:hover {
+  text-decoration: underline;
+}
+
+.auth-policy {
+  color: #8d999e;
+  font-size: 9px;
+  line-height: 1.6;
+  margin: 12px 0 0;
+  text-align: center;
+}
+
+.auth-panel > .form-hint {
+  margin-top: 10px;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+
+  .auth-panel {
+    padding: 21px;
+  }
+
+  .auth-screen {
+    justify-content: center;
+    padding: 78px 14px 15px;
+  }
+
+  .auth-brand {
+    left: 18px;
+    top: 16px;
+  }
+}

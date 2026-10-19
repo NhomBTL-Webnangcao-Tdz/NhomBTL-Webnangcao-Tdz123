@@ -5,6 +5,8 @@ import { roomApi } from '../../api/room.api';
 import { studentApi } from '../../api/student.api';
 import PageHeading from '../../components/common/PageHeading';
 import StatusBadge from '../../components/common/StatusBadge';
+import './DashboardPage.css';
+import './Stats.css';
 
 function countOccupied(rooms) {
   return rooms.filter((room) => Number(room.currentOccupancy) > 0).length;

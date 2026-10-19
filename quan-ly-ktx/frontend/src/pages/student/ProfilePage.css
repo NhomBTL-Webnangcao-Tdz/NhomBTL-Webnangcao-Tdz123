@@ -1,0 +1,68 @@
+.profile-panel {
+  padding: 20px;
+}
+
+.profile-panel .identity-avatar {
+  margin: 0 auto;
+}
+
+.profile-panel .detail-list {
+  margin: 17px auto;
+  max-width: 520px;
+}
+
+.profile-panel .form-hint {
+  margin: 0 auto;
+  max-width: 520px;
+}
+
+.student-profile-form {
+  display: grid;
+  gap: 15px;
+  padding: 20px;
+}
+
+.student-profile-form h3 {
+  color: #31414a;
+  font-size: 14px;
+  margin: 0;
+}
+
+.student-profile-form > div:first-child p {
+  color: #87939b;
+  font-size: 10px;
+  margin: 5px 0 0;
+}
+
+.student-profile-form .form-grid {
+  margin-top: 0;
+}
+
+.student-link-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 6px;
+  max-width: 390px;
+  text-align: left;
+  width: 100%;
+}
+
+.student-link-form label {
+  color: #65727a;
+  display: grid;
+  font-size: 9px;
+  font-weight: 650;
+  gap: 6px;
+}
+
+.student-link-form input {
+  background: #fff;
+  border: 1px solid #dfe6e9;
+  border-radius: 6px;
+  color: #35444d;
+  font-size: 10px;
+  min-height: 36px;
+  outline: none;
+  padding: 0 10px;
+  width: 100%;
+}

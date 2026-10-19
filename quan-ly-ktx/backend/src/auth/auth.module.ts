@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { UsersService } from './entities/users.service';
 import { userProviders } from './entities/user.provider';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RolesGuard } from '../common/roles.guard';
 
 /**
  * AuthModule - Module xử lý Authentication & Authorization
@@ -57,6 +58,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
     UsersService,
     AuthService,
     JwtAuthGuard,
+    RolesGuard,
   ],
   exports: [AuthService, JwtAuthGuard, UsersService],
 })

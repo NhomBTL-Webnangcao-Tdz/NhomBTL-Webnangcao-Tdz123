@@ -1,0 +1,161 @@
+.room-picker {
+  background: #fbfdfd;
+  border: 1px solid #e8eeef;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.room-picker-heading,
+.room-picker-subheading {
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+}
+
+.room-picker-heading h3,
+.room-picker-subheading h4 {
+  color: #34454d;
+  font-size: 11px;
+  font-weight: 720;
+  margin: 0;
+}
+
+.room-picker-heading p {
+  color: #8b989d;
+  font-size: 9px;
+  margin: 4px 0 0;
+}
+
+.room-picker-legend {
+  align-items: center;
+  color: #78868c;
+  display: flex;
+  flex: 0 0 auto;
+  font-size: 8px;
+  gap: 5px;
+}
+
+.room-picker-legend .legend-dot:not(.green) {
+  background: #d86c64;
+  margin-left: 5px;
+}
+
+.room-picker-buildings {
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  padding: 12px 0 0;
+}
+
+.room-picker-unassigned {
+  background: #fff;
+  border: 1px solid #e4ebec;
+  border-radius: 6px;
+  color: #65747a;
+  cursor: pointer;
+  font: inherit;
+  font-size: 9px;
+  margin-top: 11px;
+  padding: 8px 10px;
+}
+
+.room-picker-unassigned.selected {
+  background: #eef8f5;
+  border-color: #49a991;
+  color: #167d73;
+}
+
+.room-picker-building-stats {
+  flex-wrap: wrap;
+  gap: 7px 11px;
+}
+
+.room-picker-building-stats > span {
+  white-space: nowrap;
+}
+
+.room-picker-floor-area {
+  border-top: 1px solid #eaf0f0;
+  margin-top: 14px;
+  padding-top: 13px;
+}
+
+.room-picker-subheading {
+  align-items: center;
+  margin-bottom: 9px;
+}
+
+.room-picker-floors {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+}
+
+.room-picker-floor {
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #e4ebec;
+  border-radius: 7px;
+  color: #53636a;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 9px 10px;
+  text-align: left;
+}
+
+.room-picker-floor strong {
+  color: #394a52;
+  font-size: 10px;
+}
+
+.room-picker-floor span,
+.room-picker-floor small {
+  color: #839096;
+  font-size: 8px;
+}
+
+.room-picker-floor small {
+  color: #25866f;
+  font-weight: 650;
+}
+
+.room-picker-floor.selected {
+  background: #eef8f5;
+  border-color: #49a991;
+  box-shadow: 0 0 0 2px rgba(32, 153, 131, 0.09);
+}
+
+.room-picker-grid {
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+}
+
+.room-picker-card {
+  cursor: pointer;
+  min-height: 126px;
+}
+
+.room-picker-card.selected {
+  background: #f0faf6;
+  border-color: #32a184;
+  box-shadow: 0 0 0 2px rgba(32, 153, 131, 0.15);
+}
+
+.room-picker-card:disabled {
+  background: #f7f8f8;
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.room-picker-status {
+  color: #268267;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.room-picker-status.full {
+  color: #b4514b;
+}
+
+.room-picker .async-state {
+  padding: 11px 0;
+}
