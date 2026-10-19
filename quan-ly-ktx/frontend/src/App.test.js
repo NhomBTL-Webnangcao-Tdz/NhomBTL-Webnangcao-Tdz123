@@ -21,7 +21,33 @@ afterEach(() => {
   localStorage.clear();
 });
 
+test('opens the public landing page at the site root', async () => {
+  render(<App />);
+
+  expect(await screen.findByRole('heading', { level: 1, name: 'KTX Care' })).toBeInTheDocument();
+  expect(screen.getByRole('navigation', { name: 'Điều hướng trang chủ' })).toBeInTheDocument();
+  expect(screen.queryByRole('navigation', { name: 'Điều hướng chính' })).not.toBeInTheDocument();
+  expect(screen.getAllByRole('link', { name: 'Đăng nhập' })[0]).toHaveAttribute('href', '#login');
+});
+
+test('shows the workspace shortcut on the landing page for a signed-in user', async () => {
+  localStorage.setItem('ktx_access_token', 'test-token');
+  global.fetch.mockImplementation(async (url) => {
+    if (url.endsWith('/auth/profile')) return jsonResponse({ id: 5, username: 'student.one', role: 'STUDENT' });
+    return jsonResponse([]);
+  });
+  window.history.replaceState({}, '', '/#home');
+
+  render(<App />);
+
+  const shortcuts = await screen.findAllByRole('link', { name: 'Vào hệ thống' });
+  expect(shortcuts[0]).toHaveAttribute('href', '#my-profile');
+  expect(screen.queryByRole('link', { name: 'Đăng ký' })).not.toBeInTheDocument();
+});
+
 test('opens a standalone login page when entering without an authenticated session', async () => {
+  window.history.replaceState({}, '', '/#login');
+
   render(<App />);
 
   expect(await screen.findByRole('heading', { name: 'Đăng nhập hệ thống' })).toBeInTheDocument();
@@ -50,6 +76,7 @@ test('signs in and loads dashboard data from the API', async () => {
     if (url.endsWith('/utility-bill')) return jsonResponse([{ bill_id: 1, is_paid: false, total_amount: 50000 }]);
     return jsonResponse([]);
   });
+  window.history.replaceState({}, '', '/#login');
 
   render(<App />);
   fireEvent.change(await screen.findByLabelText('Tên đăng nhập'), { target: { value: 'manager' } });
@@ -113,6 +140,8 @@ test('shows API failures explicitly on the dashboard', async () => {
     if (url.endsWith('/auth/profile')) return jsonResponse({ id: 2, username: 'admin', role: 'ADMIN' });
     return jsonResponse({ message: 'Database unavailable' }, false, 503);
   });
+  window.history.replaceState({}, '', '/#overview');
+
   render(<App />);
 
   expect(await screen.findByRole('heading', { name: 'Bảng điều khiển' })).toBeInTheDocument();

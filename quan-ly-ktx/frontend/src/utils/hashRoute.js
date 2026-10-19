@@ -1,8 +1,8 @@
 export function getHashRoute() {
   const raw = window.location.hash.replace(/^#\/?/, '');
-  const [path = 'overview', query = ''] = raw.split('?');
+  const [path = 'home', query = ''] = raw.split('?');
   return {
-    page: path.split('/')[0] || 'overview',
+    page: path.split('/')[0] || 'home',
     segments: path.split('/').filter(Boolean),
     params: new URLSearchParams(query),
   };

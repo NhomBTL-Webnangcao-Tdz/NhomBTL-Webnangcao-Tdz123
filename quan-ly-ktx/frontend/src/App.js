@@ -13,12 +13,12 @@ import StudentsPage from './pages/admin/StudentsPage';
 import UtilitiesPage from './pages/admin/UtilitiesPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
+import LandingPage from './pages/public/LandingPage';
 import StudentPortalPage from './pages/student/StudentPortalPage';
 import { getHashRoute } from './utils/hashRoute';
 
 const ADMIN_ROLES = ['ADMIN', 'MANAGER'];
 const aliases = {
-  home: 'overview',
   dashboard: 'overview',
   'utility-bills': 'invoices',
 };
@@ -50,6 +50,11 @@ function RoutedContent() {
     );
   }
 
+  // Trang chủ công khai: ai cũng xem được, nằm ngoài khung quản trị.
+  if (currentPage === 'home') {
+    return <LandingPage />;
+  }
+
   if (!user || isAuthPage) {
     if (user) {
       return (
@@ -60,10 +65,10 @@ function RoutedContent() {
     }
     return (
       <div className="auth-screen">
-        <div className="auth-brand">
+        <a className="auth-brand" href="#home" aria-label="Về trang chủ KTX Care">
           <span className="brand-mark">K</span>
           <span>KTX Care<small>QUẢN LÝ KÝ TÚC XÁ</small></span>
-        </div>
+        </a>
         <main className="auth-main">
           {currentPage === 'register' ? <RegisterPage /> : <LoginPage />}
         </main>

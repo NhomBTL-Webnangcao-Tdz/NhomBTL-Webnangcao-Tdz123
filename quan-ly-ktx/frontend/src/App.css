@@ -1724,6 +1724,7 @@ button:disabled {
   gap: 10px;
   left: clamp(20px, 5vw, 64px);
   position: absolute;
+  text-decoration: none;
   top: 25px;
 }
 
