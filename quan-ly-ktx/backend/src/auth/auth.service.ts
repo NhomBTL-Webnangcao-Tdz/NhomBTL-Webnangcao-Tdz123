@@ -1,5 +1,6 @@
 import {
   Injectable,
+  BadRequestException,
   ConflictException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -37,7 +38,11 @@ export class AuthService {
    * @throws ConflictException nếu username đã tồn tại
    */
   async register(registerDto: RegisterDto) {
-    const { username, password } = registerDto;
+    const username = registerDto.username.trim().toLowerCase();
+    const { password } = registerDto;
+    if (Buffer.byteLength(password, 'utf8') > 72) {
+      throw new BadRequestException('Mật khẩu không được vượt quá 72 byte UTF-8.');
+    }
 
     // Kiểm tra username đã tồn tại chưa
     const existingUser = await this.usersService.findByUsername(username);
@@ -74,7 +79,11 @@ export class AuthService {
    * @throws UnauthorizedException nếu credentials không đúng
    */
   async login(loginDto: LoginDto) {
-    const { username, password } = loginDto;
+    const username = loginDto.username.trim().toLowerCase();
+    const { password } = loginDto;
+    if (Buffer.byteLength(password, 'utf8') > 72) {
+      throw new UnauthorizedException('Username hoặc mật khẩu không đúng.');
+    }
 
     // Bước 1: Tìm user theo username
     const user = await this.usersService.findByUsername(username);
@@ -104,6 +113,11 @@ export class AuthService {
     return {
       message: 'Đăng nhập thành công!',
       access_token,
+      user: {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      },
     };
   }
 
@@ -134,4 +148,3 @@ export class AuthService {
     };
   }
 }
-

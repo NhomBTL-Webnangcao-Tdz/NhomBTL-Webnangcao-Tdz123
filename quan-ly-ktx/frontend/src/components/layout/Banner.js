@@ -10,6 +10,7 @@ const bannerCopy = {
   'my-room': ['CỔNG SINH VIÊN', 'Phòng của tôi', 'Thông tin lưu trú và phòng ở hiện tại.'],
   'my-bills': ['CỔNG SINH VIÊN', 'Hóa đơn của tôi', 'Theo dõi các hóa đơn và khoản cần thanh toán.'],
   login: ['KTX CARE', 'Chào mừng đến với KTX Care', 'Đăng nhập để truy cập không gian quản lý của bạn.'],
+  register: ['KTX CARE', 'Tạo tài khoản', 'Đăng ký tài khoản sinh viên để tiếp tục.'],
 };
 
 export default function Banner({ currentPage }) {

@@ -1,9 +1,11 @@
+import { Transform } from 'class-transformer';
 import { IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
 
 /**
  * RegisterDto - Data Transfer Object cho API đăng ký
  */
 export class RegisterDto {
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   @IsString({ message: 'Username phải là chuỗi ký tự' })
   @IsNotEmpty({ message: 'Username không được để trống' })
   @MinLength(3, { message: 'Username phải có ít nhất 3 ký tự' })
@@ -12,7 +14,7 @@ export class RegisterDto {
 
   @IsString({ message: 'Password phải là chuỗi ký tự' })
   @IsNotEmpty({ message: 'Password không được để trống' })
-  @MinLength(6, { message: 'Password phải có ít nhất 6 ký tự' })
+  @MinLength(6, { message: 'Mật khẩu phải có ít nhất 6 ký tự' })
+  @MaxLength(72, { message: 'Mật khẩu không được vượt quá 72 ký tự' })
   password: string;
 }
-

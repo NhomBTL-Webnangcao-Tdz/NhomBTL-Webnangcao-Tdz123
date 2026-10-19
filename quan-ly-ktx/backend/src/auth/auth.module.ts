@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from '../database/database.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -27,13 +28,26 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
   imports: [
     // Import DatabaseModule để có DATA_SOURCE provider
     DatabaseModule,
+    ConfigModule,
 
-    // Cấu hình JwtModule với secret key và thời hạn token
-    JwtModule.register({
+    JwtModule.registerAsync({
       global: true, // Đăng ký global để dùng ở bất kỳ module nào mà không cần import lại
-      secret: process.env.JWT_SECRET || 'super-secret-jwt-key-quan-ly-ktx',
-      signOptions: {
-        expiresIn: (process.env.JWT_EXPIRES_IN || '1h') as any, // Token hết hạn sau 1 giờ
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const secret = configService.get<string>('JWT_SECRET');
+        if (!secret) {
+          throw new Error(
+            'Thiếu JWT_SECRET. Thêm JWT_SECRET=<secret riêng, ít nhất 32 ký tự> vào quan-ly-ktx/backend/.env rồi khởi động lại backend.',
+          );
+        }
+        if (secret.length < 32) {
+          throw new Error('JWT_SECRET phải có ít nhất 32 ký tự.');
+        }
+        return {
+          secret,
+          signOptions: { expiresIn: '1h' },
+        };
       },
     }),
   ],

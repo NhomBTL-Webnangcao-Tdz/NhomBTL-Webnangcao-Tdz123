@@ -7,9 +7,20 @@ import { StudentModule } from './modules/student/student.module';
 import { ContractModule } from './modules/contract/contract.module';
 import { UtilityBillModule } from './modules/utility-bill/utility-bill.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { resolve } from 'node:path';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [
+        resolve(process.cwd(), '.env'),
+        resolve(process.cwd(), 'quan-ly-ktx/backend/.env'),
+        resolve(process.cwd(), '../backend/.env'),
+      ],
+    }),
+
     // Database connection (DataSource pattern)
     DatabaseModule,
 

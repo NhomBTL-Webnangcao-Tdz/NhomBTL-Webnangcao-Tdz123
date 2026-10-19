@@ -1,6 +1,7 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { ConflictException, Injectable, Inject } from '@nestjs/common';
+import { QueryFailedError, Repository } from 'typeorm';
 import { User } from './user.entity';
+import { Role } from '../../common/role.enum';
 
 /**
  * UsersService - Service quản lý thao tác với bảng users trong CSDL
@@ -18,7 +19,10 @@ export class UsersService {
    * @returns User | null
    */
   async findByUsername(username: string): Promise<User | null> {
-    return this.usersRepository.findOne({ where: { username } });
+    return this.usersRepository.findOne({
+      where: { username },
+      select: { id: true, username: true, password: true, role: true, createdAt: true, updatedAt: true },
+    });
   }
 
   /**
@@ -40,8 +44,20 @@ export class UsersService {
     const newUser = this.usersRepository.create({
       username,
       password: hashedPassword,
+      role: Role.STUDENT,
     });
-    return this.usersRepository.save(newUser);
+    try {
+      return await this.usersRepository.save(newUser);
+    } catch (error) {
+      if (
+        error instanceof QueryFailedError
+        && ['ER_DUP_ENTRY', '23505'].includes(
+          (error.driverError as { code?: string }).code || '',
+        )
+      ) {
+        throw new ConflictException('Tên đăng nhập đã được sử dụng.');
+      }
+      throw error;
+    }
   }
 }
-

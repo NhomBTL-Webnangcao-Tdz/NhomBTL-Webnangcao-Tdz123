@@ -12,6 +12,11 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { Request as ExpressRequest } from 'express';
+
+interface AuthenticatedProfileRequest extends ExpressRequest {
+  user: { sub: number; username: string; role: string };
+}
 
 /**
  * AuthController - Controller xử lý các API endpoint Authentication
@@ -95,10 +100,9 @@ export class AuthController {
   @Get('profile')
   @UseGuards(JwtAuthGuard) // Áp dụng Custom JWT Guard - sẽ verify Bearer Token
   @HttpCode(HttpStatus.OK)
-  async getProfile(@Request() req: any) {
+  async getProfile(@Request() req: AuthenticatedProfileRequest) {
     // req.user được gắn vào bởi JwtAuthGuard sau khi giải mã token thành công
     // req.user = { sub: userId, username: '...', role: '...', iat: ..., exp: ... }
     return this.authService.getProfile(req.user);
   }
 }
-

@@ -26,8 +26,8 @@ export class User {
   @Column({ length: 100 })
   username: string;
 
-  @Column()
-  password: string; // Luôn lưu dạng hash, KHÔNG lưu plaintext
+  @Column({ length: 255, select: false })
+  password: string;
 
   @Column({ type: 'enum', enum: Role, default: Role.STUDENT })
   role: Role;
@@ -38,4 +38,3 @@ export class User {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }
-
