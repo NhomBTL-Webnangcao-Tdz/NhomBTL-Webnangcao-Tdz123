@@ -66,6 +66,7 @@ NhomBTL-Webnangcao-Tdz123/
 ├── checklist.md                        # Danh sách việc cần làm và tiến độ dự án
 ├── docs/                               # Tài liệu + log từng mục checklist (mục lục: docs/readme.md)
 │   ├── de-bai.md                       # Đề thi cuối kỳ: yêu cầu từng câu, điều kiện 0 điểm
+│   ├── user-stories.md                 # User stories US-xx (Đề 1, bản nháp)
 │   ├── ke-hoach.md                     # Thiết kế đích (bản đề xuất, chờ nhóm duyệt)
 │   ├── baocao-bt-th-2.md               # Báo cáo thực hành số 2 (Phân tích bài toán, thực thể, UML)
 │   └── luu-tru/                        # Bản cũ không dùng nữa (checklist-v1.md)
@@ -423,11 +424,17 @@ Chưa có API. Hiện mới có entity `Payment` và repository provider.
    npm install
    ```
 
-3. **Cấu hình địa chỉ backend (tùy chọn):**
-   Mặc định frontend gọi `http://localhost:5001`. Nếu backend chạy ở địa chỉ khác, tạo file `quan-ly-ktx/frontend/.env`:
-   ```env
-   REACT_APP_API_URL=http://localhost:5001
+3. **Cấu hình frontend (tùy chọn):**
+   Mặc định frontend gọi `http://localhost:5001`. Muốn đổi địa chỉ backend hoặc hiển thị liên hệ ban quản lý, sao chép file mẫu rồi sửa giá trị:
+   ```bash
+   cp .env.example .env
    ```
+   | Biến | Ý nghĩa |
+   |---|---|
+   | `REACT_APP_API_URL` | Địa chỉ backend, mặc định `http://localhost:5001` |
+   | `REACT_APP_MANAGER_EMAIL`, `REACT_APP_MANAGER_PHONE` | Email, điện thoại ban quản lý ở trang "Liên hệ quản lý" của sinh viên |
+
+   Biến `REACT_APP_*` được nhúng vào bundle khi build nên ai cũng đọc được: không đặt mật khẩu hay khóa bí mật vào đây.
 
 4. **Khởi chạy ứng dụng React:**
    ```bash

@@ -8,6 +8,7 @@ Bài tập lớn cuối kỳ môn Web nâng cao (Phenikaa, lớp N02). Nhóm 3 n
 3. Khi cần thêm:
    - [readme.md](../readme.md): hiện trạng code, cài đặt, API.
    - [docs/ke-hoach.md](../docs/ke-hoach.md): thiết kế đích.
+   - [docs/user-stories.md](../docs/user-stories.md): user stories US-xx (Đề 1); API, test, ca kiểm thử tham chiếu theo mã này.
 
 ## Quy tắc bắt buộc theo đề
 - Backend: NestJS phân lớp (module → controller → service → entity), TypeORM + MySQL. Ở `quan-ly-ktx/backend`.
