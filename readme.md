@@ -62,10 +62,13 @@ Hệ thống **KTX Care** là giải pháp phần mềm quản lý ký túc xá 
 NhomBTL-Webnangcao-Tdz123/
 │
 ├── .gitignore                          # Cấu hình bỏ qua git ở thư mục gốc
-├── baocao-bt-th-2.md                   # Báo cáo thực hành số 2 (Phân tích bài toán, thực thể, UML)
+├── .claude/CLAUDE.md                   # Hướng dẫn cho AI (Claude Code tự đọc)
 ├── checklist.md                        # Danh sách việc cần làm và tiến độ dự án
-├── docs/                               # Log từng mục checklist (mục lục: docs/readme.md)
-├── ke-hoach.md                         # Thiết kế đích (bản đề xuất, chờ nhóm duyệt)
+├── docs/                               # Tài liệu + log từng mục checklist (mục lục: docs/readme.md)
+│   ├── de-bai.md                       # Đề thi cuối kỳ: yêu cầu từng câu, điều kiện 0 điểm
+│   ├── ke-hoach.md                     # Thiết kế đích (bản đề xuất, chờ nhóm duyệt)
+│   ├── baocao-bt-th-2.md               # Báo cáo thực hành số 2 (Phân tích bài toán, thực thể, UML)
+│   └── luu-tru/                        # Bản cũ không dùng nữa (checklist-v1.md)
 ├── readme.md                           # Tài liệu hướng dẫn và mô tả cấu trúc dự án (File này)
 │
 └── quan-ly-ktx/                        # Thư mục mã nguồn chính của ứng dụng
@@ -272,7 +275,6 @@ classDiagram
     Contract "1" --> "*" Payment : Thanh toán
     User "1" ..> "0..1" Student : Tài khoản của
 ```
-<<<<<<< Updated upstream
 
 > **Ghi chú về sơ đồ (phản ánh code hiện tại):**
 > - Nét liền: quan hệ đã có khóa ngoại trong code. Nét đứt: quan hệ **dự kiến**, code chưa có (phần khai báo trong entity đang bị comment hoặc chưa viết).
@@ -483,7 +485,5 @@ Chưa có API. Hiện mới có entity `Payment` và repository provider.
 
 ## 🗺 9. Kế Hoạch Phát Triển Tiếp Theo (Roadmap)
 
-Danh sách việc đầy đủ và tiến độ từng mục được theo dõi tại [checklist.md](checklist.md). Log chi tiết của từng mục nằm trong thư mục [docs/](docs/readme.md). Thiết kế đích của hệ thống (bản đề xuất) xem tại [ke-hoach.md](ke-hoach.md).
+Danh sách việc đầy đủ và tiến độ từng mục được theo dõi tại [checklist.md](checklist.md). Log chi tiết của từng mục nằm trong thư mục [docs/](docs/readme.md). Thiết kế đích của hệ thống (bản đề xuất) xem tại [docs/ke-hoach.md](docs/ke-hoach.md). Yêu cầu của đề thi cuối kỳ xem tại [docs/de-bai.md](docs/de-bai.md).
 
-=======
->>>>>>> Stashed changes

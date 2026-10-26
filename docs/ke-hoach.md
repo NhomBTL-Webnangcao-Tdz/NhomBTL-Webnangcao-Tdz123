@@ -1,7 +1,7 @@
 # Kế hoạch thiết kế đích — KTX Care
 
 > **Trạng thái: BẢN ĐỀ XUẤT, CHỜ NHÓM DUYỆT.**
-> Tài liệu này mô tả hệ thống **khi hoàn thiện** sẽ hoạt động thế nào. Hiện trạng code xem [readme.md](readme.md), tiến độ và việc cần làm xem [checklist.md](checklist.md).
+> Tài liệu này mô tả hệ thống **khi hoàn thiện** sẽ hoạt động thế nào. Hiện trạng code xem [readme.md](../readme.md), tiến độ và việc cần làm xem [checklist.md](../checklist.md), yêu cầu của đề thi xem [de-bai.md](de-bai.md).
 > Phần backend (mô hình dữ liệu, API) là **đề xuất từ phía frontend**, người phụ trách backend quyết định cách làm. Các chỗ còn phải chốt được đánh dấu **[Chốt 2.x]**, tương ứng mục 2 trong checklist.
 > Khi nhóm đã chốt, cập nhật tài liệu này theo quyết định; khi viết readme bản cuối (checklist 10.1) có thể gộp nội dung vào readme rồi bỏ file này.
 
