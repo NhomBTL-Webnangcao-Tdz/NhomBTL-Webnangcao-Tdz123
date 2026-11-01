@@ -1,14 +1,24 @@
+/* Navbar của react-bootstrap: logo | menu (giữa) | nút; dưới 992px menu thu vào nút ☰. */
 .landing-header {
-  align-items: center;
   background: #202124;
   color: #fff;
-  display: flex;
-  flex: 0 0 68px;
-  height: 68px;
-  justify-content: space-between;
+  flex: 0 0 auto;
+  min-height: 68px;
   padding: 0 22px;
   position: relative;
   z-index: 2;
+}
+
+.landing-header .landing-nav-collapse { justify-content: center; }
+
+@media (min-width: 992px) {
+  .landing-header .landing-nav-collapse { order: 1; }
+  .landing-header-actions { order: 2; }
+}
+
+.landing-header .navbar-toggler {
+  border-color: rgba(255, 255, 255, .3);
+  padding: 4px 8px;
 }
 
 .landing-header .landing-brand {
@@ -19,6 +29,8 @@
   font-size: 16px;
   font-weight: 700;
   gap: 10px;
+  margin-right: 0;
+  padding: 0;
   text-decoration: none;
 }
 
@@ -109,13 +121,13 @@
   .landing-header-actions { gap: 14px; }
 }
 
-@media (max-width: 980px) {
-  .landing-header { justify-content: flex-start; }
-  .landing-header-actions { margin-left: auto; }
+@media (max-width: 991.98px) {
+  .landing-header { padding-bottom: 8px; padding-top: 8px; }
+  .landing-header-actions { gap: 12px; margin-left: auto; }
 }
 
 @media (max-width: 560px) {
-  .landing-header { flex-basis: 62px; height: 62px; padding: 0 15px; }
+  .landing-header { min-height: 62px; padding-left: 15px; padding-right: 15px; }
   .landing-header .landing-brand { font-size: 14px; gap: 7px; }
   .landing-header .landing-brand-mark { flex-basis: 34px; height: 34px; width: 34px; }
   .landing-header .landing-brand-mark svg { height: 33px; width: 33px; }

@@ -64,7 +64,7 @@ NhomBTL-Webnangcao-Tdz123/
 ├── .gitignore                          # Cấu hình bỏ qua git ở thư mục gốc
 ├── .claude/CLAUDE.md                   # Hướng dẫn cho AI (Claude Code tự đọc)
 ├── checklist.md                        # Danh sách việc cần làm và tiến độ dự án
-├── docs/                               # Tài liệu + log từng mục checklist (mục lục: docs/readme.md)
+├── docs/                               # Tài liệu + log từng mục checklist (mục lục: docs/logs.md)
 │   ├── de-bai.md                       # Đề thi cuối kỳ: yêu cầu từng câu, điều kiện 0 điểm
 │   ├── user-stories.md                 # User stories US-xx (Đề 1, bản nháp)
 │   ├── ke-hoach.md                     # Thiết kế đích (bản đề xuất, chờ nhóm duyệt)
@@ -492,5 +492,5 @@ Chưa có API. Hiện mới có entity `Payment` và repository provider.
 
 ## 🗺 9. Kế Hoạch Phát Triển Tiếp Theo (Roadmap)
 
-Danh sách việc đầy đủ và tiến độ từng mục được theo dõi tại [checklist.md](checklist.md). Log chi tiết của từng mục nằm trong thư mục [docs/](docs/readme.md). Thiết kế đích của hệ thống (bản đề xuất) xem tại [docs/ke-hoach.md](docs/ke-hoach.md). Yêu cầu của đề thi cuối kỳ xem tại [docs/de-bai.md](docs/de-bai.md).
+Danh sách việc đầy đủ và tiến độ từng mục được theo dõi tại [checklist.md](checklist.md). Log chi tiết của từng mục nằm trong thư mục [docs/](docs/logs.md). Thiết kế đích của hệ thống (bản đề xuất) xem tại [docs/ke-hoach.md](docs/ke-hoach.md). Yêu cầu của đề thi cuối kỳ xem tại [docs/de-bai.md](docs/de-bai.md).
 

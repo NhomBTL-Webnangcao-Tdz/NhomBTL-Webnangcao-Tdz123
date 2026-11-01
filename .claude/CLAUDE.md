@@ -19,7 +19,7 @@ Bài tập lớn cuối kỳ môn Web nâng cao (Phenikaa, lớp N02). Nhóm 3 n
 ## Tổ chức file
 
 * Ở gốc repo chỉ có `readme.md`, `checklist.md`, `LICENSE`. Tài liệu khác để trong `docs/`. Bản cũ không dùng nữa để trong `docs/luu-tru/`.
-* Mỗi mục checklist có một log `docs/<số mục>-<tên ngắn>.md`, bố cục: Mục tiêu → Đã làm → File thay đổi → Kiểm thử → Lưu ý. Mục lục ở `docs/readme.md`.
+* Mỗi mục checklist có một log trong thư mục theo phần `docs/Phan <số phần>/<số mục>-<tên ngắn>.md` (VD `docs/Phan 6/6.3-xu-ly-phien.md`); tài liệu chung để thẳng trong `docs/`. Bố cục log: Mục tiêu → Đã làm → File thay đổi → Kiểm thử → Lưu ý. Mục lục ở `docs/logs.md`.
 * Log cũ là lịch sử: không sửa đường dẫn hay số mục trong log cũ.
 
 ## Định dạng file md

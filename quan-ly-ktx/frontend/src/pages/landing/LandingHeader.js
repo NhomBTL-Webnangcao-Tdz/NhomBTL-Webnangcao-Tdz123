@@ -1,10 +1,12 @@
+import Button from 'react-bootstrap/Button';
+import Navbar from 'react-bootstrap/Navbar';
 import LandingNavigation from './LandingNavigation';
 import './LandingHeader.css';
 
 export default function LandingHeader() {
   return (
-    <header className="landing-header">
-      <a className="landing-brand" href="#welcome">
+    <Navbar as="header" expand="lg" variant="dark" className="landing-header">
+      <Navbar.Brand className="landing-brand" href="#welcome">
         <span className="landing-brand-mark" aria-hidden="true">
           <svg viewBox="0 0 40 40">
             <ellipse cx="20" cy="20" rx="17" ry="7" />
@@ -14,8 +16,7 @@ export default function LandingHeader() {
           </svg>
         </span>
         <span>KTX Care</span>
-      </a>
-      <LandingNavigation />
+      </Navbar.Brand>
       <div className="landing-header-actions">
         <a className="landing-icon-link" href="#lien-he" aria-label="GitHub">
           <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -28,8 +29,12 @@ export default function LandingHeader() {
             <circle cx="12" cy="12" r="4.5" />
           </svg>
         </span>
-        <a className="landing-header-login" href="#login">Đăng nhập</a>
+        <Button className="landing-header-login" href="#login" role="link" variant="light">Đăng nhập</Button>
+        <Navbar.Toggle aria-controls="landing-nav" label="Mở menu" />
       </div>
-    </header>
+      <Navbar.Collapse id="landing-nav" className="landing-nav-collapse">
+        <LandingNavigation />
+      </Navbar.Collapse>
+    </Navbar>
   );
 }

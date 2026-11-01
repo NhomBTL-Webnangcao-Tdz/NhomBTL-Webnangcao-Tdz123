@@ -20,3 +20,8 @@ code {
 a {
   color: inherit;
 }
+
+/* Bootstrap đặt tiêu đề font-weight 500; giữ độ đậm mặc định của trình duyệt như trước khi dùng Bootstrap. */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+}

@@ -117,7 +117,11 @@
 
 .landing-button:hover { transform: translateY(-1px); }
 
+/* Button react-bootstrap không có variant: khai báo màu khi bấm để không rơi về màu mặc định của Bootstrap. */
 .landing-button-primary {
+  --bs-btn-active-bg: #066e94;
+  --bs-btn-active-border-color: #066e94;
+  --bs-btn-active-color: #fff;
   background: #087fa8;
   border-color: #087fa8;
   color: #fff;
@@ -130,6 +134,9 @@
 }
 
 .landing-button-secondary {
+  --bs-btn-active-bg: #f5fbfc;
+  --bs-btn-active-border-color: #9bb8c2;
+  --bs-btn-active-color: #34414b;
   background: #fff;
   color: #485160;
 }
@@ -433,14 +440,15 @@
 }
 
 .landing-introduction {
-  align-items: start;
-  display: grid;
-  gap: clamp(40px, 8vw, 115px);
-  grid-template-columns: .85fr 1.15fr;
   margin: 0 auto;
   max-width: 1080px;
   padding: 94px 35px 100px;
   scroll-margin-top: 22px;
+}
+
+.landing-introduction-row {
+  --bs-gutter-x: clamp(40px, 8vw, 115px);
+  --bs-gutter-y: 25px;
 }
 
 .introduction-heading h2,
@@ -495,11 +503,10 @@
 }
 
 .purpose-grid {
-  display: grid;
-  gap: 18px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  --bs-gutter-x: 18px;
+  --bs-gutter-y: 18px;
   margin: 0 auto;
-  max-width: 1050px;
+  max-width: 1068px;
 }
 
 .purpose-card {
@@ -551,13 +558,15 @@
 }
 
 .landing-connection {
-  align-items: center;
-  display: grid;
-  gap: clamp(36px, 8vw, 100px);
-  grid-template-columns: .7fr 1.3fr;
   margin: 0 auto;
   max-width: 1000px;
   padding: 92px 35px 100px;
+}
+
+.landing-connection-row {
+  --bs-gutter-x: clamp(28px, 6vw, 80px);
+  --bs-gutter-y: 28px;
+  align-items: center;
 }
 
 .connection-mark {
@@ -645,15 +654,11 @@
   .landing-devices { width: 96%; }
   .device-phone { transform: scale(.86); transform-origin: bottom center; }
   .landing-about { min-height: 170px; }
-  .landing-introduction {
-    gap: 25px;
-    grid-template-columns: 1fr;
-    padding: 70px 30px;
-  }
+  .landing-introduction { padding: 70px 30px; }
   .introduction-copy { padding-left: 20px; }
-  .purpose-grid { grid-template-columns: 1fr; max-width: 520px; }
+  .purpose-grid { max-width: 538px; }
   .purpose-card { min-height: 0; }
-  .landing-connection { gap: 28px; grid-template-columns: .65fr 1.35fr; padding: 70px 30px; }
+  .landing-connection { padding: 70px 30px; }
 }
 
 @media (max-width: 560px) {
@@ -709,7 +714,7 @@
   .purpose-heading h2 { font-size: 30px; }
   .purpose-heading > p { font-size: 13px; }
   .purpose-card { padding: 21px; }
-  .landing-connection { grid-template-columns: 1fr; padding: 65px 22px; }
+  .landing-connection { padding: 65px 22px; }
   .connection-mark { max-width: 165px; }
   .connection-mark span:first-child { left: 0; top: 35px; }
   .connection-mark span:last-child { bottom: 28px; right: -2px; }

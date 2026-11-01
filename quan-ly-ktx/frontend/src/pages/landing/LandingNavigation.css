@@ -8,6 +8,10 @@
   min-width: 0;
 }
 
+.landing-header .landing-nav .nav-link {
+  padding: 0;
+}
+
 .landing-nav a {
   color: #f1f1f2;
   font-size: 15px;
@@ -38,6 +42,7 @@
   .landing-nav a { font-size: 14px; }
 }
 
-@media (max-width: 980px) {
-  .landing-nav { display: none; }
+@media (max-width: 991.98px) {
+  .landing-nav { align-items: flex-start; gap: 0; margin: 8px 0 4px; }
+  .landing-header .landing-nav .nav-link { padding: 10px 0; width: 100%; }
 }

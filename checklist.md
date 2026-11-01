@@ -15,7 +15,7 @@ Cách dùng:
 * Làm từ trên xuống: xong một phần mới sang phần sau. Trong cùng một phần, FE và BE có thể làm song song.
 * (FE) frontend, (BE) backend, (Nhóm) cả nhóm quyết hoặc cùng làm. Mục BE do FE đề xuất, người phụ trách backend quyết cách làm.
 * [Đề x] là câu của đề thi mà mục đó phục vụ.
-* Mỗi mục làm xong có log trong `docs/` (Mục tiêu → Đã làm → File thay đổi → Kiểm thử → Lưu ý). Mục lục và mã commit ở `docs/readme.md`.
+* Mỗi mục làm xong có log trong `docs/` (Mục tiêu → Đã làm → File thay đổi → Kiểm thử → Lưu ý). Mục lục và mã commit ở `docs/logs.md`.
 
 Ký hiệu:
 
@@ -79,20 +79,20 @@ Chi tiết từng câu: `docs/de-bai.md`.
 * [x] 1.1 (Nhóm/BE) Đổi mật khẩu DB Aiven và bỏ thông tin DB khỏi code (code sạch từ commit `1c56b71`; Nam đánh dấu xong ở `7864eac`, xem phần 11)
 * [x] 1.2 (BE) Chuyển cấu hình sang `.env` (commit `1c56b71`)
 * [x] 1.3 (FE) Xóa file thừa `App 2.js`, `logo.svg`, `reportWebVitals.js` (commit `1c56b71`)
-* [x] 1.4 (FE) Rà soát `readme.md` cho khớp code hiện tại. Log `docs/1.4-ra-soat-readme.md`
+* [x] 1.4 (FE) Rà soát `readme.md` cho khớp code hiện tại. Log `docs/Phan 1/1.4-ra-soat-readme.md`
 * [x] 1.5 (FE) Tạo thư mục log + mục lục (nay là `docs/`)
-* [x] 1.6 (FE) Viết `docs/ke-hoach.md`: thiết kế đích (vai trò, luồng L1–L6, quy tắc R1–R10, dữ liệu, API, giao diện). Log `docs/1.6-ke-hoach.md`
-* [x] 1.7 (FE) Sắp xếp lại checklist theo giai đoạn, làm từ trên xuống. Log `docs/1.7-sap-xep-checklist.md`
+* [x] 1.6 (FE) Viết `docs/ke-hoach.md`: thiết kế đích (vai trò, luồng L1–L6, quy tắc R1–R10, dữ liệu, API, giao diện). Log `docs/Phan 1/1.6-ke-hoach.md`
+* [x] 1.7 (FE) Sắp xếp lại checklist theo giai đoạn, làm từ trên xuống. Log `docs/Phan 1/1.7-sap-xep-checklist.md`
 * [ ] 1.8 (BE) Thêm `backend/.env.example` (mẫu tạm có trong readme mục 7.2); quyết định có đọc lại `JWT_EXPIRES_IN` hay giữ cố định 1 giờ
-* [x] 1.9 (FE) Thêm `frontend/.env.example` (`REACT_APP_API_URL`, `REACT_APP_MANAGER_EMAIL`, `REACT_APP_MANAGER_PHONE`). Log `docs/1.9-frontend-env-example.md`
-* [~] 1.10 (Nhóm) Thêm file `LICENSE` có thông báo bản quyền ở gốc repo và `quan-ly-ktx/frontend/`; chọn loại license (VD MIT), ghi tên nhóm và năm; sửa trường `license` trong 2 `package.json` cho khớp [Đề 3c]. Đã thêm MIT (tạm), sửa `package.json` frontend. Còn: nhóm xác nhận MIT, backend đổi `UNLICENSED`. Log `docs/1.10-license.md`
+* [x] 1.9 (FE) Thêm `frontend/.env.example` (`REACT_APP_API_URL`, `REACT_APP_MANAGER_EMAIL`, `REACT_APP_MANAGER_PHONE`). Log `docs/Phan 1/1.9-frontend-env-example.md`
+* [~] 1.10 (Nhóm) Thêm file `LICENSE` có thông báo bản quyền ở gốc repo và `quan-ly-ktx/frontend/`; chọn loại license (VD MIT), ghi tên nhóm và năm; sửa trường `license` trong 2 `package.json` cho khớp [Đề 3c]. Đã thêm MIT (tạm), sửa `package.json` frontend. Còn: nhóm xác nhận MIT, backend đổi `UNLICENSED`. Log `docs/Phan 1/1.10-license.md`
 * [ ] 1.11 (BE) Gỡ `quan-ly-ktx/backend/storage/` khỏi git (`git rm -r --cached`): đang commit ảnh đồng hồ, biên lai thật của người dùng dù `.gitignore` đã chặn [Đề 3d, 9]
 
 ## 2. Chốt thiết kế & tổ chức nhóm
 
 Đề xuất cho các mục 2.4–2.9 có trong `docs/ke-hoach.md` (đánh dấu [Chốt 2.x]). Phần này phải xong trước khi code phần 3. Riêng 2.12–2.14 là tài liệu đề bắt buộc nộp, làm song song với các phần sau được.
 
-* [~] 2.1 (Nhóm) Thu thập đề bài và tiêu chí chấm của giảng viên; đối chiếu và bổ sung checklist. Đã ghi đề vào `docs/de-bai.md` và bổ sung checklist theo đề (log `docs/2.1-de-bai-va-sap-xep-docs.md`, `docs/2.1-bo-sung-checklist-theo-de.md`). Còn: hỏi giáo viên các điểm chưa rõ (2.15)
+* [~] 2.1 (Nhóm) Thu thập đề bài và tiêu chí chấm của giảng viên; đối chiếu và bổ sung checklist. Đã ghi đề vào `docs/de-bai.md` và bổ sung checklist theo đề (log `docs/Phan 2/2.1-de-bai-va-sap-xep-docs.md`, `docs/Phan 2/2.1-bo-sung-checklist-theo-de.md`). Còn: hỏi giáo viên các điểm chưa rõ (2.15)
 * [ ] 2.2 (Nhóm) Phân công theo người (ghi tên vào từng phần) và đặt mốc thời gian; hạn nộp 09/11/2026 (bản cứng trước 17h, PDF trước 23h59)
 * [ ] 2.3 (Nhóm) Thống nhất quy trình git (mỗi người một nhánh `feature/*` hay cùng đẩy `main`, ai merge, cách đặt tên commit)
 * [ ] 2.4 (Nhóm) Quy ước đặt tên (đề xuất: thuộc tính camelCase trong TS, tên cột snake_case qua `name:`) và kiểu khóa chính cho từng bảng
@@ -101,13 +101,13 @@ Chi tiết từng câu: `docs/de-bai.md`.
 * [ ] 2.7 (Nhóm) Hóa đơn điện nước: `UNPAID | PAID` (hay giữ `is_paid`), thu theo phòng hay chia đầu người, thanh toán điện nước có ghi vào `Payment` không
 * [~] 2.8 (Nhóm) Đơn giá điện/nước lưu ở đâu. Code đã có bảng `utility_tariff` + API `utility-bill/tariff` (commit `fde890e`); nhóm xác nhận giữ cách này
 * [ ] 2.9 (Nhóm) Phạm vi mở rộng: đơn đăng ký ở, yêu cầu sửa chữa, thông báo, xuất file (quyết định phần 8)
-* [ ] 2.10 (Nhóm) React-Bootstrap đang cài nhưng chưa file nào dùng, mà đề 5b bắt buộc dùng. Chốt phạm vi chuyển đổi: trang chủ theo mẫu React Native, layout, form, bảng… [Đề 5b]
+* [~] 2.10 (Nhóm) React-Bootstrap đang cài nhưng chưa file nào dùng, mà đề 5b bắt buộc dùng. Trang chủ đã dùng (6.12). Chốt phạm vi chuyển đổi: trang chủ theo mẫu React Native, layout, form, bảng… [Đề 5b]
 * [ ] 2.11 (Nhóm) Cập nhật `docs/ke-hoach.md` và UML trong readme theo các quyết định trên, đổi trạng thái `docs/ke-hoach.md` thành "đã duyệt" [Đề 2b]
-* [~] 2.12 (Nhóm) User stories: tối thiểu 12 câu, đúng định dạng "Là <vai trò>, tôi muốn <hành động> để <lợi ích>.", đánh mã US-xx, mỗi câu ứng với API, màn hình, test [Đề 1]. Bản nháp 24 câu ở `docs/user-stories.md` (log `docs/2.12-user-stories.md`). Còn: nhóm duyệt
-* [~] 2.13 (Nhóm) Phân tích yêu cầu, đối tượng, quan hệ, phương thức; sơ đồ thuật toán (flowchart) cho các nghiệp vụ chính [Đề 2a, 2b]. Bản nháp ở `docs/phan-tich-thiet-ke.md` (UML + 6 flowchart, log `docs/2.13-phan-tich-thiet-ke.md`). Còn: nhóm duyệt
-* [~] 2.14 (Nhóm) Wireframe các màn hình chính; sơ đồ luồng xử lý thông tin (người dùng → React → API → Controller → Service → DB) cho 2–3 luồng chính [Đề 3a, 3b]. Bản nháp ở `docs/wireframe-luong-xu-ly.md` (log `docs/2.14-wireframe-luong-xu-ly.md`). Còn: nhóm duyệt, vẽ lại trang chủ sau 6.12
+* [~] 2.12 (Nhóm) User stories: tối thiểu 12 câu, đúng định dạng "Là <vai trò>, tôi muốn <hành động> để <lợi ích>.", đánh mã US-xx, mỗi câu ứng với API, màn hình, test [Đề 1]. Bản nháp 24 câu ở `docs/user-stories.md` (log `docs/Phan 2/2.12-user-stories.md`). Còn: nhóm duyệt
+* [~] 2.13 (Nhóm) Phân tích yêu cầu, đối tượng, quan hệ, phương thức; sơ đồ thuật toán (flowchart) cho các nghiệp vụ chính [Đề 2a, 2b]. Bản nháp ở `docs/phan-tich-thiet-ke.md` (UML + 6 flowchart, log `docs/Phan 2/2.13-phan-tich-thiet-ke.md`). Còn: nhóm duyệt
+* [~] 2.14 (Nhóm) Wireframe các màn hình chính; sơ đồ luồng xử lý thông tin (người dùng → React → API → Controller → Service → DB) cho 2–3 luồng chính [Đề 3a, 3b]. Bản nháp ở `docs/wireframe-luong-xu-ly.md` (log `docs/Phan 2/2.14-wireframe-luong-xu-ly.md`). Còn: nhóm duyệt, vẽ lại trang chủ sau 6.12
 * [ ] 2.15 (Nhóm) Hỏi giáo viên 5 điểm chưa rõ của đề, ghi câu trả lời vào mục 4 của `docs/de-bai.md`
-* [ ] 2.16 (Nhóm) Chọn một trang chủ: `pages/landing/` trên `main` (Nam) hay `pages/public/` ở nhánh `feature/trang-chu-tandz` (Tân, chưa merge); merge hoặc bỏ nhánh còn lại [Đề 5b]
+* [x] 2.16 (Nhóm) Chọn một trang chủ: `pages/landing/` trên `main` (Nam) hay `pages/public/` ở nhánh `feature/trang-chu-tandz` (Tân, chưa merge); merge hoặc bỏ nhánh còn lại [Đề 5b]. Chốt 01/11/2026: dùng `pages/landing/` của Nam; nhánh `feature/trang-chu-tandz` không merge
 
 ## 3. Database & dữ liệu (BE)
 
@@ -154,8 +154,8 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 
 * [ ] 6.1 (FE) Kiểm thử các trang admin hiện có trên app thật với API mới (tải / rỗng / lỗi, 375px, console, XSS), ghi lại lỗi
 * [ ] 6.2 (FE) Phần dùng chung: toast thành công/lỗi, hộp xác nhận trước khi xóa, validate form khớp DTO backend
-* [x] 6.3 (FE) Xử lý phiên: 401 → đăng xuất, về đăng nhập kèm thông báo; 403 → báo "Không có quyền" [Đề 3d, 4c]. Log `docs/6.3-xu-ly-phien.md`
-* [x] 6.4 (FE) Sidebar theo vai trò: ẩn menu quản lý với STUDENT, ẩn mục chỉ-ADMIN với MANAGER. Code có từ `fde890e`, thêm test. Log `docs/6.4-sidebar-theo-vai-tro.md`
+* [x] 6.3 (FE) Xử lý phiên: 401 → đăng xuất, về đăng nhập kèm thông báo; 403 → báo "Không có quyền" [Đề 3d, 4c]. Log `docs/Phan 6/6.3-xu-ly-phien.md`
+* [x] 6.4 (FE) Sidebar theo vai trò: ẩn menu quản lý với STUDENT, ẩn mục chỉ-ADMIN với MANAGER. Code có từ `fde890e`, thêm test. Log `docs/Phan 6/6.4-sidebar-theo-vai-tro.md`
 * [ ] 6.5 (FE) Tòa nhà & Phòng: lưới phòng theo tòa/tầng, màu theo trạng thái, lọc, chi tiết phòng (SV đang ở, lịch sử HĐ)
 * [ ] 6.6 (FE) Sinh viên: tìm kiếm, lọc, trang chi tiết (hồ sơ, tài khoản liên kết, phòng, HĐ, công nợ)
 * [ ] 6.7 (FE) Hợp đồng: tab theo trạng thái, form theo bước (SV → phòng còn chỗ → thời hạn, cọc), Gia hạn / Kết thúc, ghi nhận thanh toán
@@ -163,7 +163,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [ ] 6.9 (FE) Hóa đơn: lọc tháng/tòa/trạng thái, đánh dấu đã thu, xem/in hóa đơn
 * [ ] 6.10 (FE) Tổng quan: thẻ số liệu, biểu đồ lấp đầy theo tòa, thu tiền 6 tháng, danh sách việc cần làm
 * [ ] 6.11 (FE) Cài đặt: đơn giá điện/nước, quản lý tài khoản cán bộ (chỉ ADMIN)
-* [ ] 6.12 (FE) Chuyển giao diện sang `react-bootstrap` theo phạm vi chốt ở 2.10; trang chủ theo mẫu React Native (3 ảnh chụp kèm đề) [Đề 5b]
+* [~] 6.12 (FE) Chuyển giao diện sang `react-bootstrap` theo phạm vi chốt ở 2.10; trang chủ theo mẫu React Native (3 ảnh chụp kèm đề) [Đề 5b]. Xong trang chủ (Navbar, Container, Row/Col, Card, Button, Stack), log `docs/Phan 6/6.12-landing-react-bootstrap.md`. Còn: các trang sau đăng nhập
 * [ ] 6.13 (FE) Rà usability: mỗi tác vụ chính ≤ 4 thao tác, gợi ý / tự điền, thông báo không gây phiền; ghi số thao tác vào báo cáo [Đề 5c]
 
 ## 7. Frontend cổng sinh viên (STUDENT)
@@ -182,13 +182,13 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 
 ## 9. Kiểm thử & triển khai
 
-* [x] 9.1 (FE) Rà soát toàn bộ giao diện: 375px, không lỗi console, không render HTML từ dữ liệu người dùng, không `console.log` dữ liệu người dùng [Đề 3d, 7e]. Thử với backend giả; sửa tải ảnh bỏ qua 401, thông báo tiếng Nga, tắt source map. Log `docs/9.1-ra-soat-frontend.md`
+* [x] 9.1 (FE) Rà soát toàn bộ giao diện: 375px, không lỗi console, không render HTML từ dữ liệu người dùng, không `console.log` dữ liệu người dùng [Đề 3d, 7e]. Thử với backend giả; sửa tải ảnh bỏ qua 401, thông báo tiếng Nga, tắt source map. Log `docs/Phan 9/9.1-ra-soat-frontend.md`
 * [ ] 9.2 (FE) Test component chính ở frontend (form, guard, xử lý phiên) [Đề 7e]
 * [ ] 9.3 (Nhóm) E2E luồng chính: lập HĐ → nhập điện nước → SV xem hóa đơn → ghi thanh toán → kết thúc HĐ [Đề 7c]
 * [ ] 9.4 (Nhóm) Triển khai backend, frontend, DB lên cloud; cấu hình CORS + biến môi trường
 * [ ] 9.5 (Nhóm) Kiểm thử trên bản đã triển khai với 3 tài khoản demo
 * [ ] 9.6 (Nhóm) (Tùy chọn) Tự chạy lint + test khi push (GitHub Actions)
-* [~] 9.7 (Nhóm) Danh sách ca kiểm thử: đầu vào, kết quả mong đợi, kết quả thực tế, ảnh chụp; gồm cả ca lỗi và ca thành công [Đề 7d]. Nháp `docs/ca-kiem-thu.md` (46 ca, BE 27/27, FE 25/25). Còn: ảnh chụp, ca E2E. Log `docs/9.7-ca-kiem-thu.md`
+* [~] 9.7 (Nhóm) Danh sách ca kiểm thử: đầu vào, kết quả mong đợi, kết quả thực tế, ảnh chụp; gồm cả ca lỗi và ca thành công [Đề 7d]. Nháp `docs/ca-kiem-thu.md` (46 ca, BE 27/27, FE 25/25). Còn: ảnh chụp, ca E2E. Log `docs/Phan 9/9.7-ca-kiem-thu.md`
 
 ## 10. Tài liệu & bảo vệ
 
@@ -197,7 +197,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [ ] 10.3 (Nhóm) Báo cáo cuối kỳ theo mẫu Phenikaa, trả lời đủ 10 câu của đề; có trang link demo, link GitHub, đóng góp từng thành viên [Đề 8]
 * [ ] 10.4 (Nhóm) Video demo dưới 8 phút (đưa link vào báo cáo) + slide, kịch bản demo [Đề 8]
 * [ ] 10.5 (Nhóm) Dọn dữ liệu thử còn sót (theo log), kiểm tra lần cuối
-* [~] 10.6 (Nhóm) Phần luật (VD Nghị định 13/2023 về dữ liệu cá nhân, Luật An ninh mạng, license thư viện), đạo đức nghề nghiệp, đạo đức xã hội; tự kiểm tra an ninh an toàn của dự án [Đề 9]. Nháp `docs/luat-dao-duc.md`. Còn: nhóm duyệt. Log `docs/10.6-luat-dao-duc.md`
+* [~] 10.6 (Nhóm) Phần luật (VD Nghị định 13/2023 về dữ liệu cá nhân, Luật An ninh mạng, license thư viện), đạo đức nghề nghiệp, đạo đức xã hội; tự kiểm tra an ninh an toàn của dự án [Đề 9]. Nháp `docs/luat-dao-duc.md`. Còn: nhóm duyệt. Log `docs/Phan 10/10.6-luat-dao-duc.md`
 * [ ] 10.7 (Nhóm) Bảng đóng góp từng thành viên, đối chiếu commit. Mỗi người phải có commit và đóng góp thật (Sơn hiện mới có 2 commit, ngày 23/09) [Đề 10a, 10b; điều kiện 0 điểm]
 * [ ] 10.8 (Nhóm) Nộp trước 09/11/2026: PDF lên Canvas, bản cứng mỗi người 1 bản tại phòng 2310 nhà A9, ký danh sách nộp [điều kiện 0 điểm]
 
@@ -232,7 +232,7 @@ NhomBTL-Webnangcao-Tdz123/
 │           ├── pages/        # auth, admin, student, landing
 │           └── utils/        # hashRoute
 ├── .claude/CLAUDE.md         # Hướng dẫn cho AI (Claude Code tự đọc)
-├── docs/                     # Tài liệu + log từng mục checklist (mục lục: docs/readme.md)
+├── docs/                     # Tài liệu + log từng mục checklist (mục lục: docs/logs.md)
 │   ├── de-bai.md             # Đề thi cuối kỳ: yêu cầu từng câu, điều kiện 0 điểm
 │   ├── user-stories.md       # User stories US-xx (Đề 1)
 │   ├── phan-tich-thiet-ke.md # Phân tích, UML, sơ đồ thuật toán (Đề 2)
