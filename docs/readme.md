@@ -28,10 +28,12 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 1.9: thêm `quan-ly-ktx/frontend/.env.example`, cập nhật readme. `1.9-frontend-env-example.md`. Xong, `f1c2a14`
 * 2.1 (phần 2): bổ sung checklist theo đề (đối chiếu đề, mục mới có nhãn [Đề x], cập nhật trạng thái theo code). `2.1-bo-sung-checklist-theo-de.md`. Xong phần 2, còn 2.15, `f1c2a14`
 * 2.12: nháp 24 user stories. `2.12-user-stories.md`. Nháp xong, chờ nhóm duyệt, `f1c2a14`
-* 6.3: xử lý phiên 401 đăng xuất, 403 báo không có quyền. `6.3-xu-ly-phien.md`. Xong, chờ commit
-* 6.4: sidebar theo vai trò (code có sẵn, thêm test). `6.4-sidebar-theo-vai-tro.md`. Xong, chờ commit
-* 2.13: nháp phân tích, UML, 6 sơ đồ thuật toán. `2.13-phan-tich-thiet-ke.md`. Nháp xong, chờ nhóm duyệt, chờ commit
-* 2.14: nháp wireframe và 4 sơ đồ luồng xử lý. `2.14-wireframe-luong-xu-ly.md`. Nháp xong, chờ nhóm duyệt, chờ commit
+* 6.3: xử lý phiên 401 đăng xuất, 403 báo không có quyền. `6.3-xu-ly-phien.md`. Xong, `2af40b4`
+* 6.4: sidebar theo vai trò (code có sẵn, thêm test). `6.4-sidebar-theo-vai-tro.md`. Xong, `2af40b4`
+* 2.13: nháp phân tích, UML, 6 sơ đồ thuật toán. `2.13-phan-tich-thiet-ke.md`. Nháp xong, chờ nhóm duyệt, `04fd5a1`
+* 2.14: nháp wireframe và 4 sơ đồ luồng xử lý. `2.14-wireframe-luong-xu-ly.md`. Nháp xong, chờ nhóm duyệt, `04fd5a1`
+* 1.10: LICENSE MIT (tạm) ở gốc và frontend. `1.10-license.md`. Chờ nhóm xác nhận, chờ commit
+* 9.1: rà soát bảo mật, giao diện FE; sửa 3 lỗi. `9.1-ra-soat-frontend.md`. Xong, chờ commit
 
 Việc ngoài checklist (không có log riêng):
 

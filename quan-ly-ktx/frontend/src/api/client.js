@@ -10,7 +10,15 @@ export function setUnauthorizedHandler(handler) {
   unauthorizedHandler = handler;
 }
 
-export async function apiRequest(path, options = {}) {
+async function readPayload(response) {
+  const contentType = response.headers.get('content-type') || '';
+  return contentType.includes('application/json')
+    ? response.json()
+    : response.text();
+}
+
+// Gửi request kèm token; mọi lỗi HTTP (kể cả 401/403) đều đi qua đây.
+async function send(path, options = {}) {
   const headers = new Headers(options.headers || {});
   const token = localStorage.getItem(TOKEN_KEY);
 
@@ -25,13 +33,10 @@ export async function apiRequest(path, options = {}) {
     ...options,
     headers,
   });
-  const contentType = response.headers.get('content-type') || '';
-  const payload = contentType.includes('application/json')
-    ? await response.json()
-    : await response.text();
 
   if (!response.ok) {
-    const rawMessage = typeof payload === 'string'
+    const payload = await readPayload(response).catch(() => '');
+    const rawMessage = typeof payload === 'string' && payload
       ? payload
       : payload.message || `Yêu cầu thất bại (HTTP ${response.status}).`;
     let message = Array.isArray(rawMessage) ? rawMessage.join(', ') : rawMessage;
@@ -49,7 +54,17 @@ export async function apiRequest(path, options = {}) {
     throw error;
   }
 
-  return payload;
+  return response;
+}
+
+export async function apiRequest(path, options = {}) {
+  return readPayload(await send(path, options));
+}
+
+// Tải file (ảnh) có xác thực, trả về object URL để gắn vào <img> / <a>.
+export async function apiBlobRequest(path) {
+  const response = await send(path);
+  return URL.createObjectURL(await response.blob());
 }
 
 export function getApiBaseUrl() {

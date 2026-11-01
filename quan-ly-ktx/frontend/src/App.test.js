@@ -737,3 +737,29 @@ test('a forbidden API response shows a Vietnamese permission message and keeps t
   expect(screen.getByRole('navigation', { name: 'Điều hướng chính' })).toBeInTheDocument();
   expect(localStorage.getItem('ktx_access_token')).toBe('test-token');
 });
+
+test('an expired token while loading a receipt image also logs the user out', async () => {
+  localStorage.setItem('ktx_access_token', 'test-token');
+  global.fetch.mockImplementation(async (url) => {
+    if (url.endsWith('/auth/profile')) return jsonResponse({ id: 27, username: 'student27', role: 'STUDENT' });
+    if (url.endsWith('/student/me/portal')) return jsonResponse({
+      linked: true,
+      student: { sid: 'SV027', name: 'Sinh viên 27', email: 'sv27@example.com', phone: '0900000027' },
+      room: { id: 'room-27', building: 'A', roomNumber: '107' },
+      roommates: [],
+      bills: [{
+        bill_id: 27, billType: 'GENERAL', title: 'Sửa điều hòa', description: '', month: 10, year: 2026,
+        total_amount: 50000, dueDate: '2099-11-10', is_paid: false, hasReceiptImage: true,
+      }],
+    });
+    if (url.endsWith('/utility-bill/27/receipt')) return jsonResponse({ message: 'Unauthorized' }, false, 401);
+    return jsonResponse([]);
+  });
+  window.history.replaceState({}, '', '/#my-bills');
+
+  render(<App />);
+
+  expect(await screen.findByRole('heading', { name: 'Đăng nhập hệ thống' })).toBeInTheDocument();
+  expect(screen.getByRole('alert')).toHaveTextContent('Phiên đăng nhập đã hết hạn');
+  expect(localStorage.getItem('ktx_access_token')).toBeNull();
+});

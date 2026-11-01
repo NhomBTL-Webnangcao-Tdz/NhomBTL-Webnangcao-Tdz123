@@ -18,7 +18,7 @@ Bài tập lớn cuối kỳ môn Web nâng cao (Phenikaa, lớp N02). Nhóm 3 n
 
 ## Tổ chức file
 
-* Ở gốc repo chỉ có `readme.md`, `checklist.md`. Tài liệu khác để trong `docs/`. Bản cũ không dùng nữa để trong `docs/luu-tru/`.
+* Ở gốc repo chỉ có `readme.md`, `checklist.md`, `LICENSE`. Tài liệu khác để trong `docs/`. Bản cũ không dùng nữa để trong `docs/luu-tru/`.
 * Mỗi mục checklist có một log `docs/<số mục>-<tên ngắn>.md`, bố cục: Mục tiêu → Đã làm → File thay đổi → Kiểm thử → Lưu ý. Mục lục ở `docs/readme.md`.
 * Log cũ là lịch sử: không sửa đường dẫn hay số mục trong log cũ.
 
@@ -32,6 +32,8 @@ Viết để đọc được trong text editor và khi xem diff, theo kiểu c�
 * In đậm hạn chế: chỉ cho nhãn đầu dòng ở phần giới thiệu (VD `* **Backend:** ...`) và ngày ở phần cập nhật. Không in đậm giữa câu.
 * Không dùng blockquote `>`, không lồng danh sách quá 2 cấp.
 * Tên file, lệnh, đường dẫn, mã endpoint để trong backtick. Cây thư mục để trong khối ` ```text `.
+
+* Log và tài liệu viết ngắn gọn: mỗi phần vài dòng, chỉ ý chính.
 
 ## Làm việc với nhóm
 

@@ -85,7 +85,7 @@ Chi tiết từng câu: `docs/de-bai.md`.
 * [x] 1.7 (FE) Sắp xếp lại checklist theo giai đoạn, làm từ trên xuống. Log `docs/1.7-sap-xep-checklist.md`
 * [ ] 1.8 (BE) Thêm `backend/.env.example` (mẫu tạm có trong readme mục 7.2); quyết định có đọc lại `JWT_EXPIRES_IN` hay giữ cố định 1 giờ
 * [x] 1.9 (FE) Thêm `frontend/.env.example` (`REACT_APP_API_URL`, `REACT_APP_MANAGER_EMAIL`, `REACT_APP_MANAGER_PHONE`). Log `docs/1.9-frontend-env-example.md`
-* [ ] 1.10 (Nhóm) Thêm file `LICENSE` có thông báo bản quyền ở gốc repo và `quan-ly-ktx/frontend/`; chọn loại license (VD MIT), ghi tên nhóm và năm; sửa trường `license` trong 2 `package.json` cho khớp [Đề 3c]
+* [~] 1.10 (Nhóm) Thêm file `LICENSE` có thông báo bản quyền ở gốc repo và `quan-ly-ktx/frontend/`; chọn loại license (VD MIT), ghi tên nhóm và năm; sửa trường `license` trong 2 `package.json` cho khớp [Đề 3c]. Đã thêm MIT (tạm), sửa `package.json` frontend. Còn: nhóm xác nhận MIT, backend đổi `UNLICENSED`. Log `docs/1.10-license.md`
 * [ ] 1.11 (BE) Gỡ `quan-ly-ktx/backend/storage/` khỏi git (`git rm -r --cached`): đang commit ảnh đồng hồ, biên lai thật của người dùng dù `.gitignore` đã chặn [Đề 3d, 9]
 
 ## 2. Chốt thiết kế & tổ chức nhóm
@@ -182,7 +182,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 
 ## 9. Kiểm thử & triển khai
 
-* [ ] 9.1 (FE) Rà soát toàn bộ giao diện: 375px, không lỗi console, không render HTML từ dữ liệu người dùng, không `console.log` dữ liệu người dùng [Đề 3d, 7e]
+* [x] 9.1 (FE) Rà soát toàn bộ giao diện: 375px, không lỗi console, không render HTML từ dữ liệu người dùng, không `console.log` dữ liệu người dùng [Đề 3d, 7e]. Thử với backend giả; sửa tải ảnh bỏ qua 401, thông báo tiếng Nga, tắt source map. Log `docs/9.1-ra-soat-frontend.md`
 * [ ] 9.2 (FE) Test component chính ở frontend (form, guard, xử lý phiên) [Đề 7e]
 * [ ] 9.3 (Nhóm) E2E luồng chính: lập HĐ → nhập điện nước → SV xem hóa đơn → ghi thanh toán → kết thúc HĐ [Đề 7c]
 * [ ] 9.4 (Nhóm) Triển khai backend, frontend, DB lên cloud; cấu hình CORS + biến môi trường
@@ -239,6 +239,7 @@ NhomBTL-Webnangcao-Tdz123/
 │   ├── ke-hoach.md           # Thiết kế đích (bản đề xuất)
 │   ├── baocao-bt-th-2.md     # Báo cáo bài thực hành số 2
 │   └── luu-tru/              # Bản cũ không dùng nữa (checklist-v1.md)
+├── LICENSE                   # MIT (Đề 3c)
 ├── checklist.md              # Bảng theo dõi tiến độ (file này)
 └── readme.md                 # Hiện trạng, cài đặt và chạy dự án
 ```

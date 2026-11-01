@@ -1,4 +1,4 @@
-import { apiRequest, getApiBaseUrl, TOKEN_KEY } from './client';
+import { apiBlobRequest, apiRequest } from './client';
 
 function buildPhotos(electricPhoto, waterPhoto) {
   const formData = new FormData();
@@ -20,17 +20,7 @@ export const meterReadingApi = {
     method: 'PATCH',
     body: JSON.stringify(details),
   }),
-  getPhoto: async (id, meter) => {
-    const headers = new Headers();
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (token) headers.set('Authorization', `Bearer ${token}`);
-    const response = await fetch(`${getApiBaseUrl()}/meter-readings/${id}/photo/${meter}`, { headers });
-    if (!response.ok) {
-      const payload = await response.json().catch(() => ({}));
-      throw new Error(payload.message || `Не удалось загрузить фото (HTTP ${response.status}).`);
-    }
-    return URL.createObjectURL(await response.blob());
-  },
+  getPhoto: (id, meter) => apiBlobRequest(`/meter-readings/${id}/photo/${meter}`),
   tariff: () => apiRequest('/utility-bill/tariff'),
   updateTariff: (tariff) => apiRequest('/utility-bill/tariff', {
     method: 'PUT',

@@ -1,16 +1,6 @@
-import { apiRequest, getApiBaseUrl, TOKEN_KEY } from './client';
+import { apiBlobRequest, apiRequest } from './client';
 
-async function getReceipt(billId) {
-  const headers = new Headers();
-  const token = localStorage.getItem(TOKEN_KEY);
-  if (token) headers.set('Authorization', `Bearer ${token}`);
-  const response = await fetch(`${getApiBaseUrl()}/utility-bill/${billId}/receipt`, { headers });
-  if (!response.ok) {
-    const payload = await response.json().catch(() => ({}));
-    throw new Error(payload.message || `Không thể tải ảnh hóa đơn (HTTP ${response.status}).`);
-  }
-  return URL.createObjectURL(await response.blob());
-}
+const getReceipt = (billId) => apiBlobRequest(`/utility-bill/${billId}/receipt`);
 
 export const billApi = {
   list: () => apiRequest('/utility-bill'),
