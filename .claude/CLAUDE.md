@@ -6,7 +6,8 @@ Bài tập lớn cuối kỳ môn Web nâng cao (Phenikaa, lớp N02). Nhóm 3 n
 
 * `docs/de-bai.md`: đề thi, yêu cầu từng câu, điều kiện 0 điểm. Đây là nguồn yêu cầu gốc.
 * `checklist.md`: việc cần làm và tiến độ. Làm từ trên xuống.
-* Khi cần thêm: `readme.md` (hiện trạng code, cài đặt, API), `docs/ke-hoach.md` (thiết kế đích), `docs/user-stories.md` (user stories US-xx; API, test, ca kiểm thử tham chiếu theo mã này).
+* Khi cần thêm: `readme.md` (hiện trạng code, cài đặt, API), `docs/ke-hoach.md` (thiết kế đích), `docs/user-stories.md` (user stories US-xx; API, test, ca kiểm thử tham chiếu theo mã này), `docs/phan-tich-thiet-ke.md` (đối tượng, quan hệ, UML, sơ đồ thuật toán), `docs/wireframe-luong-xu-ly.md` (wireframe, luồng xử lý).
+* Sơ đồ trong md viết bằng Mermaid. Trong `sequenceDiagram` không dùng dấu `;` trong nội dung tin nhắn.
 
 ## Quy tắc bắt buộc theo đề
 

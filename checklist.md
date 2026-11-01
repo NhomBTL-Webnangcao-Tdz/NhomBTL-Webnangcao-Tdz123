@@ -104,8 +104,8 @@ Chi tiết từng câu: `docs/de-bai.md`.
 * [ ] 2.10 (Nhóm) React-Bootstrap đang cài nhưng chưa file nào dùng, mà đề 5b bắt buộc dùng. Chốt phạm vi chuyển đổi: trang chủ theo mẫu React Native, layout, form, bảng… [Đề 5b]
 * [ ] 2.11 (Nhóm) Cập nhật `docs/ke-hoach.md` và UML trong readme theo các quyết định trên, đổi trạng thái `docs/ke-hoach.md` thành "đã duyệt" [Đề 2b]
 * [~] 2.12 (Nhóm) User stories: tối thiểu 12 câu, đúng định dạng "Là <vai trò>, tôi muốn <hành động> để <lợi ích>.", đánh mã US-xx, mỗi câu ứng với API, màn hình, test [Đề 1]. Bản nháp 24 câu ở `docs/user-stories.md` (log `docs/2.12-user-stories.md`). Còn: nhóm duyệt
-* [ ] 2.13 (Nhóm) Phân tích yêu cầu, đối tượng, quan hệ, phương thức; sơ đồ thuật toán (flowchart) cho các nghiệp vụ chính [Đề 2a, 2b]
-* [ ] 2.14 (Nhóm) Wireframe các màn hình chính; sơ đồ luồng xử lý thông tin (người dùng → React → API → Controller → Service → DB) cho 2–3 luồng chính [Đề 3a, 3b]
+* [~] 2.13 (Nhóm) Phân tích yêu cầu, đối tượng, quan hệ, phương thức; sơ đồ thuật toán (flowchart) cho các nghiệp vụ chính [Đề 2a, 2b]. Bản nháp ở `docs/phan-tich-thiet-ke.md` (UML + 6 flowchart, log `docs/2.13-phan-tich-thiet-ke.md`). Còn: nhóm duyệt
+* [~] 2.14 (Nhóm) Wireframe các màn hình chính; sơ đồ luồng xử lý thông tin (người dùng → React → API → Controller → Service → DB) cho 2–3 luồng chính [Đề 3a, 3b]. Bản nháp ở `docs/wireframe-luong-xu-ly.md` (log `docs/2.14-wireframe-luong-xu-ly.md`). Còn: nhóm duyệt, vẽ lại trang chủ sau 6.12
 * [ ] 2.15 (Nhóm) Hỏi giáo viên 5 điểm chưa rõ của đề, ghi câu trả lời vào mục 4 của `docs/de-bai.md`
 * [ ] 2.16 (Nhóm) Chọn một trang chủ: `pages/landing/` trên `main` (Nam) hay `pages/public/` ở nhánh `feature/trang-chu-tandz` (Tân, chưa merge); merge hoặc bỏ nhánh còn lại [Đề 5b]
 
@@ -154,8 +154,8 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 
 * [ ] 6.1 (FE) Kiểm thử các trang admin hiện có trên app thật với API mới (tải / rỗng / lỗi, 375px, console, XSS), ghi lại lỗi
 * [ ] 6.2 (FE) Phần dùng chung: toast thành công/lỗi, hộp xác nhận trước khi xóa, validate form khớp DTO backend
-* [ ] 6.3 (FE) Xử lý phiên: 401 → đăng xuất, về đăng nhập kèm thông báo; 403 → trang "Không có quyền"
-* [ ] 6.4 (FE) Sidebar theo vai trò: ẩn menu quản lý với STUDENT, ẩn mục chỉ-ADMIN với MANAGER
+* [x] 6.3 (FE) Xử lý phiên: 401 → đăng xuất, về đăng nhập kèm thông báo; 403 → báo "Không có quyền" [Đề 3d, 4c]. Log `docs/6.3-xu-ly-phien.md`
+* [x] 6.4 (FE) Sidebar theo vai trò: ẩn menu quản lý với STUDENT, ẩn mục chỉ-ADMIN với MANAGER. Code có từ `fde890e`, thêm test. Log `docs/6.4-sidebar-theo-vai-tro.md`
 * [ ] 6.5 (FE) Tòa nhà & Phòng: lưới phòng theo tòa/tầng, màu theo trạng thái, lọc, chi tiết phòng (SV đang ở, lịch sử HĐ)
 * [ ] 6.6 (FE) Sinh viên: tìm kiếm, lọc, trang chi tiết (hồ sơ, tài khoản liên kết, phòng, HĐ, công nợ)
 * [ ] 6.7 (FE) Hợp đồng: tab theo trạng thái, form theo bước (SV → phòng còn chỗ → thời hạn, cọc), Gia hạn / Kết thúc, ghi nhận thanh toán
@@ -234,6 +234,8 @@ NhomBTL-Webnangcao-Tdz123/
 ├── docs/                     # Tài liệu + log từng mục checklist (mục lục: docs/readme.md)
 │   ├── de-bai.md             # Đề thi cuối kỳ: yêu cầu từng câu, điều kiện 0 điểm
 │   ├── user-stories.md       # User stories US-xx (Đề 1)
+│   ├── phan-tich-thiet-ke.md # Phân tích, UML, sơ đồ thuật toán (Đề 2)
+│   ├── wireframe-luong-xu-ly.md # Wireframe, luồng xử lý (Đề 3a, 3b)
 │   ├── ke-hoach.md           # Thiết kế đích (bản đề xuất)
 │   ├── baocao-bt-th-2.md     # Báo cáo bài thực hành số 2
 │   └── luu-tru/              # Bản cũ không dùng nữa (checklist-v1.md)
