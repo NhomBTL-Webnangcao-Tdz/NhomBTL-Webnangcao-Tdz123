@@ -188,7 +188,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [ ] 9.4 (Nhóm) Triển khai backend, frontend, DB lên cloud; cấu hình CORS + biến môi trường
 * [ ] 9.5 (Nhóm) Kiểm thử trên bản đã triển khai với 3 tài khoản demo
 * [ ] 9.6 (Nhóm) (Tùy chọn) Tự chạy lint + test khi push (GitHub Actions)
-* [ ] 9.7 (Nhóm) Danh sách ca kiểm thử: đầu vào, kết quả mong đợi, kết quả thực tế, ảnh chụp; gồm cả ca lỗi và ca thành công [Đề 7d]
+* [~] 9.7 (Nhóm) Danh sách ca kiểm thử: đầu vào, kết quả mong đợi, kết quả thực tế, ảnh chụp; gồm cả ca lỗi và ca thành công [Đề 7d]. Nháp `docs/ca-kiem-thu.md` (46 ca, BE 27/27, FE 25/25). Còn: ảnh chụp, ca E2E. Log `docs/9.7-ca-kiem-thu.md`
 
 ## 10. Tài liệu & bảo vệ
 
@@ -197,7 +197,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [ ] 10.3 (Nhóm) Báo cáo cuối kỳ theo mẫu Phenikaa, trả lời đủ 10 câu của đề; có trang link demo, link GitHub, đóng góp từng thành viên [Đề 8]
 * [ ] 10.4 (Nhóm) Video demo dưới 8 phút (đưa link vào báo cáo) + slide, kịch bản demo [Đề 8]
 * [ ] 10.5 (Nhóm) Dọn dữ liệu thử còn sót (theo log), kiểm tra lần cuối
-* [ ] 10.6 (Nhóm) Phần luật (VD Nghị định 13/2023 về dữ liệu cá nhân, Luật An ninh mạng, license thư viện), đạo đức nghề nghiệp, đạo đức xã hội; tự kiểm tra an ninh an toàn của dự án [Đề 9]
+* [~] 10.6 (Nhóm) Phần luật (VD Nghị định 13/2023 về dữ liệu cá nhân, Luật An ninh mạng, license thư viện), đạo đức nghề nghiệp, đạo đức xã hội; tự kiểm tra an ninh an toàn của dự án [Đề 9]. Nháp `docs/luat-dao-duc.md`. Còn: nhóm duyệt. Log `docs/10.6-luat-dao-duc.md`
 * [ ] 10.7 (Nhóm) Bảng đóng góp từng thành viên, đối chiếu commit. Mỗi người phải có commit và đóng góp thật (Sơn hiện mới có 2 commit, ngày 23/09) [Đề 10a, 10b; điều kiện 0 điểm]
 * [ ] 10.8 (Nhóm) Nộp trước 09/11/2026: PDF lên Canvas, bản cứng mỗi người 1 bản tại phòng 2310 nhà A9, ký danh sách nộp [điều kiện 0 điểm]
 
@@ -206,6 +206,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [ ] Nam xác nhận đã đổi mật khẩu Aiven (1.1); mật khẩu cũ vẫn nằm trong lịch sử git nên chỉ an toàn khi đã đổi
 * [ ] Xác minh phiên bản Node.js tối thiểu cho NestJS 12 và ghi vào readme mục 7.1
 * [ ] Token đang lưu ở `localStorage`: đã chuyển thành mục 4.11
+* [ ] (BE) `backend/package-lock.json` lệch `package.json`, `npm ci` lỗi (thiếu `@emnapi/core`, `@emnapi/runtime`): chạy `npm install` rồi commit lock file
 
 ---
 
@@ -236,6 +237,8 @@ NhomBTL-Webnangcao-Tdz123/
 │   ├── user-stories.md       # User stories US-xx (Đề 1)
 │   ├── phan-tich-thiet-ke.md # Phân tích, UML, sơ đồ thuật toán (Đề 2)
 │   ├── wireframe-luong-xu-ly.md # Wireframe, luồng xử lý (Đề 3a, 3b)
+│   ├── ca-kiem-thu.md        # Ca kiểm thử (Đề 7d)
+│   ├── luat-dao-duc.md       # Luật, đạo đức, an ninh (Đề 9)
 │   ├── ke-hoach.md           # Thiết kế đích (bản đề xuất)
 │   ├── baocao-bt-th-2.md     # Báo cáo bài thực hành số 2
 │   └── luu-tru/              # Bản cũ không dùng nữa (checklist-v1.md)

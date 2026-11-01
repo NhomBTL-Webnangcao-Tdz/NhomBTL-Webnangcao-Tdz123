@@ -8,6 +8,8 @@ Tài liệu của dự án và log từng mục checklist. Ở gốc repo chỉ 
 * `user-stories.md`: user stories US-xx kèm API, màn hình, hiện trạng code (Đề 1; bản nháp, chờ nhóm duyệt).
 * `phan-tich-thiet-ke.md`: phân tích yêu cầu, đối tượng, quan hệ, phương thức, UML, sơ đồ thuật toán (Đề 2; bản nháp).
 * `wireframe-luong-xu-ly.md`: wireframe màn hình chính và sơ đồ luồng xử lý thông tin (Đề 3a, 3b; bản nháp).
+* `ca-kiem-thu.md`: ca kiểm thử thành công / lỗi kèm kết quả (Đề 7d; bản nháp).
+* `luat-dao-duc.md`: luật, đạo đức nghề nghiệp, đạo đức xã hội, tự kiểm tra an ninh (Đề 9; bản nháp).
 * `ke-hoach.md`: thiết kế đích (bản đề xuất, chờ nhóm duyệt).
 * `baocao-bt-th-2.md`: báo cáo bài thực hành số 2 (thực thể, quan hệ, UML).
 * `luu-tru/`: bản cũ không dùng nữa. `checklist-v1.md` là checklist trước khi sắp xếp lại ở mục 1.7.
@@ -32,8 +34,10 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 6.4: sidebar theo vai trò (code có sẵn, thêm test). `6.4-sidebar-theo-vai-tro.md`. Xong, `2af40b4`
 * 2.13: nháp phân tích, UML, 6 sơ đồ thuật toán. `2.13-phan-tich-thiet-ke.md`. Nháp xong, chờ nhóm duyệt, `04fd5a1`
 * 2.14: nháp wireframe và 4 sơ đồ luồng xử lý. `2.14-wireframe-luong-xu-ly.md`. Nháp xong, chờ nhóm duyệt, `04fd5a1`
-* 1.10: LICENSE MIT (tạm) ở gốc và frontend. `1.10-license.md`. Chờ nhóm xác nhận, chờ commit
-* 9.1: rà soát bảo mật, giao diện FE; sửa 3 lỗi. `9.1-ra-soat-frontend.md`. Xong, chờ commit
+* 1.10: LICENSE MIT (tạm) ở gốc và frontend. `1.10-license.md`. Chờ nhóm xác nhận, `9ff17dc`
+* 9.1: rà soát bảo mật, giao diện FE; sửa 3 lỗi. `9.1-ra-soat-frontend.md`. Xong, `9ff17dc`
+* 9.7: nháp 46 ca kiểm thử (BE 27/27, FE 25/25). `9.7-ca-kiem-thu.md`. Nháp xong, chờ commit
+* 10.6: nháp luật, đạo đức, tự kiểm tra an ninh. `10.6-luat-dao-duc.md`. Nháp xong, chờ commit
 
 Việc ngoài checklist (không có log riêng):
 
