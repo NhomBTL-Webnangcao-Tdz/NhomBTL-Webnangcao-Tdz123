@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { authApi } from '../api/auth.api';
-import { TOKEN_KEY } from '../api/client';
+import { setUnauthorizedHandler, TOKEN_KEY } from '../api/client';
 
 const AuthContext = createContext(null);
 
@@ -8,6 +8,17 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isReady, setIsReady] = useState(false);
   const [sessionError, setSessionError] = useState('');
+
+  // Đăng ký trước effect tải profile để 401 ngay lần tải đầu cũng được xử lý.
+  useEffect(() => {
+    setUnauthorizedHandler((message) => {
+      localStorage.removeItem(TOKEN_KEY);
+      setUser(null);
+      setSessionError(message);
+      window.location.hash = '#login';
+    });
+    return () => setUnauthorizedHandler(null);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -24,7 +35,8 @@ export function AuthProvider({ children }) {
         if (active) setUser(profile);
       }).catch((requestError) => {
         localStorage.removeItem(TOKEN_KEY);
-        if (active) {
+        // 401 đã được unauthorizedHandler xử lý và hiện thông báo.
+        if (active && requestError.status !== 401) {
           setSessionError(`Phiên đăng nhập không hợp lệ hoặc máy chủ chưa sẵn sàng: ${requestError.message}`);
         }
       })

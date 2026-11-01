@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import './AuthPages.css';
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, sessionError } = useAuth();
   const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,6 +28,7 @@ export default function LoginPage() {
       <p className="eyebrow">CỔNG QUẢN LÝ KÝ TÚC XÁ</p>
       <h2>Đăng nhập hệ thống</h2>
       <p className="page-description">Sử dụng tài khoản của bạn để tiếp tục.</p>
+      {sessionError && !error && <p className="form-error" role="alert">{sessionError}</p>}
       <form className="auth-form" onSubmit={submit}>
         <label>Tên đăng nhập<input autoComplete="username" name="username" value={form.username} onChange={(event) => setForm((current) => ({ ...current, username: event.target.value }))} required maxLength={100} /></label>
         <label>Mật khẩu<input autoComplete="current-password" name="password" type="password" value={form.password} onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))} required maxLength={72} /></label>

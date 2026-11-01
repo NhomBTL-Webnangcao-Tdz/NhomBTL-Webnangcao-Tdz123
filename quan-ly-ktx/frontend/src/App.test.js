@@ -646,3 +646,94 @@ test('shows API failures explicitly on the dashboard', async () => {
   expect(await screen.findByRole('heading', { name: 'Bảng điều khiển' })).toBeInTheDocument();
   expect(await screen.findByRole('status')).toHaveTextContent(/không thể tải số liệu tổng quan/i);
 });
+
+test('managers do not see the admin-only settings link and are blocked from the settings page', async () => {
+  localStorage.setItem('ktx_access_token', 'test-token');
+  global.fetch.mockImplementation(async (url) => {
+    if (url.endsWith('/auth/profile')) return jsonResponse({ id: 2, username: 'manager', role: 'MANAGER' });
+    return jsonResponse([]);
+  });
+  window.history.replaceState({}, '', '/#settings');
+
+  render(<App />);
+
+  expect(await screen.findByRole('heading', { name: 'Không đủ quyền truy cập' })).toBeInTheDocument();
+  const navigation = screen.getByRole('navigation', { name: 'Điều hướng chính' });
+  expect(within(navigation).getByRole('link', { name: /Tổng quan/ })).toBeInTheDocument();
+  expect(within(navigation).queryByRole('link', { name: /Cài đặt/ })).not.toBeInTheDocument();
+  expect(within(navigation).queryByRole('link', { name: /Hồ sơ cá nhân/ })).not.toBeInTheDocument();
+});
+
+test('admins see the settings link in the sidebar', async () => {
+  localStorage.setItem('ktx_access_token', 'test-token');
+  global.fetch.mockImplementation(async (url) => {
+    if (url.endsWith('/auth/profile')) return jsonResponse({ id: 1, username: 'admin', role: 'ADMIN' });
+    return jsonResponse([]);
+  });
+  window.history.replaceState({}, '', '/#overview');
+
+  render(<App />);
+
+  const navigation = await screen.findByRole('navigation', { name: 'Điều hướng chính' });
+  expect(within(navigation).getByRole('link', { name: /Cài đặt/ })).toHaveAttribute('href', '#settings');
+});
+
+test('an expired token on first load returns to the login screen with a session message', async () => {
+  localStorage.setItem('ktx_access_token', 'expired-token');
+  global.fetch.mockResolvedValue(jsonResponse({ message: 'Token không hợp lệ hoặc đã hết hạn.' }, false, 401));
+  window.history.replaceState({}, '', '/#overview');
+
+  render(<App />);
+
+  expect(await screen.findByRole('heading', { name: 'Đăng nhập hệ thống' })).toBeInTheDocument();
+  expect(screen.getByRole('alert')).toHaveTextContent('Phiên đăng nhập đã hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại.');
+  expect(window.location.hash).toBe('#login');
+  expect(localStorage.getItem('ktx_access_token')).toBeNull();
+});
+
+test('a token rejected while working logs the user out and shows the login screen', async () => {
+  localStorage.setItem('ktx_access_token', 'test-token');
+  global.fetch.mockImplementation(async (url) => {
+    if (url.endsWith('/auth/profile')) return jsonResponse({ id: 2, username: 'manager', role: 'MANAGER' });
+    return jsonResponse({ message: 'Token không hợp lệ hoặc đã hết hạn.' }, false, 401);
+  });
+  window.history.replaceState({}, '', '/#contracts');
+
+  render(<App />);
+
+  expect(await screen.findByRole('heading', { name: 'Đăng nhập hệ thống' })).toBeInTheDocument();
+  expect(screen.getByRole('alert')).toHaveTextContent('Phiên đăng nhập đã hết hạn');
+  expect(screen.queryByRole('navigation', { name: 'Điều hướng chính' })).not.toBeInTheDocument();
+  expect(localStorage.getItem('ktx_access_token')).toBeNull();
+});
+
+test('a wrong password keeps the backend message instead of the session message', async () => {
+  global.fetch.mockResolvedValue(jsonResponse({ message: 'Username hoặc mật khẩu không đúng.' }, false, 401));
+  window.history.replaceState({}, '', '/#login');
+
+  render(<App />);
+  fireEvent.change(await screen.findByLabelText('Tên đăng nhập'), { target: { value: 'manager' } });
+  fireEvent.change(screen.getByLabelText('Mật khẩu'), { target: { value: 'wrong-password' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Đăng nhập' }));
+
+  expect(await screen.findByRole('alert')).toHaveTextContent('Username hoặc mật khẩu không đúng.');
+  expect(screen.queryByText(/Phiên đăng nhập đã hết hạn/)).not.toBeInTheDocument();
+  expect(window.location.hash).toBe('#login');
+});
+
+test('a forbidden API response shows a Vietnamese permission message and keeps the session', async () => {
+  localStorage.setItem('ktx_access_token', 'test-token');
+  global.fetch.mockImplementation(async (url) => {
+    if (url.endsWith('/auth/profile')) return jsonResponse({ id: 2, username: 'manager', role: 'MANAGER' });
+    if (url.endsWith('/contract')) return jsonResponse({ message: 'Forbidden resource', statusCode: 403 }, false, 403);
+    return jsonResponse([]);
+  });
+  window.history.replaceState({}, '', '/#contracts');
+
+  render(<App />);
+
+  expect(await screen.findByText('Bạn không có quyền thực hiện thao tác này.')).toBeInTheDocument();
+  expect(screen.queryByText('Forbidden resource')).not.toBeInTheDocument();
+  expect(screen.getByRole('navigation', { name: 'Điều hướng chính' })).toBeInTheDocument();
+  expect(localStorage.getItem('ktx_access_token')).toBe('test-token');
+});
