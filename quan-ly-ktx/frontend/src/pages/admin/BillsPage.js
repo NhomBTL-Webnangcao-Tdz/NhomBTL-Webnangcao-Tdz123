@@ -14,6 +14,12 @@ import useApiResource from '../../hooks/useApiResource';
 import './BillsPage.css';
 import './Stats.css';
 
+function billPeriod(bill) {
+  return `${bill.year}-${String(bill.month).padStart(2, '0')}`;
+}
+
+const formatMoney = (value) => `${Number(value || 0).toLocaleString('vi-VN')} ₫`;
+
 function isPastDue(dueDate) {
   if (!dueDate) return false;
   const due = new Date(`${String(dueDate).slice(0, 10)}T00:00:00`);
@@ -29,6 +35,9 @@ export default function BillsPage() {
   const { data: rooms } = useApiResource(roomApi.list);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [periodFilter, setPeriodFilter] = useState('');
+  const [buildingFilter, setBuildingFilter] = useState('');
+  const [detailBillId, setDetailBillId] = useState(null);
   const [activeBill, setActiveBill] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
   const [generalChargeOpen, setGeneralChargeOpen] = useState(false);
@@ -42,8 +51,13 @@ export default function BillsPage() {
   const filtered = useMemo(() => bills.filter((bill) => {
     const matches = `HD-${bill.bill_id} ${bill.month}/${bill.year} ${bill.title || ''} ${bill.description || ''}`
       .toLowerCase().includes(search.trim().toLowerCase());
-    return matches && (statusFilter === 'all' || (statusFilter === 'paid' ? bill.is_paid : !bill.is_paid));
-  }), [bills, search, statusFilter]);
+    const matchesPeriod = !periodFilter || billPeriod(bill) === periodFilter;
+    const matchesBuilding = !buildingFilter || bill.room?.building === buildingFilter;
+    return matches && matchesPeriod && matchesBuilding
+      && (statusFilter === 'all' || (statusFilter === 'paid' ? bill.is_paid : !bill.is_paid));
+  }), [bills, search, statusFilter, periodFilter, buildingFilter]);
+  const buildings = useMemo(() => [...new Set(rooms.map((room) => room.building))].sort(), [rooms]);
+  const detailBill = bills.find((bill) => bill.bill_id === detailBillId);
 
   const { notify, confirm } = useFeedback();
   const closeForm = () => { setFormOpen(false); setActiveBill(null); setSaveError(''); };
@@ -119,23 +133,7 @@ export default function BillsPage() {
     }
   };
 
-  const columns = [
-    { key: 'bill_id', label: 'Mã hóa đơn', render: (bill) => `HD-${String(bill.bill_id).padStart(4, '0')}` },
-    { key: 'room', label: 'Phòng', render: (bill) => bill.room ? `${bill.room.building} · ${bill.room.roomNumber}` : 'Chưa gắn phòng' },
-    { key: 'title', label: 'Khoản thu', render: (bill) => <><strong>{bill.billType === 'GENERAL' ? bill.title : 'Tiền phòng + điện nước'}</strong>{bill.description && <small className="bill-description">{bill.description}</small>}</> },
-    { key: 'period', label: 'Kỳ', render: (bill) => `${String(bill.month).padStart(2, '0')}/${bill.year}` },
-    { key: 'dueDate', label: 'Hạn thanh toán', render: (bill) => bill.dueDate ? String(bill.dueDate).slice(0, 10).split('-').reverse().join('/') : '—' },
-    { key: 'roomRent', label: 'Tiền phòng', render: (bill) => Number(bill.roomRentAmount || 0).toLocaleString('vi-VN') + ' ₫' },
-    { key: 'utilities', label: 'Điện nước', render: (bill) => bill.billType === 'GENERAL' ? '—' : `${Math.max(0, Number(bill.total_amount) - Number(bill.roomRentAmount || 0)).toLocaleString('vi-VN')} ₫` },
-    { key: 'electric', label: 'Điện tiêu thụ', render: (bill) => bill.billType === 'GENERAL' ? '—' : `${Math.max(0, bill.new_electric_index - bill.old_electric_index)} kWh` },
-    { key: 'water', label: 'Nước tiêu thụ', render: (bill) => bill.billType === 'GENERAL' ? '—' : `${Math.max(0, bill.new_water_index - bill.old_water_index)} m³` },
-    { key: 'total_amount', label: 'Tổng tiền', render: (bill) => `${Number(bill.total_amount).toLocaleString('vi-VN')} ₫` },
-    { key: 'is_paid', label: 'Trạng thái', render: (bill) => <StatusBadge value={bill.is_paid ? 'paid' : 'unpaid'} label={bill.is_paid ? 'Đã thanh toán' : 'Chưa thanh toán'} /> },
-    { key: 'receipt', label: 'Ảnh hóa đơn', render: (bill) => bill.hasReceiptImage ? <InvoiceReceiptLink billId={bill.bill_id} /> : '—' },
-    {
-      key: 'shares',
-      label: 'Phần từng sinh viên',
-      render: (bill) => bill.shares?.length ? (
+  const renderShares = (bill) => bill.shares?.length ? (
         <ul className="bill-share-list">
           {bill.shares.map((share) => {
             const overdue = !share.isPaid && isPastDue(bill.dueDate);
@@ -183,9 +181,17 @@ export default function BillsPage() {
             );
           })}
         </ul>
-      ) : 'Chưa có dữ liệu chia hóa đơn.',
-    },
-    { key: 'actions', label: '', render: (bill) => <div className="row-actions">{bill.billType !== 'GENERAL' && <button className="text-button" onClick={() => { setActiveBill(bill); setFormOpen(true); }}>Sửa</button>}{isAdmin && <button className="text-button danger-text" onClick={() => removeBill(bill)}>Xóa</button>}</div> },
+      ) : 'Chưa có dữ liệu chia hóa đơn.';
+
+  const columns = [
+    { key: 'bill_id', label: 'Mã hóa đơn', render: (bill) => `HD-${String(bill.bill_id).padStart(4, '0')}` },
+    { key: 'room', label: 'Phòng', render: (bill) => bill.room ? `${bill.room.building} · ${bill.room.roomNumber}` : 'Chưa gắn phòng' },
+    { key: 'title', label: 'Khoản thu', render: (bill) => <><strong>{bill.billType === 'GENERAL' ? bill.title : 'Tiền phòng + điện nước'}</strong>{bill.description && <small className="bill-description">{bill.description}</small>}</> },
+    { key: 'period', label: 'Kỳ', render: (bill) => `${String(bill.month).padStart(2, '0')}/${bill.year}` },
+    { key: 'dueDate', label: 'Hạn thanh toán', render: (bill) => bill.dueDate ? String(bill.dueDate).slice(0, 10).split('-').reverse().join('/') : '—' },
+    { key: 'total_amount', label: 'Tổng tiền', render: (bill) => `${Number(bill.total_amount).toLocaleString('vi-VN')} ₫` },
+    { key: 'is_paid', label: 'Trạng thái', render: (bill) => <StatusBadge value={bill.is_paid ? 'paid' : 'unpaid'} label={bill.is_paid ? 'Đã thanh toán' : 'Chưa thanh toán'} /> },
+    { key: 'actions', label: '', render: (bill) => <div className="row-actions"><button className="text-button" onClick={() => setDetailBillId(bill.bill_id)}>Xem</button>{bill.billType !== 'GENERAL' && <button className="text-button" onClick={() => { setActiveBill(bill); setFormOpen(true); }}>Sửa</button>}{isAdmin && <button className="text-button danger-text" onClick={() => removeBill(bill)}>Xóa</button>}</div> },
   ];
 
   return (
@@ -203,9 +209,39 @@ export default function BillsPage() {
         <div className="table-toolbar">
           <label className="search-field"><span aria-hidden="true">⌕</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Tìm mã hóa đơn hoặc kỳ thanh toán" aria-label="Tìm hóa đơn" /></label>
           <label className="compact-select">Thanh toán<select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}><option value="all">Tất cả</option><option value="unpaid">Chưa thanh toán</option><option value="paid">Đã thanh toán</option></select></label>
+          <label className="compact-select">Kỳ<input type="month" value={periodFilter} onChange={(event) => setPeriodFilter(event.target.value)} /></label>
+          <label className="compact-select">Tòa<select value={buildingFilter} onChange={(event) => setBuildingFilter(event.target.value)}><option value="">Tất cả</option>{buildings.map((building) => <option key={building} value={building}>{building}</option>)}</select></label>
         </div>
         <DataTable columns={columns} rows={filtered} rowKey={(bill) => bill.bill_id} isLoading={isLoading} error={error} onRetry={refresh} emptyMessage="Không tìm thấy hóa đơn." />
       </section>
+      {detailBill && (
+        <Modal title={`Hóa đơn HD-${String(detailBill.bill_id).padStart(4, '0')}`} onClose={() => setDetailBillId(null)} wide>
+          <div className="bill-print-area">
+            <h2 className="bill-print-title">KTX Care · Hóa đơn HD-{String(detailBill.bill_id).padStart(4, '0')}</h2>
+            <dl className="bill-detail-list">
+              <div><dt>Phòng</dt><dd>{detailBill.room ? `${detailBill.room.building} · ${detailBill.room.roomNumber}` : 'Chưa gắn phòng'}</dd></div>
+              <div><dt>Khoản thu</dt><dd>{detailBill.billType === 'GENERAL' ? detailBill.title : 'Tiền phòng + điện nước'}</dd></div>
+              <div><dt>Kỳ</dt><dd>{String(detailBill.month).padStart(2, '0')}/{detailBill.year}</dd></div>
+              <div><dt>Hạn thanh toán</dt><dd>{detailBill.dueDate ? String(detailBill.dueDate).slice(0, 10).split('-').reverse().join('/') : '—'}</dd></div>
+              {detailBill.billType !== 'GENERAL' && <>
+                <div><dt>Tiền phòng</dt><dd>{formatMoney(detailBill.roomRentAmount)}</dd></div>
+                <div><dt>Điện nước</dt><dd>{formatMoney(Math.max(0, Number(detailBill.total_amount) - Number(detailBill.roomRentAmount || 0)))}</dd></div>
+                <div><dt>Điện tiêu thụ</dt><dd>{Math.max(0, detailBill.new_electric_index - detailBill.old_electric_index)} kWh ({detailBill.old_electric_index} → {detailBill.new_electric_index})</dd></div>
+                <div><dt>Nước tiêu thụ</dt><dd>{Math.max(0, detailBill.new_water_index - detailBill.old_water_index)} m³ ({detailBill.old_water_index} → {detailBill.new_water_index})</dd></div>
+              </>}
+              <div><dt>Tổng tiền</dt><dd><strong>{formatMoney(detailBill.total_amount)}</strong></dd></div>
+              <div><dt>Trạng thái</dt><dd>{detailBill.is_paid ? 'Đã thanh toán' : 'Chưa thanh toán'}</dd></div>
+              {detailBill.hasReceiptImage && <div className="no-print"><dt>Ảnh hóa đơn</dt><dd><InvoiceReceiptLink billId={detailBill.bill_id} /></dd></div>}
+            </dl>
+            <h3 className="bill-detail-heading">Phần từng sinh viên</h3>
+            {renderShares(detailBill)}
+          </div>
+          <div className="form-actions no-print">
+            <button className="button button-secondary" onClick={() => setDetailBillId(null)}>Đóng</button>
+            <button className="button button-primary" onClick={() => window.print()}>In hóa đơn</button>
+          </div>
+        </Modal>
+      )}
       {formOpen && <Modal title={`Hóa đơn điện nước #${activeBill.bill_id}`} onClose={closeForm} wide><BillForm value={activeBill} rooms={rooms} onSave={saveBill} onCancel={closeForm} saving={saving} error={saveError} /></Modal>}
       {generalChargeOpen && <Modal title="Tạo hóa đơn khoản thu" onClose={() => setGeneralChargeOpen(false)} wide><GeneralChargeForm rooms={rooms} onSave={createGeneralCharge} onCancel={() => setGeneralChargeOpen(false)} saving={generalChargeSaving} error={generalChargeError} /></Modal>}
     </>

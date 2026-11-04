@@ -560,6 +560,7 @@ test('managers can contact a resident, send an overdue reminder, and track their
 
   render(<App />);
 
+  fireEvent.click(await screen.findByRole('button', { name: 'Xem' }));
   expect(await screen.findByText('Sinh viên 25')).toBeInTheDocument();
   expect(screen.getByText('Quá hạn')).toBeInTheDocument();
   expect(screen.getByRole('link', { name: 'Gọi' })).toHaveAttribute('href', 'tel:0900000025');
