@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
-import { UtilityTariff } from './utility-tariff.entity';
-import { UtilityTariffService } from './utility-tariff.service';
+import { UtilityTariff } from '../../../../src/modules/utility-bill/utility-tariff.entity';
+import { UtilityTariffService } from '../../../../src/modules/utility-bill/utility-tariff.service';
 
 describe('UtilityTariffService', () => {
   it('initializes the default tariff atomically when no tariff exists', async () => {

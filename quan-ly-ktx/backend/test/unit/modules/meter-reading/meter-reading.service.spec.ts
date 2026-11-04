@@ -1,13 +1,13 @@
 import { DataSource } from 'typeorm';
-import { User } from '../../auth/entities/user.entity';
-import { Contract } from '../contract/contract.entity';
-import { Notification } from '../notification/notification.entity';
-import { Room } from '../room/room.entity';
-import { UtilityBill } from '../utility-bill/utility-bill.entity';
-import { UtilityBillShare } from '../utility-bill/utility-bill-share.entity';
-import { UtilityTariff } from '../utility-bill/utility-tariff.entity';
-import { MeterReadingStatus, MeterReadingSubmission } from './meter-reading.entity';
-import { MeterReadingService } from './meter-reading.service';
+import { User } from '../../../../src/auth/entities/user.entity';
+import { Contract } from '../../../../src/modules/contract/contract.entity';
+import { Notification } from '../../../../src/modules/notification/notification.entity';
+import { Room } from '../../../../src/modules/room/room.entity';
+import { UtilityBill } from '../../../../src/modules/utility-bill/utility-bill.entity';
+import { UtilityBillShare } from '../../../../src/modules/utility-bill/utility-bill-share.entity';
+import { UtilityTariff } from '../../../../src/modules/utility-bill/utility-tariff.entity';
+import { MeterReadingStatus, MeterReadingSubmission } from '../../../../src/modules/meter-reading/meter-reading.entity';
+import { MeterReadingService } from '../../../../src/modules/meter-reading/meter-reading.service';
 
 function makeQueryBuilder() {
   const builder: Record<string, jest.Mock> = {};

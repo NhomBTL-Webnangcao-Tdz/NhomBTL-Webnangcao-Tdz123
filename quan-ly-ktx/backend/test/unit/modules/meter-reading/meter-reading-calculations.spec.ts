@@ -3,7 +3,7 @@ import {
   calculateUtilityAmount,
   getNextMonthPaymentDate,
   splitUtilityAmount,
-} from './meter-reading-calculations';
+} from '../../../../src/modules/meter-reading/meter-reading-calculations';
 
 describe('meter reading billing calculations', () => {
   it('calculates only electricity and water consumption at the configured prices', () => {

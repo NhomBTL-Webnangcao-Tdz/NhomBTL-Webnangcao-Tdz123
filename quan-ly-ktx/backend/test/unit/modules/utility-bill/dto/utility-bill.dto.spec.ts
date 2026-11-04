@@ -1,7 +1,7 @@
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
-import { CreateUtilityBillDto } from './create-utility-bill.dto';
-import { UpdateSharePaymentDto } from './update-share-payment.dto';
-import { UpdateUtilityBillDto } from './update-utility-bill.dto';
+import { CreateUtilityBillDto } from '../../../../../src/modules/utility-bill/dto/create-utility-bill.dto';
+import { UpdateSharePaymentDto } from '../../../../../src/modules/utility-bill/dto/update-share-payment.dto';
+import { UpdateUtilityBillDto } from '../../../../../src/modules/utility-bill/dto/update-utility-bill.dto';
 
 const pipe = new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true });
 const check = (metatype: new () => object, body: unknown) => pipe.transform(body, { type: 'body', metatype });

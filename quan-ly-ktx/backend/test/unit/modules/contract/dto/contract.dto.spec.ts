@@ -1,6 +1,6 @@
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
-import { CreateContractDto } from './create-contract.dto';
-import { UpdateContractDto } from './update-contract.dto';
+import { CreateContractDto } from '../../../../../src/modules/contract/dto/create-contract.dto';
+import { UpdateContractDto } from '../../../../../src/modules/contract/dto/update-contract.dto';
 
 // Cấu hình giống ValidationPipe toàn cục trong main.ts.
 const pipe = new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true });

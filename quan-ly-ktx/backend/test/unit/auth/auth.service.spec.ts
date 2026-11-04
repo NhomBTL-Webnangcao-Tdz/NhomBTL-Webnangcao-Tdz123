@@ -2,9 +2,9 @@ import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as bcrypt from 'bcrypt';
-import { Role } from '../common/role.enum';
-import { AuthService } from './auth.service';
-import { UsersService } from './entities/users.service';
+import { Role } from '../../../src/common/role.enum';
+import { AuthService } from '../../../src/auth/auth.service';
+import { UsersService } from '../../../src/auth/entities/users.service';
 
 describe('AuthService', () => {
   let service: AuthService;

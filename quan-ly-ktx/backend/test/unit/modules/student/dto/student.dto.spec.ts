@@ -1,7 +1,7 @@
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
-import { RejectResidenceRequestDto } from './reject-residence-request.dto';
-import { StudentProfileDto } from './student-profile.dto';
-import { UpdateStudentDto } from './update-student.dto';
+import { RejectResidenceRequestDto } from '../../../../../src/modules/student/dto/reject-residence-request.dto';
+import { StudentProfileDto } from '../../../../../src/modules/student/dto/student-profile.dto';
+import { UpdateStudentDto } from '../../../../../src/modules/student/dto/update-student.dto';
 
 const pipe = new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true });
 const check = (metatype: new () => object, body: unknown) => pipe.transform(body, { type: 'body', metatype });

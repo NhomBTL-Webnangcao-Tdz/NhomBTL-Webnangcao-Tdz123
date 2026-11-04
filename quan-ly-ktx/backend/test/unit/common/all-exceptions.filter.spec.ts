@@ -1,6 +1,6 @@
 import { ArgumentsHost, BadRequestException, Logger, NotFoundException } from '@nestjs/common';
 import { QueryFailedError } from 'typeorm';
-import { AllExceptionsFilter } from './all-exceptions.filter';
+import { AllExceptionsFilter } from '../../../src/common/all-exceptions.filter';
 
 function run(exception: unknown, headersSent = false) {
   const json = jest.fn();

@@ -1,8 +1,8 @@
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { Role } from '../../common/role.enum';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { Role } from '../../../../src/common/role.enum';
+import { JwtAuthGuard } from '../../../../src/auth/guards/jwt-auth.guard';
 
 describe('JwtAuthGuard', () => {
   function createContext(request: Request): ExecutionContext {

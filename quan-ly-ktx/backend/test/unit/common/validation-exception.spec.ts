@@ -1,7 +1,7 @@
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
-import { CreateContractDto } from '../modules/contract/dto/create-contract.dto';
-import { RegisterDto } from '../auth/dto/register.dto';
-import { validationExceptionFactory } from './validation-exception';
+import { CreateContractDto } from '../../../src/modules/contract/dto/create-contract.dto';
+import { RegisterDto } from '../../../src/auth/dto/register.dto';
+import { validationExceptionFactory } from '../../../src/common/validation-exception';
 
 const pipe = new ValidationPipe({
   whitelist: true,

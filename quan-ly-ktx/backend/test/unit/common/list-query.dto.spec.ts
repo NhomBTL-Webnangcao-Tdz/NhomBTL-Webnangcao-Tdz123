@@ -1,7 +1,7 @@
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
-import { BillListQueryDto } from '../modules/utility-bill/dto/bill-list-query.dto';
-import { RoomListQueryDto } from '../modules/room/dto/room-list-query.dto';
-import { isPaged, likePattern, ListQueryDto, pageWindow } from './list-query.dto';
+import { BillListQueryDto } from '../../../src/modules/utility-bill/dto/bill-list-query.dto';
+import { RoomListQueryDto } from '../../../src/modules/room/dto/room-list-query.dto';
+import { isPaged, likePattern, ListQueryDto, pageWindow } from '../../../src/common/list-query.dto';
 
 const pipe = new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true });
 const check = (metatype: new () => object, query: unknown) => pipe.transform(query, { type: 'query', metatype });

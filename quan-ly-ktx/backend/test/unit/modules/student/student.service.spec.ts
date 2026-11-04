@@ -1,11 +1,11 @@
 import { DataSource, Repository } from 'typeorm';
-import { User } from '../../auth/entities/user.entity';
-import { Contract } from '../contract/contract.entity';
-import { Notification } from '../notification/notification.entity';
-import { UtilityBill } from '../utility-bill/utility-bill.entity';
-import { ResidenceRequest } from './residence-request.entity';
-import { Student } from './student.entity';
-import { StudentService } from './student.service';
+import { User } from '../../../../src/auth/entities/user.entity';
+import { Contract } from '../../../../src/modules/contract/contract.entity';
+import { Notification } from '../../../../src/modules/notification/notification.entity';
+import { UtilityBill } from '../../../../src/modules/utility-bill/utility-bill.entity';
+import { ResidenceRequest } from '../../../../src/modules/student/residence-request.entity';
+import { Student } from '../../../../src/modules/student/student.entity';
+import { StudentService } from '../../../../src/modules/student/student.service';
 
 function makeQueryBuilder() {
   const builder: Record<string, jest.Mock> = {};

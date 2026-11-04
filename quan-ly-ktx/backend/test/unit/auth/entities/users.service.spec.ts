@@ -1,8 +1,8 @@
 import { ConflictException } from '@nestjs/common';
 import { QueryFailedError, Repository } from 'typeorm';
-import { Role } from '../../common/role.enum';
-import { User } from './user.entity';
-import { UsersService } from './users.service';
+import { Role } from '../../../../src/common/role.enum';
+import { User } from '../../../../src/auth/entities/user.entity';
+import { UsersService } from '../../../../src/auth/entities/users.service';
 
 describe('UsersService', () => {
   let service: UsersService;
