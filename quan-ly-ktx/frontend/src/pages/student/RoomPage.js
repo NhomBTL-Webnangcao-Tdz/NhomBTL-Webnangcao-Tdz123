@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { ErrorState, LoadingState } from '../../components/common/AsyncState';
 import PageHeading from '../../components/common/PageHeading';
 import './RoomPage.css';
@@ -65,9 +67,9 @@ export default function RoomPage({ portal, loading, error, retry, onRequest }) {
                   : 'Gửi yêu cầu đăng ký lưu trú. Quản lý sẽ duyệt và xếp phòng cho bạn.'}</p>
               {status !== 'PENDING' && (
                 <div className="residence-request-form">
-                  <label>Ghi chú cho quản lý (không bắt buộc)<textarea value={note} onChange={(event) => setNote(event.target.value)} maxLength={500} rows={3} /></label>
+                  <label>Ghi chú cho quản lý (không bắt buộc)<Form.Control as="textarea" value={note} onChange={(event) => setNote(event.target.value)} maxLength={500} rows={3} /></label>
                   {requestError && <p className="form-error" role="alert">{requestError}</p>}
-                  <button className="button button-primary" onClick={submitRequest} disabled={submitting}>{submitting ? 'Đang gửi...' : status === 'REJECTED' ? 'Gửi lại yêu cầu lưu trú' : 'Đăng ký lưu trú'}</button>
+                  <Button variant="primary" className="button button-primary" onClick={submitRequest} disabled={submitting}>{submitting ? 'Đang gửi...' : status === 'REJECTED' ? 'Gửi lại yêu cầu lưu trú' : 'Đăng ký lưu trú'}</Button>
                 </div>
               )}
             </section>

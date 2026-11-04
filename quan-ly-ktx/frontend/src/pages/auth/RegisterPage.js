@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { useAuth } from '../../context/AuthContext';
 import './AuthPages.css';
 
@@ -49,10 +51,10 @@ export default function RegisterPage() {
           <p className="form-success" role="status">{notice}</p>
           <a className="button button-primary full-button" href="#login">Đến trang đăng nhập</a>
         </div>
-      ) : <form className="auth-form" onSubmit={submit}>
+      ) : <Form className="auth-form" onSubmit={submit}>
         <label>
           Tên đăng nhập
-          <input
+          <Form.Control
             autoComplete="username"
             name="username"
             value={form.username}
@@ -66,7 +68,7 @@ export default function RegisterPage() {
         </label>
         <label>
           Mật khẩu
-          <input
+          <Form.Control
             autoComplete="new-password"
             name="password"
             type="password"
@@ -79,7 +81,7 @@ export default function RegisterPage() {
         </label>
         <label>
           Xác nhận mật khẩu
-          <input
+          <Form.Control
             autoComplete="new-password"
             name="confirmPassword"
             type="password"
@@ -92,10 +94,10 @@ export default function RegisterPage() {
         </label>
         {notice && <p className="form-success" role="status">{notice}</p>}
         {error && <p className="form-error" role="alert">{error}</p>}
-        <button className="button button-primary full-button" disabled={isSubmitting}>
+        <Button variant="primary" type="submit" className="button button-primary full-button" disabled={isSubmitting}>
           {isSubmitting ? 'Đang tạo tài khoản...' : 'Đăng ký'}
-        </button>
-      </form>}
+        </Button>
+      </Form>}
       {!isRegistered && <p className="auth-policy">Tài khoản tự đăng ký được cấp vai trò sinh viên. Sau khi đăng nhập, hãy hoàn thiện hồ sơ cá nhân để sử dụng cổng sinh viên.</p>}
       <p className="auth-switch-copy">Đã có tài khoản? <a href="#login">Đăng nhập</a></p>
     </section>

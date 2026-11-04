@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { roomApi } from '../../api/room.api';
 import DataTable from '../../components/common/DataTable';
 import Modal from '../../components/common/Modal';
@@ -30,7 +32,7 @@ function RoomForm({ initialValue, onSave, onCancel, saving, error }) {
     setRoom((current) => ({ ...current, [name]: ['maxCapacity', 'currentOccupancy', 'price'].includes(name) ? Number(value) : value }));
   };
   return (
-    <form className="form-grid" onSubmit={(event) => {
+    <Form className="form-grid" onSubmit={(event) => {
       event.preventDefault();
       onSave({
         roomNumber: room.roomNumber,
@@ -39,14 +41,14 @@ function RoomForm({ initialValue, onSave, onCancel, saving, error }) {
         price: Number(room.price),
       });
     }}>
-      <label>Tòa nhà<input name="building" value={room.building} onChange={handleChange} required /></label>
-      <label>Số phòng<input name="roomNumber" value={room.roomNumber} onChange={handleChange} required /></label>
-      <label>Sức chứa tối đa<input name="maxCapacity" type="number" min="1" max="10" value={room.maxCapacity} onChange={handleChange} required /></label>
-      <label>Giá thuê hàng tháng (₫)<input name="price" type="number" min="0" value={room.price} onChange={handleChange} required /></label>
+      <label>Tòa nhà<Form.Control name="building" value={room.building} onChange={handleChange} required /></label>
+      <label>Số phòng<Form.Control name="roomNumber" value={room.roomNumber} onChange={handleChange} required /></label>
+      <label>Sức chứa tối đa<Form.Control name="maxCapacity" type="number" min="1" max="10" value={room.maxCapacity} onChange={handleChange} required /></label>
+      <label>Giá thuê hàng tháng (₫)<Form.Control name="price" type="number" min="0" value={room.price} onChange={handleChange} required /></label>
       <p className="form-hint form-wide">Số người ở do hợp đồng quản lý; API hiện tại tự khởi tạo phòng mới với 0 người. Tòa nhà được suy ra từ thông tin phòng, chưa có API tạo tòa riêng.</p>
       {error && <p className="form-error form-wide" role="alert">{error}</p>}
-      <div className="form-actions form-wide"><button type="button" className="button button-secondary" onClick={onCancel}>Hủy</button><button type="submit" className="button button-primary" disabled={saving}>{saving ? 'Đang lưu...' : 'Lưu phòng'}</button></div>
-    </form>
+      <div className="form-actions form-wide"><Button variant="outline-secondary" type="button" className="button button-secondary" onClick={onCancel}>Hủy</Button><Button variant="primary" type="submit" className="button button-primary" disabled={saving}>{saving ? 'Đang lưu...' : 'Lưu phòng'}</Button></div>
+    </Form>
   );
 }
 
@@ -133,21 +135,21 @@ export default function RoomsPage({ segments, params }) {
 
   return (
     <>
-      <PageHeading eyebrow="SƠ ĐỒ TÒA NHÀ" title={buildingFromRoute || 'Tòa nhà & Phòng'} description="Theo dõi công suất, trạng thái phòng và số người đang lưu trú." action={<button className="button button-primary" onClick={() => setFormMode('create')}>＋ Thêm phòng</button>} />
+      <PageHeading eyebrow="SƠ ĐỒ TÒA NHÀ" title={buildingFromRoute || 'Tòa nhà & Phòng'} description="Theo dõi công suất, trạng thái phòng và số người đang lưu trú." action={<Button variant="primary" className="button button-primary" onClick={() => setFormMode('create')}>＋ Thêm phòng</Button>} />
       <section className="panel">
         <div className="table-toolbar">
           {buildingFromRoute ? (
             <div className="room-filter-bar">
               <a className="text-link" href="#rooms">← Tất cả tòa nhà</a>
-              <label className="compact-select">Trạng thái<select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}><option value="all">Tất cả</option><option value="available">Còn chỗ</option><option value="occupied">Đang ở</option><option value="full">Đã đầy</option><option value="maintenance">Bảo trì</option></select></label>
+              <label className="compact-select">Trạng thái<Form.Select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}><option value="all">Tất cả</option><option value="available">Còn chỗ</option><option value="occupied">Đang ở</option><option value="full">Đã đầy</option><option value="maintenance">Bảo trì</option></Form.Select></label>
             </div>
           ) : (
-            <label className="search-field"><span aria-hidden="true">⌕</span><input value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} placeholder="Tìm theo tên tòa nhà" aria-label="Tìm tòa nhà" /></label>
+            <label className="search-field"><span aria-hidden="true">⌕</span><Form.Control value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} placeholder="Tìm theo tên tòa nhà" aria-label="Tìm tòa nhà" /></label>
           )}
-          <button className="button button-secondary" onClick={refresh}>Làm mới</button>
+          <Button variant="outline-secondary" className="button button-secondary" onClick={refresh}>Làm mới</Button>
         </div>
         {isLoading ? <p className="async-state" role="status">Đang tải danh sách phòng...</p>
-          : error ? <div className="async-state async-error" role="alert"><p>{error}</p><p>API phòng yêu cầu đăng nhập với quyền ADMIN hoặc MANAGER.</p><button className="button button-secondary" onClick={refresh}>Thử lại</button></div>
+          : error ? <div className="async-state async-error" role="alert"><p>{error}</p><p>API phòng yêu cầu đăng nhập với quyền ADMIN hoặc MANAGER.</p><Button variant="outline-secondary" className="button button-secondary" onClick={refresh}>Thử lại</Button></div>
             : rooms.length === 0 ? <p className="async-state">Chưa có phòng để hiển thị.</p>
               : buildingFromRoute ? (
                 <div className="room-map">
@@ -204,7 +206,7 @@ export default function RoomsPage({ segments, params }) {
               <div><dt>Tầng</dt><dd>{getFloor(selectedRoom.roomNumber)}</dd></div>
             </dl>
             <p className="form-hint">API hiện tại chưa liên kết phòng với sinh viên, chỉ số công tơ, hợp đồng hoặc lịch sử hóa đơn.</p>
-            <div className="form-actions"><button className="button button-secondary" onClick={() => { setActiveRoom(selectedRoom); setFormMode('edit'); setHashQuery('viewRoom', null); }}>Chỉnh sửa</button><button className="button button-danger" onClick={() => deleteRoom(selectedRoom)}>Xóa phòng</button></div>
+            <div className="form-actions"><Button variant="outline-secondary" className="button button-secondary" onClick={() => { setActiveRoom(selectedRoom); setFormMode('edit'); setHashQuery('viewRoom', null); }}>Chỉnh sửa</Button><button className="button button-danger" onClick={() => deleteRoom(selectedRoom)}>Xóa phòng</button></div>
           </div>
         </Modal>
       )}

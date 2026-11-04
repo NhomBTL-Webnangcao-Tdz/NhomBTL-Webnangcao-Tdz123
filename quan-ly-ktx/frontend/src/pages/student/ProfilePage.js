@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { studentApi } from '../../api/student.api';
 import { ErrorState, LoadingState } from '../../components/common/AsyncState';
 import PageHeading from '../../components/common/PageHeading';
@@ -28,22 +30,22 @@ function ProfileForm({ initialValue, onSaved }) {
   };
 
   return (
-    <form className="panel student-profile-form" onSubmit={submit}>
+    <Form className="panel student-profile-form" onSubmit={submit}>
       <div>
         <h3>{initialValue ? 'Cập nhật hồ sơ cá nhân' : 'Hoàn thiện hồ sơ cá nhân'}</h3>
         <p>Nhập thông tin của bạn để đăng ký lưu trú tại ký túc xá.</p>
       </div>
       <div className="form-grid">
-        <label>Mã sinh viên<input value={form.sid} onChange={(event) => setForm({ ...form, sid: event.target.value })} required maxLength={15} disabled={Boolean(initialValue)} /></label>
-        <label>Họ và tên<input value={form.sname} onChange={(event) => setForm({ ...form, sname: event.target.value })} required maxLength={50} /></label>
-        <label>Email<input type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} required maxLength={50} /></label>
-        <label>Số điện thoại<input value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} required maxLength={15} /></label>
+        <label>Mã sinh viên<Form.Control value={form.sid} onChange={(event) => setForm({ ...form, sid: event.target.value })} required maxLength={15} disabled={Boolean(initialValue)} /></label>
+        <label>Họ và tên<Form.Control value={form.sname} onChange={(event) => setForm({ ...form, sname: event.target.value })} required maxLength={50} /></label>
+        <label>Email<Form.Control type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} required maxLength={50} /></label>
+        <label>Số điện thoại<Form.Control value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} required maxLength={15} /></label>
         {error && <p className="form-error form-wide" role="alert">{error}</p>}
         <div className="form-actions form-wide">
-          <button className="button button-primary" type="submit" disabled={saving}>{saving ? 'Đang lưu...' : 'Lưu hồ sơ cá nhân'}</button>
+          <Button variant="primary" className="button button-primary" type="submit" disabled={saving}>{saving ? 'Đang lưu...' : 'Lưu hồ sơ cá nhân'}</Button>
         </div>
       </div>
-    </form>
+    </Form>
   );
 }
 

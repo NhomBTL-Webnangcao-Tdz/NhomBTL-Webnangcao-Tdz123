@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { meterReadingApi } from '../../api/meterReading.api';
 import { formatDate } from './studentPageUtils';
 import './MeterReadingForm.css';
@@ -47,11 +49,11 @@ export default function MeterReadingForm({ current, onSubmitted }) {
   };
 
   return (
-    <form className="meter-reading-form" onSubmit={submit}>
+    <Form className="meter-reading-form" onSubmit={submit}>
       <div className="meter-reading-photo-grid">
         <label className="meter-photo-input">
           <strong>Ảnh minh chứng công tơ điện</strong>
-          <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => {
+          <Form.Control type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => {
             setElectricPhoto(event.target.files?.[0] || null);
             setReadings({ electricReading: '', waterReading: '' });
           }} required />
@@ -59,7 +61,7 @@ export default function MeterReadingForm({ current, onSubmitted }) {
         </label>
         <label className="meter-photo-input">
           <strong>Ảnh minh chứng công tơ nước</strong>
-          <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => {
+          <Form.Control type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => {
             setWaterPhoto(event.target.files?.[0] || null);
             setReadings({ electricReading: '', waterReading: '' });
           }} required />
@@ -68,18 +70,18 @@ export default function MeterReadingForm({ current, onSubmitted }) {
       </div>
       {electricPhoto && waterPhoto && (
         <div className="form-grid meter-reading-values">
-          <label>Tự nhập chỉ số điện (kWh)<input type="number" min="0" step="1" value={readings.electricReading} onChange={(event) => setReadings((currentReadings) => ({ ...currentReadings, electricReading: event.target.value }))} required /></label>
-          <label>Tự nhập chỉ số nước (m³)<input type="number" min="0" step="1" value={readings.waterReading} onChange={(event) => setReadings((currentReadings) => ({ ...currentReadings, waterReading: event.target.value }))} required /></label>
+          <label>Tự nhập chỉ số điện (kWh)<Form.Control type="number" min="0" step="1" value={readings.electricReading} onChange={(event) => setReadings((currentReadings) => ({ ...currentReadings, electricReading: event.target.value }))} required /></label>
+          <label>Tự nhập chỉ số nước (m³)<Form.Control type="number" min="0" step="1" value={readings.waterReading} onChange={(event) => setReadings((currentReadings) => ({ ...currentReadings, waterReading: event.target.value }))} required /></label>
           <p className="form-hint form-wide">Hai ảnh chỉ dùng làm minh chứng để quản lý kiểm tra; hãy tự nhập chỉ số đọc được. Ảnh được lưu riêng tư trên máy chủ ký túc xá.</p>
         </div>
       )}
       {error && <p className="form-error" role="alert">{error}</p>}
       {electricPhoto && waterPhoto && (
-        <button className="button button-primary" type="submit" disabled={submitting}>
+        <Button variant="primary" className="button button-primary" type="submit" disabled={submitting}>
           {submitting ? 'Đang gửi...' : 'Gửi chỉ số cho quản lý xác nhận'}
-        </button>
+        </Button>
       )}
       <p className="form-hint">Hạn gửi chỉ số kỳ {current.month}/{current.year}: {formatDate(current.deadline)}.</p>
-    </form>
+    </Form>
   );
 }

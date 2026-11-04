@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { billApi } from '../../api/bill.api';
 import { roomApi } from '../../api/room.api';
 import BillForm from '../../components/common/BillForm';
@@ -46,16 +48,16 @@ export default function UtilitiesPage() {
     { key: 'old_water_index', label: 'Nước cũ (m³)' },
     { key: 'new_water_index', label: 'Nước mới (m³)' },
     { key: 'waterUsage', label: 'Tiêu thụ nước', render: (bill) => `${Math.max(0, bill.new_water_index - bill.old_water_index)} m³` },
-    { key: 'actions', label: '', render: (bill) => <button className="text-button" onClick={() => { setSaveError(''); setActiveBill(bill); }}>Cập nhật</button> },
+    { key: 'actions', label: '', render: (bill) => <Button variant="link" className="text-button" onClick={() => { setSaveError(''); setActiveBill(bill); }}>Cập nhật</Button> },
   ];
 
   return (
     <>
-      <PageHeading eyebrow="CHỐT CHỈ SỐ HÀNG THÁNG" title="Nhập chỉ số điện nước" description="Chọn kỳ ghi nhận và cập nhật số liệu công tơ." action={<button className="button button-primary" onClick={() => { setActiveBill({ month: Number(month), year: Number(year) }); setSaveError(''); }}>＋ Thêm chỉ số</button>} />
+      <PageHeading eyebrow="CHỐT CHỈ SỐ HÀNG THÁNG" title="Nhập chỉ số điện nước" description="Chọn kỳ ghi nhận và cập nhật số liệu công tơ." action={<Button variant="primary" className="button button-primary" onClick={() => { setActiveBill({ month: Number(month), year: Number(year) }); setSaveError(''); }}>＋ Thêm chỉ số</Button>} />
       <MeterReadingsPanel />
       <section className="panel">
         <div className="table-toolbar">
-          <div className="period-picker"><label>Tháng<select value={month} onChange={(event) => setMonth(Number(event.target.value))}>{Array.from({ length: 12 }, (_, index) => <option key={index + 1} value={index + 1}>{index + 1}</option>)}</select></label><label>Năm<input type="number" min="2000" value={year} onChange={(event) => setYear(Number(event.target.value))} /></label></div>
+          <div className="period-picker"><label>Tháng<Form.Select value={month} onChange={(event) => setMonth(Number(event.target.value))}>{Array.from({ length: 12 }, (_, index) => <option key={index + 1} value={index + 1}>{index + 1}</option>)}</Form.Select></label><label>Năm<Form.Control type="number" min="2000" value={year} onChange={(event) => setYear(Number(event.target.value))} /></label></div>
           <span className="toolbar-count">{selectedBills.length} bản ghi</span>
         </div>
         <div className="inline-notice">Chỉ số cũ được điền từ bản ghi đã lưu nếu có. Chọn phòng và hạn thanh toán khi lưu hóa đơn để sinh viên có thể theo dõi hóa đơn cá nhân.</div>

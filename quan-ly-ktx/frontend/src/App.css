@@ -1029,15 +1029,16 @@ button:disabled {
 }
 
 .modal-backdrop {
-  align-items: center;
-  background: rgba(24, 43, 48, 0.44);
-  display: flex;
-  inset: 0;
-  justify-content: center;
-  overflow-y: auto;
-  padding: 22px;
-  position: fixed;
-  z-index: 20;
+  --bs-backdrop-bg: #182b30;
+  --bs-backdrop-opacity: 0.44;
+}
+
+.app-modal {
+  max-width: 560px;
+}
+
+.app-modal-wide {
+  max-width: 700px;
 }
 
 .modal-card {
@@ -1045,15 +1046,10 @@ button:disabled {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 18px 60px rgba(12, 35, 39, 0.22);
+  border: 0;
   max-height: min(90vh, 850px);
-  max-width: 560px;
   overflow-y: auto;
   padding: 0 19px 19px;
-  width: 100%;
-}
-
-.modal-wide {
-  max-width: 700px;
 }
 
 @keyframes modal-in {
@@ -1068,6 +1064,12 @@ button:disabled {
   justify-content: space-between;
   margin-bottom: 17px;
   min-height: 58px;
+  padding: 0;
+}
+
+.modal-header .btn-close {
+  font-size: 11px;
+  margin: 0;
 }
 
 .modal-header h2 {
@@ -1467,14 +1469,127 @@ button:disabled {
     grid-column: auto;
   }
 
-  .modal-backdrop {
+  .app-modal {
     align-items: flex-end;
-    padding: 0;
+    margin: 0;
+    max-width: none;
+    min-height: 100%;
   }
 
   .modal-card {
     border-radius: 13px 13px 0 0;
     max-height: 91vh;
     padding: 0 16px 19px;
+  }
+}
+
+/* react-bootstrap: giữ giao diện đã có khi dùng component của thư viện. */
+.btn.button {
+  --bs-btn-border-radius: 7px;
+  --bs-btn-font-size: 11px;
+  --bs-btn-font-weight: 700;
+  --bs-btn-line-height: 1.2;
+  --bs-btn-padding-x: 13px;
+  --bs-btn-padding-y: 0;
+}
+
+.btn.button-primary {
+  --bs-btn-bg: var(--teal);
+  --bs-btn-border-color: transparent;
+  --bs-btn-color: #fff;
+  --bs-btn-disabled-bg: var(--teal);
+  --bs-btn-disabled-border-color: transparent;
+  --bs-btn-hover-bg: var(--teal-dark);
+  --bs-btn-hover-border-color: transparent;
+  --bs-btn-active-bg: var(--teal-dark);
+  --bs-btn-active-border-color: transparent;
+}
+
+.btn.text-button {
+  --bs-btn-border-width: 0;
+  --bs-btn-font-size: inherit;
+  --bs-btn-font-weight: inherit;
+  --bs-btn-line-height: inherit;
+  --bs-btn-padding-x: 0;
+  --bs-btn-padding-y: 0;
+  text-decoration: none;
+}
+
+/* Bootstrap đặt font cho .form-control theo class nên mạnh hơn rule input ở đầu file. */
+.form-control,
+.form-select {
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+/* Rule background của ô chọn xóa mất mũi tên của .form-select. */
+.compact-select .form-select,
+.period-picker .form-select,
+.form-grid .form-select {
+  background-image: var(--bs-form-select-bg-img);
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  background-size: 12px 9px;
+  padding-right: 26px;
+}
+
+.compact-select .form-select,
+.period-picker .form-select,
+.compact-select .form-control,
+.period-picker .form-control {
+  width: auto;
+}
+
+.sidebar-nav .sidebar-link.nav-link {
+  color: #64717b;
+}
+
+.sidebar-nav .sidebar-link.nav-link:hover,
+.sidebar-nav .sidebar-link.nav-link.active {
+  color: var(--teal-dark);
+}
+
+/* .nav của Bootstrap cho phép xuống dòng, làm menu ở điện thoại đè lên header. */
+.sidebar-nav.nav {
+  flex-wrap: nowrap;
+}
+
+/* Ô chọn file giữ dạng gọn như trước. */
+.meter-photo-input input.form-control {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.sidebar-nav .nav-link {
+  --bs-nav-link-padding-x: 0;
+  --bs-nav-link-padding-y: 0;
+}
+
+.progress-track.progress,
+.bar-track.progress {
+  --bs-progress-bar-bg: var(--teal);
+}
+
+.async-error.alert {
+  --bs-alert-bg: transparent;
+  --bs-alert-border-color: transparent;
+  --bs-alert-color: inherit;
+}
+
+.inline-notice.alert {
+  --bs-alert-padding-x: 0;
+  --bs-alert-padding-y: 0;
+}
+
+@media print {
+  .modal,
+  .modal-dialog,
+  .modal-content {
+    display: block;
+    max-height: none;
+    overflow: visible;
+    position: static;
+    transform: none;
   }
 }

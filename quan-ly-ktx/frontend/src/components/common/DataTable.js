@@ -1,3 +1,4 @@
+import Table from 'react-bootstrap/Table';
 import { EmptyState, ErrorState, LoadingState } from './AsyncState';
 
 export default function DataTable({
@@ -16,7 +17,7 @@ export default function DataTable({
 
   return (
     <div className="table-scroll">
-      <table className="records-table">
+      <Table className="records-table">
         <thead>
           <tr>
             {columns.map((column) => <th key={column.key} scope="col">{column.label}</th>)}
@@ -35,7 +36,7 @@ export default function DataTable({
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 }

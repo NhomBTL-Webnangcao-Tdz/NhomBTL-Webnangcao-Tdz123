@@ -60,6 +60,7 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 2.15: ghi câu trả lời 5 điểm chưa rõ của đề, chốt đơn giá. `Phan 2/2.15-tra-loi-de.md`. Xong, `f6e1b7c`
 * 5.10: chuyển toàn bộ spec sang `test/unit/`. Ghi trong `Phan 5/5.9-5.10-unit-test.md`. Xong phần chuyển
 * 4.10 (phần 2): Postman collection. `Phan 4/4.10-postman.md`. Xong
+* 6.12 (phần 2): react-bootstrap cho các trang sau đăng nhập. `Phan 6/6.12-react-bootstrap-trang-trong.md`. Còn ContractsPage
 
 Việc ngoài checklist (không có log riêng):
 

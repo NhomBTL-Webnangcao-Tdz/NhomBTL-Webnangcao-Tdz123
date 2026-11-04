@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Button from 'react-bootstrap/Button';
 import { notificationApi } from '../../api/notification.api';
 import { useAuth } from '../../context/AuthContext';
 
@@ -97,7 +98,7 @@ export default function Header({ currentPage }) {
                     <strong>{notification.title}</strong>
                     <p>{notification.message}</p>
                     <small>{new Date(notification.createdAt).toLocaleString('vi-VN')}</small>
-                    {!notification.isRead && <button className="text-button" onClick={() => markRead(notification)}>Đánh dấu đã đọc</button>}
+                    {!notification.isRead && <Button variant="link" className="text-button" onClick={() => markRead(notification)}>Đánh dấu đã đọc</Button>}
                   </li>
                 ))}</ul> : <p>Chưa có thông báo mới.</p>}
             </div>
@@ -107,7 +108,7 @@ export default function Header({ currentPage }) {
           <div className="account-menu">
             <span className="account-avatar">{(user.username || user.role || 'A').slice(0, 1).toUpperCase()}</span>
             <span className="account-copy"><strong>{user.username}</strong><small>{user.role}</small></span>
-            <button className="button button-quiet" onClick={logout}>Đăng xuất</button>
+            <Button variant="outline-secondary" className="button button-quiet" onClick={logout}>Đăng xuất</Button>
           </div>
         ) : (
           <>

@@ -1,3 +1,5 @@
+import Badge from 'react-bootstrap/Badge';
+
 const statusClasses = {
   active: 'status-green',
   current: 'status-green',
@@ -23,5 +25,5 @@ export default function StatusBadge({ value, label }) {
   else if (normalized.includes('bảo trì') || normalized.includes('hết hiệu lực')) className = statusClasses.maintenance;
   else if (statusClasses[normalized]) className = statusClasses[normalized];
 
-  return <span className={`status-badge ${className}`}>{label || value || 'Chưa cập nhật'}</span>;
+  return <Badge bg="" className={`status-badge ${className}`}>{label || value || 'Chưa cập nhật'}</Badge>;
 }

@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { billApi } from '../../api/bill.api';
 import { roomApi } from '../../api/room.api';
 import BillForm from '../../components/common/BillForm';
@@ -150,31 +152,31 @@ export default function BillsPage() {
                   {share.student.phone && <a className="text-button" href={`tel:${share.student.phone}`}>Gọi</a>}
                   {share.student.email && <a className="text-button" href={`mailto:${share.student.email}`}>Email</a>}
                   {overdue && (
-                    <button
+                    <Button variant="link"
                       className="text-button"
                       disabled={activeShareAction === actionKey}
                       onClick={() => remindStudent(bill, share)}
                     >
                       {activeShareAction === actionKey ? 'Đang gửi...' : 'Gửi nhắc'}
-                    </button>
+                    </Button>
                   )}
                   {!share.isPaid && (
-                    <button
+                    <Button variant="link"
                       className="text-button"
                       disabled={activeShareAction === actionKey}
                       onClick={() => updateSharePayment(bill, share)}
                     >
                       Đánh dấu đã thu
-                    </button>
+                    </Button>
                   )}
                   {share.isPaid && (
-                    <button
+                    <Button variant="link"
                       className="text-button"
                       disabled={activeShareAction === actionKey}
                       onClick={() => updateSharePayment(bill, share)}
                     >
                       Hoàn tác
-                    </button>
+                    </Button>
                   )}
                 </div>
               </li>
@@ -191,12 +193,12 @@ export default function BillsPage() {
     { key: 'dueDate', label: 'Hạn thanh toán', render: (bill) => bill.dueDate ? String(bill.dueDate).slice(0, 10).split('-').reverse().join('/') : '—' },
     { key: 'total_amount', label: 'Tổng tiền', render: (bill) => `${Number(bill.total_amount).toLocaleString('vi-VN')} ₫` },
     { key: 'is_paid', label: 'Trạng thái', render: (bill) => <StatusBadge value={bill.is_paid ? 'paid' : 'unpaid'} label={bill.is_paid ? 'Đã thanh toán' : 'Chưa thanh toán'} /> },
-    { key: 'actions', label: '', render: (bill) => <div className="row-actions"><button className="text-button" onClick={() => setDetailBillId(bill.bill_id)}>Xem</button>{bill.billType !== 'GENERAL' && <button className="text-button" onClick={() => { setActiveBill(bill); setFormOpen(true); }}>Sửa</button>}{isAdmin && <button className="text-button danger-text" onClick={() => removeBill(bill)}>Xóa</button>}</div> },
+    { key: 'actions', label: '', render: (bill) => <div className="row-actions"><Button variant="link" className="text-button" onClick={() => setDetailBillId(bill.bill_id)}>Xem</Button>{bill.billType !== 'GENERAL' && <Button variant="link" className="text-button" onClick={() => { setActiveBill(bill); setFormOpen(true); }}>Sửa</Button>}{isAdmin && <Button variant="link" className="text-button danger-text" onClick={() => removeBill(bill)}>Xóa</Button>}</div> },
   ];
 
   return (
     <>
-      <PageHeading eyebrow="THU CHI & CÔNG NỢ" title="Hóa đơn & Khoản thu" description="Theo dõi hóa đơn điện nước và các khoản phí phát sinh theo phòng." action={<button className="button button-primary" onClick={() => { setGeneralChargeError(''); setGeneralChargeOpen(true); }}>＋ Tạo hóa đơn</button>} />
+      <PageHeading eyebrow="THU CHI & CÔNG NỢ" title="Hóa đơn & Khoản thu" description="Theo dõi hóa đơn điện nước và các khoản phí phát sinh theo phòng." action={<Button variant="primary" className="button button-primary" onClick={() => { setGeneralChargeError(''); setGeneralChargeOpen(true); }}>＋ Tạo hóa đơn</Button>} />
       <div className="stat-grid compact-stats">
         <article className="stat-card"><span className="stat-label">Tổng hóa đơn</span><strong>{bills.length}</strong></article>
         <article className="stat-card"><span className="stat-label">Đã thanh toán</span><strong>{bills.filter((bill) => bill.is_paid).length}</strong></article>
@@ -207,10 +209,10 @@ export default function BillsPage() {
         {shareActionMessage && <p className="form-success" role="status">{shareActionMessage}</p>}
         {shareActionError && <p className="form-error" role="alert">{shareActionError}</p>}
         <div className="table-toolbar">
-          <label className="search-field"><span aria-hidden="true">⌕</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Tìm mã hóa đơn hoặc kỳ thanh toán" aria-label="Tìm hóa đơn" /></label>
-          <label className="compact-select">Thanh toán<select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}><option value="all">Tất cả</option><option value="unpaid">Chưa thanh toán</option><option value="paid">Đã thanh toán</option></select></label>
-          <label className="compact-select">Kỳ<input type="month" value={periodFilter} onChange={(event) => setPeriodFilter(event.target.value)} /></label>
-          <label className="compact-select">Tòa<select value={buildingFilter} onChange={(event) => setBuildingFilter(event.target.value)}><option value="">Tất cả</option>{buildings.map((building) => <option key={building} value={building}>{building}</option>)}</select></label>
+          <label className="search-field"><span aria-hidden="true">⌕</span><Form.Control value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Tìm mã hóa đơn hoặc kỳ thanh toán" aria-label="Tìm hóa đơn" /></label>
+          <label className="compact-select">Thanh toán<Form.Select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}><option value="all">Tất cả</option><option value="unpaid">Chưa thanh toán</option><option value="paid">Đã thanh toán</option></Form.Select></label>
+          <label className="compact-select">Kỳ<Form.Control type="month" value={periodFilter} onChange={(event) => setPeriodFilter(event.target.value)} /></label>
+          <label className="compact-select">Tòa<Form.Select value={buildingFilter} onChange={(event) => setBuildingFilter(event.target.value)}><option value="">Tất cả</option>{buildings.map((building) => <option key={building} value={building}>{building}</option>)}</Form.Select></label>
         </div>
         <DataTable columns={columns} rows={filtered} rowKey={(bill) => bill.bill_id} isLoading={isLoading} error={error} onRetry={refresh} emptyMessage="Không tìm thấy hóa đơn." />
       </section>
@@ -237,8 +239,8 @@ export default function BillsPage() {
             {renderShares(detailBill)}
           </div>
           <div className="form-actions no-print">
-            <button className="button button-secondary" onClick={() => setDetailBillId(null)}>Đóng</button>
-            <button className="button button-primary" onClick={() => window.print()}>In hóa đơn</button>
+            <Button variant="outline-secondary" className="button button-secondary" onClick={() => setDetailBillId(null)}>Đóng</Button>
+            <Button variant="primary" className="button button-primary" onClick={() => window.print()}>In hóa đơn</Button>
           </div>
         </Modal>
       )}

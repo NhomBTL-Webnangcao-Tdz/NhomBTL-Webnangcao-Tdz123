@@ -1,3 +1,4 @@
+import Nav from 'react-bootstrap/Nav';
 import { useAuth } from '../../context/AuthContext';
 
 const managementLinks = [
@@ -32,19 +33,20 @@ export default function Sidebar({ currentPage }) {
         <span className="brand-name">KTX Care<small>QUẢN LÝ LƯU TRÚ</small></span>
       </a>
       <p className="sidebar-label">{isStudent ? 'CỔNG SINH VIÊN' : 'MENU CHÍNH'}</p>
-      <nav className="sidebar-nav" aria-label="Điều hướng chính">
+      <Nav as="nav" className="sidebar-nav" aria-label="Điều hướng chính">
         {links.map(({ id, label, icon }) => (
-          <a
-            className={`sidebar-link${currentPage === id ? ' active' : ''}`}
+          <Nav.Link
+            className="sidebar-link"
+            active={currentPage === id}
             href={`#${id}`}
             key={id}
             aria-current={currentPage === id ? 'page' : undefined}
           >
             <span className="sidebar-icon" aria-hidden="true">{icon}</span>
             <span>{label}</span>
-          </a>
+          </Nav.Link>
         ))}
-      </nav>
+      </Nav>
       <div className="sidebar-help">
         <span className="help-icon">?</span>
         <strong>Cần hỗ trợ?</strong>

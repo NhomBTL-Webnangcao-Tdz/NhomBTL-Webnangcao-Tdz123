@@ -3,6 +3,8 @@ import { billApi } from '../../api/bill.api';
 import { contractApi } from '../../api/contract.api';
 import { residenceApi } from '../../api/residence.api';
 import { roomApi } from '../../api/room.api';
+import Alert from 'react-bootstrap/Alert';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 import PageHeading from '../../components/common/PageHeading';
 import StatusBadge from '../../components/common/StatusBadge';
 import { buildTodos, countResidents, occupancyByBuilding, revenueLastMonths } from './dashboardStats';
@@ -69,7 +71,7 @@ export default function DashboardPage() {
         description="Theo dõi nhanh tình hình vận hành ký túc xá."
         action={<span className="date-chip">{new Intl.DateTimeFormat('vi-VN', { dateStyle: 'long' }).format(new Date())}</span>}
       />
-      {loadError && <div className="inline-notice" role="status">{loadError}</div>}
+      {loadError && <Alert variant="warning" className="inline-notice" role="status">{loadError}</Alert>}
       <div className="stat-grid">
         <article className="stat-card"><span className="stat-icon teal">▦</span><span className="stat-label">Tổng số phòng</span><strong>{stats?.roomCount ?? '—'}</strong><span className="stat-foot">Trong toàn bộ các tòa</span></article>
         <article className="stat-card"><span className="stat-icon blue">♙</span><span className="stat-label">Sinh viên lưu trú</span><strong>{stats?.residentCount ?? '—'}</strong><span className="stat-foot">Có hợp đồng và phòng</span></article>
@@ -79,7 +81,7 @@ export default function DashboardPage() {
       <div className="dashboard-grid">
         <section className="panel occupancy-panel">
           <div className="panel-heading"><div><h3>Công suất phòng</h3><p>Tỷ lệ phòng đang có người ở</p></div><span className="occupancy-value">{stats ? `${stats.occupancy}%` : '—'}</span></div>
-          <div className="progress-track"><span style={{ width: `${stats?.occupancy || 0}%` }} /></div>
+          <ProgressBar className="progress-track" now={stats?.occupancy || 0} aria-label="Công suất phòng" />
           <div className="progress-labels"><span>{stats?.occupied ?? '—'} phòng đang có người</span><span>{stats?.roomCount ?? '—'} phòng tổng</span></div>
           <h4 className="dashboard-subtitle">Lấp đầy theo tòa</h4>
           {stats?.buildings?.length ? (
@@ -87,7 +89,7 @@ export default function DashboardPage() {
               {stats.buildings.map((item) => (
                 <li key={item.building}>
                   <span>{item.building}</span>
-                  <span className="bar-track" role="img" aria-label={`${item.building}: ${item.percent}%`}><span style={{ width: `${item.percent}%` }} /></span>
+                  <ProgressBar className="bar-track" now={item.percent} aria-label={`${item.building}: ${item.percent}%`} />
                   <strong>{item.occupied}/{item.capacity}</strong>
                 </li>
               ))}

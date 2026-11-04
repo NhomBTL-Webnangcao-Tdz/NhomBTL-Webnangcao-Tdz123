@@ -117,7 +117,7 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 * [ ] 2.7 (Nhóm, bỏ: không đổi schema sát hạn) Hóa đơn điện nước: `UNPAID | PAID` (hay giữ `is_paid`), thu theo phòng hay chia đầu người, thanh toán điện nước có ghi vào `Payment` không
 * [~] 2.8 (Nhóm, Tân kiểm) Đơn giá điện/nước lưu ở đâu. Code đã có bảng `utility_tariff` + API `utility-bill/tariff` (commit `fde890e`); nhóm xác nhận giữ cách này
 * [ ] 2.9 (Nhóm, cả nhóm) Phạm vi mở rộng: đơn đăng ký ở, yêu cầu sửa chữa, thông báo, xuất file (quyết định phần 8)
-* [~] 2.10 (Nhóm, cả nhóm) React-Bootstrap đang cài nhưng chưa file nào dùng, mà đề 5b bắt buộc dùng. Trang chủ đã dùng (6.12). Chốt phạm vi chuyển đổi: trang chủ theo mẫu React Native, layout, form, bảng… [Đề 5b]
+* [~] 2.10 (Nhóm, cả nhóm) React-Bootstrap đang cài nhưng chưa file nào dùng, mà đề 5b bắt buộc dùng. Chốt 04/11: trang chủ theo mẫu React Native, các trang trong giữ giao diện Nam, dùng react-bootstrap cho layout, form, bảng (6.12) [Đề 5b]
 * [ ] 2.11 (Nhóm, cả nhóm duyệt) Cập nhật `docs/ke-hoach.md` và UML trong readme theo các quyết định trên, đổi trạng thái `docs/ke-hoach.md` thành "đã duyệt" [Đề 2b]
 * [~] 2.12 (Nhóm, cả nhóm duyệt) User stories: tối thiểu 12 câu, đúng định dạng "Là <vai trò>, tôi muốn <hành động> để <lợi ích>.", đánh mã US-xx, mỗi câu ứng với API, màn hình, test [Đề 1]. Bản nháp 24 câu ở `docs/user-stories.md` (log `docs/Phan 2/2.12-user-stories.md`). Còn: nhóm duyệt
 * [~] 2.13 (Nhóm, cả nhóm duyệt) Phân tích yêu cầu, đối tượng, quan hệ, phương thức; sơ đồ thuật toán (flowchart) cho các nghiệp vụ chính [Đề 2a, 2b]. Bản nháp ở `docs/phan-tich-thiet-ke.md` (UML + 6 flowchart, log `docs/Phan 2/2.13-phan-tich-thiet-ke.md`). Còn: nhóm duyệt
@@ -179,7 +179,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [x] 6.9 (FE, Tân) Hóa đơn: lọc tháng/tòa/trạng thái, đánh dấu đã thu, xem/in hóa đơn. Log `docs/Phan 6/6.9-trang-hoa-don.md`
 * [x] 6.10 (FE, Tân) Tổng quan: thẻ số liệu, biểu đồ lấp đầy theo tòa, thu tiền 6 tháng, danh sách việc cần làm. Log `docs/Phan 6/6.10-tong-quan.md`
 * [x] 6.11 (FE, Tân) Cài đặt: đơn giá điện/nước, quản lý tài khoản cán bộ (chỉ ADMIN). Log `docs/Phan 6/6.11-cai-dat.md`
-* [~] 6.12 (FE, Tân) Chuyển giao diện sang `react-bootstrap` theo phạm vi chốt ở 2.10; trang chủ theo mẫu React Native (3 ảnh chụp kèm đề) [Đề 5b]. Xong trang chủ (Navbar, Container, Row/Col, Card, Button, Stack), log `docs/Phan 6/6.12-landing-react-bootstrap.md`. Còn: các trang sau đăng nhập
+* [~] 6.12 (FE, Tân) Chuyển giao diện sang `react-bootstrap` theo phạm vi chốt ở 2.10; trang chủ theo mẫu React Native (3 ảnh chụp kèm đề) [Đề 5b]. Xong trang chủ (log `docs/Phan 6/6.12-landing-react-bootstrap.md`) và các trang sau đăng nhập (log `docs/Phan 6/6.12-react-bootstrap-trang-trong.md`). Còn: `ContractsPage`, sau khi Nam xong 6.7
 * [ ] 6.13 (FE, Tân) Rà usability: mỗi tác vụ chính ≤ 4 thao tác, gợi ý / tự điền, thông báo không gây phiền; ghi số thao tác vào báo cáo [Đề 5c]
 
 ## 7. Frontend cổng sinh viên (STUDENT)

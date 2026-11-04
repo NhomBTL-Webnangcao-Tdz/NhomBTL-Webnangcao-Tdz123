@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { residenceApi } from '../../api/residence.api';
 import { roomApi } from '../../api/room.api';
 import DataTable from '../../components/common/DataTable';
@@ -22,7 +24,7 @@ function ApproveForm({ request, rooms, onApprove, onCancel, saving, error }) {
   const selectedRoom = rooms.find((room) => room.id === roomId);
 
   return (
-    <form className="form-grid" onSubmit={(event) => {
+    <Form className="form-grid" onSubmit={(event) => {
       event.preventDefault();
       onApprove(request.id, { roomId, endDate, depositAmount: Number(depositAmount) });
     }}>
@@ -37,15 +39,15 @@ function ApproveForm({ request, rooms, onApprove, onCancel, saving, error }) {
           setDepositAmount(room?.price || 0);
         }}
       />
-      <label>Ngày kết thúc lưu trú<input type="date" value={endDate} onChange={(event) => setEndDate(event.target.value)} required min={new Date().toISOString().slice(0, 10)} /></label>
-      <label>Tiền đặt cọc (₫)<input type="number" value={depositAmount} onChange={(event) => setDepositAmount(event.target.value)} required min="0" /></label>
+      <label>Ngày kết thúc lưu trú<Form.Control type="date" value={endDate} onChange={(event) => setEndDate(event.target.value)} required min={new Date().toISOString().slice(0, 10)} /></label>
+      <label>Tiền đặt cọc (₫)<Form.Control type="number" value={depositAmount} onChange={(event) => setDepositAmount(event.target.value)} required min="0" /></label>
       {selectedRoom && <p className="form-hint form-wide">Phòng {selectedRoom.roomNumber}, {selectedRoom.building} · Sức chứa {selectedRoom.maxCapacity} sinh viên.</p>}
       {error && <p className="form-error form-wide" role="alert">{error}</p>}
       <div className="form-actions form-wide">
-        <button type="button" className="button button-secondary" onClick={onCancel}>Hủy</button>
-        <button type="submit" className="button button-primary" disabled={saving || !selectedRoom || Number(selectedRoom.currentOccupancy) >= Number(selectedRoom.maxCapacity)}>{saving ? 'Đang duyệt...' : 'Duyệt và xếp phòng'}</button>
+        <Button variant="outline-secondary" type="button" className="button button-secondary" onClick={onCancel}>Hủy</Button>
+        <Button variant="primary" type="submit" className="button button-primary" disabled={saving || !selectedRoom || Number(selectedRoom.currentOccupancy) >= Number(selectedRoom.maxCapacity)}>{saving ? 'Đang duyệt...' : 'Duyệt và xếp phòng'}</Button>
       </div>
-    </form>
+    </Form>
   );
 }
 
@@ -93,7 +95,7 @@ export default function ResidenceRequestsPage() {
     { key: 'requestedAt', label: 'Ngày gửi', render: (request) => new Date(request.requestedAt).toLocaleDateString('vi-VN') },
     { key: 'note', label: 'Ghi chú', render: (request) => request.note || '—' },
     { key: 'status', label: 'Trạng thái', render: (request) => <StatusBadge value={request.status === 'APPROVED' ? 'paid' : request.status === 'REJECTED' ? 'overdue' : 'upcoming'} label={statusLabels[request.status]} /> },
-    { key: 'review', label: '', render: (request) => request.status === 'PENDING' ? <div className="row-actions"><button className="text-button" onClick={() => { setSaveError(''); setSelectedRequest(request); }}>Duyệt / xếp phòng</button><button className="text-button danger-text" onClick={() => reject(request)}>Từ chối</button></div> : request.reviewNote || '—' },
+    { key: 'review', label: '', render: (request) => request.status === 'PENDING' ? <div className="row-actions"><Button variant="link" className="text-button" onClick={() => { setSaveError(''); setSelectedRequest(request); }}>Duyệt / xếp phòng</Button><Button variant="link" className="text-button danger-text" onClick={() => reject(request)}>Từ chối</Button></div> : request.reviewNote || '—' },
   ];
 
   return (
@@ -102,7 +104,7 @@ export default function ResidenceRequestsPage() {
       {saveError && !selectedRequest && <div className="inline-notice" role="alert">{saveError}</div>}
       <section className="panel">
         <div className="table-toolbar">
-          <label className="compact-select">Trạng thái<select value={filter} onChange={(event) => setFilter(event.target.value)}><option value="PENDING">Chờ duyệt</option><option value="APPROVED">Đã duyệt</option><option value="REJECTED">Đã từ chối</option><option value="ALL">Tất cả</option></select></label>
+          <label className="compact-select">Trạng thái<Form.Select value={filter} onChange={(event) => setFilter(event.target.value)}><option value="PENDING">Chờ duyệt</option><option value="APPROVED">Đã duyệt</option><option value="REJECTED">Đã từ chối</option><option value="ALL">Tất cả</option></Form.Select></label>
           <span className="toolbar-count">{requests.filter((request) => request.status === 'PENDING').length} yêu cầu chờ duyệt</span>
         </div>
         <DataTable columns={columns} rows={visibleRequests} rowKey={(request) => request.id} isLoading={isLoading} error={error} onRetry={refresh} emptyMessage="Không có yêu cầu lưu trú ở trạng thái này." />
