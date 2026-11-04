@@ -1,0 +1,1396 @@
+{
+  "info": {
+    "name": "KTX Care API",
+    "description": "Chạy Đăng nhập trước, token được lưu vào biến token. Điền username, password ở biến của collection.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5001"
+    },
+    {
+      "key": "username",
+      "value": "demo_admin"
+    },
+    {
+      "key": "password",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "app",
+      "item": [
+        {
+          "name": "Kiểm tra backend đang chạy",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: Công khai",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": []
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "Đăng ký tài khoản sinh viên",
+          "request": {
+            "method": "POST",
+            "description": "Quyền: Công khai",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"sinhvien01\",\n  \"password\": \"mat-khau-6-ky-tu\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Đăng nhập, nhận JWT có hạn 1 giờ",
+          "request": {
+            "method": "POST",
+            "description": "Quyền: Công khai",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Đăng nhập thành công', () => pm.response.to.have.status(200));",
+                  "pm.collectionVariables.set('token', pm.response.json().access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Xem tài khoản đang đăng nhập",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: Mọi tài khoản đã đăng nhập",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "profile"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "users",
+      "item": [
+        {
+          "name": "Danh sách tài khoản",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tạo tài khoản cán bộ (MANAGER)",
+          "request": {
+            "method": "POST",
+            "description": "Quyền: ADMIN",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"canbo01\",\n  \"password\": \"mat-khau-6-ky-tu\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Đổi vai trò tài khoản",
+          "request": {
+            "method": "PATCH",
+            "description": "Quyền: ADMIN",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/:id/role",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":id",
+                "role"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"MANAGER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "student",
+      "item": [
+        {
+          "name": "Dữ liệu cổng sinh viên: phòng, bạn cùng phòng, hóa đơn, đơn đăng ký",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: STUDENT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/student/me/portal",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "student",
+                "me",
+                "portal"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Lưu hồ sơ của mình, liên kết với tài khoản",
+          "request": {
+            "method": "PUT",
+            "description": "Quyền: STUDENT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/student/me/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "student",
+                "me",
+                "profile"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sid\": \"DEMO07\",\n  \"sname\": \"Sinh viên Demo 7\",\n  \"email\": \"demo07@example.test\",\n  \"phone\": \"0900000007\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Gửi đơn đăng ký ở",
+          "request": {
+            "method": "POST",
+            "description": "Quyền: STUDENT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/student/me/residence-request",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "student",
+                "me",
+                "residence-request"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Danh sách sinh viên. Có page thì trả { items, total, page, limit }, không có thì trả mảng",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/student",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "student"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tạo hồ sơ sinh viên",
+          "request": {
+            "method": "POST",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/student",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "student"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sid\": \"DEMO07\",\n  \"sname\": \"Sinh viên Demo 7\",\n  \"email\": \"demo07@example.test\",\n  \"phone\": \"0900000007\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Chi tiết sinh viên",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/student/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "student",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sửa sinh viên, không đổi được mã",
+          "request": {
+            "method": "PUT",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/student/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "student",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"0911111111\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Xóa sinh viên",
+          "request": {
+            "method": "DELETE",
+            "description": "Quyền: ADMIN",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/student/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "student",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "residence-requests",
+      "item": [
+        {
+          "name": "Danh sách đơn đăng ký ở",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/residence-requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "residence-requests"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Duyệt đơn, xếp phòng, tạo hợp đồng",
+          "request": {
+            "method": "PATCH",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/residence-requests/:id/approve",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "residence-requests",
+                ":id",
+                "approve"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomId\": \"<id phòng>\",\n  \"endDate\": \"2027-06-30\",\n  \"depositAmount\": 1000000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Từ chối đơn",
+          "request": {
+            "method": "PATCH",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/residence-requests/:id/reject",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "residence-requests",
+                ":id",
+                "reject"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reviewNote\": \"Hết chỗ ở tòa đã chọn\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "rooms",
+      "item": [
+        {
+          "name": "Tạo phòng",
+          "request": {
+            "method": "POST",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rooms",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rooms"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomNumber\": \"A301\",\n  \"building\": \"Tòa A\",\n  \"maxCapacity\": 4,\n  \"price\": 1200000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Danh sách phòng. Có page thì trả { items, total, page, limit }, không có thì trả mảng",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rooms",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rooms"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "building",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Chi tiết phòng",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rooms/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rooms",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sửa phòng",
+          "request": {
+            "method": "PATCH",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rooms/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rooms",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 1300000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Xóa phòng",
+          "request": {
+            "method": "DELETE",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rooms/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rooms",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "contract",
+      "item": [
+        {
+          "name": "Danh sách hợp đồng",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/contract",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contract"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tạo hợp đồng",
+          "request": {
+            "method": "POST",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/contract",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contract"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"student\": {\n    \"sid\": \"DEMO01\"\n  },\n  \"room\": {\n    \"id\": \"<id phòng>\"\n  },\n  \"start_date\": \"2026-09-01\",\n  \"end_date\": \"2027-06-30\",\n  \"deposit_amount\": 1000000,\n  \"is_active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Chi tiết hợp đồng",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/contract/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contract",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sửa, gia hạn hoặc thanh lý hợp đồng",
+          "request": {
+            "method": "PUT",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/contract/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contract",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_active\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Xóa hợp đồng",
+          "request": {
+            "method": "DELETE",
+            "description": "Quyền: ADMIN",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/contract/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contract",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "utility-bill",
+      "item": [
+        {
+          "name": "Xem đơn giá điện nước",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/utility-bill/tariff",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utility-bill",
+                "tariff"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sửa đơn giá điện nước",
+          "request": {
+            "method": "PUT",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/utility-bill/tariff",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utility-bill",
+                "tariff"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"electricPrice\": 3500,\n  \"waterPrice\": 15000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Danh sách hóa đơn. Có page thì trả { items, total, page, limit }, không có thì trả mảng",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/utility-bill",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utility-bill"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "month",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "year",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "building",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tạo hóa đơn điện nước",
+          "request": {
+            "method": "POST",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/utility-bill",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utility-bill"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"room\": {\n    \"id\": \"<id phòng>\"\n  },\n  \"dueDate\": \"2026-12-10\",\n  \"month\": 11,\n  \"year\": 2026,\n  \"old_electric_index\": 100,\n  \"new_electric_index\": 150,\n  \"old_water_index\": 10,\n  \"new_water_index\": 12,\n  \"total_amount\": 1400000,\n  \"is_paid\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Tải ảnh biên lai; sinh viên chỉ xem được hóa đơn của mình",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER, STUDENT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/utility-bill/:id/receipt",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utility-bill",
+                ":id",
+                "receipt"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Chi tiết hóa đơn",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/utility-bill/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utility-bill",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sửa hóa đơn",
+          "request": {
+            "method": "PUT",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/utility-bill/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utility-bill",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_paid\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Xóa hóa đơn",
+          "request": {
+            "method": "DELETE",
+            "description": "Quyền: ADMIN",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/utility-bill/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utility-bill",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tạo khoản thu chung, gửi multipart/form-data, ảnh ở trường receiptImage",
+          "request": {
+            "method": "POST",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/utility-bill/general",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utility-bill",
+                "general"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Đánh dấu phần của một sinh viên đã đóng",
+          "request": {
+            "method": "PATCH",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/utility-bill/:id/shares/:sid",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utility-bill",
+                ":id",
+                "shares",
+                ":sid"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                },
+                {
+                  "key": "sid",
+                  "value": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isPaid\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Nhắc sinh viên đóng tiền",
+          "request": {
+            "method": "POST",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/utility-bill/:id/shares/:sid/remind",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "utility-bill",
+                ":id",
+                "shares",
+                ":sid",
+                "remind"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                },
+                {
+                  "key": "sid",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "notifications",
+      "item": [
+        {
+          "name": "Thông báo của mình",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER, STUDENT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications",
+                "me"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Đánh dấu đã đọc",
+          "request": {
+            "method": "PATCH",
+            "description": "Quyền: ADMIN, MANAGER, STUDENT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/me/:id/read",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications",
+                "me",
+                ":id",
+                "read"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "meter-readings",
+      "item": [
+        {
+          "name": "Chỉ số kỳ hiện tại của phòng mình",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: STUDENT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/meter-readings/me/current",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "meter-readings",
+                "me",
+                "current"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Gửi chỉ số kèm ảnh đồng hồ, gửi multipart/form-data",
+          "request": {
+            "method": "POST",
+            "description": "Quyền: STUDENT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/meter-readings/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "meter-readings",
+                "me"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Danh sách chỉ số sinh viên gửi",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/meter-readings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "meter-readings"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tải ảnh đồng hồ, meter là electric hoặc water",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER, STUDENT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/meter-readings/:id/photo/:meter",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "meter-readings",
+                ":id",
+                "photo",
+                ":meter"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                },
+                {
+                  "key": "meter",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Duyệt chỉ số và tạo hóa đơn, hoặc yêu cầu gửi lại",
+          "request": {
+            "method": "PATCH",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/meter-readings/:id/review",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "meter-readings",
+                ":id",
+                "review"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

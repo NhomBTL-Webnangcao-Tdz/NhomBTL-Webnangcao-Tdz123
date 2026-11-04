@@ -398,6 +398,7 @@ Chưa có API. Hiện mới có entity `Payment` và repository provider.
    - Dữ liệu demo: đặt `SEED_DEMO_PASSWORD` (ít nhất 8 ký tự) trong `.env`, tạo xong bảng thì chạy `npm run seed`. Lệnh tạo 3 tài khoản `demo_admin`, `demo_manager`, `demo_student` dùng chung mật khẩu đó. Đã có dữ liệu demo thì lệnh không làm gì.
 
    - Tài liệu API (Swagger): chạy backend rồi mở `http://localhost:5001/api-docs`. Đặt `SWAGGER_ENABLED=false` để tắt.
+   - Postman: nhập `docs/postman/ktx-care.postman_collection.json`, điền biến `password`, chạy Đăng nhập trước. Xuất lại bằng `npm run postman:export`.
 
 5. **Khởi chạy máy chủ Backend:**
    - Chế độ phát triển (hot reload):
