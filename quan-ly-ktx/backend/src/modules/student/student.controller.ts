@@ -54,7 +54,7 @@ export class StudentController {
   @Get(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MANAGER)
-  async findOne(@Param('id') id: string): Promise<Student | null> {
+  async findOne(@Param('id') id: string): Promise<Student> {
     return this.studentService.findOne(id);
   }
 
@@ -68,7 +68,7 @@ export class StudentController {
   @Put(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MANAGER)
-  async update(@Param('id') id: string, @Body() studentData: UpdateStudentDto): Promise<Student | null> {
+  async update(@Param('id') id: string, @Body() studentData: UpdateStudentDto): Promise<Student> {
     return this.studentService.update(id, studentData);
   }
 

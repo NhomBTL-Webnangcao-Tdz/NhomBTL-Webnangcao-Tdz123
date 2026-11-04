@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { AllExceptionsFilter } from './common/all-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -29,6 +30,8 @@ async function bootstrap() {
       transform: true,       // Tự động transform kiểu dữ liệu
     }),
   );
+
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   const port = Number(process.env.PORT || 5001);
   if (!Number.isInteger(port) || port < 1 || port > 65535) {

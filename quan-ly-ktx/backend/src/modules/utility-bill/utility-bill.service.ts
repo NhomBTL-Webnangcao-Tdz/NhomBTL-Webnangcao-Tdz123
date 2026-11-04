@@ -61,7 +61,8 @@ export class UtilityBillService {
       where: { bill_id: id },
       relations: { room: true, shares: { student: true } },
     });
-    return bill ? this.serializeBill(bill) : null;
+    if (!bill) throw new NotFoundException('Không tìm thấy hóa đơn.');
+    return this.serializeBill(bill);
   }
 
   async create(utilityBillData: CreateUtilityBillDto): Promise<UtilityBill> {
@@ -259,7 +260,7 @@ export class UtilityBillService {
 
   async update(id: number, utilityBillData: UpdateUtilityBillDto) {
     const bill = await this.utilityBillRepository.findOneBy({ bill_id: id });
-    if (!bill) return null;
+    if (!bill) throw new NotFoundException('Không tìm thấy hóa đơn.');
     Object.assign(bill, utilityBillData);
     await this.utilityBillRepository.save(bill);
     if (utilityBillData.is_paid !== undefined) {
@@ -341,6 +342,7 @@ export class UtilityBillService {
   }
 
   async remove(id: number): Promise<void> {
-    await this.utilityBillRepository.delete(id);
+    const result = await this.utilityBillRepository.delete(id);
+    if (!result.affected) throw new NotFoundException('Không tìm thấy hóa đơn.');
   }
 }

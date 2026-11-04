@@ -32,22 +32,30 @@ export class StudentService {
     return this.studentRepository.find();
   }
 
-  async findOne(id: string): Promise<Student | null> {
-    return this.studentRepository.findOneBy({ sid: id });
+  async findOne(id: string): Promise<Student> {
+    const student = await this.studentRepository.findOneBy({ sid: id });
+    if (!student) throw new NotFoundException('Không tìm thấy sinh viên.');
+    return student;
   }
 
   async create(studentData: Partial<Student>): Promise<Student> {
+    // save() với khóa chính đã có sẽ ghi đè bản cũ nên phải kiểm tra trước.
+    if (await this.studentRepository.existsBy({ sid: studentData.sid })) {
+      throw new ConflictException('Mã sinh viên đã tồn tại.');
+    }
     const newStudent = this.studentRepository.create(studentData);
     return this.studentRepository.save(newStudent);
   }
 
-  async update(id: string, studentData: Partial<Student>): Promise<Student | null> {
+  async update(id: string, studentData: Partial<Student>): Promise<Student> {
+    await this.findOne(id);
     if (Object.keys(studentData).length) await this.studentRepository.update(id, studentData);
     return this.findOne(id);
   }
 
   async remove(id: string): Promise<void> {
-    await this.studentRepository.delete(id);
+    const result = await this.studentRepository.delete(id);
+    if (!result.affected) throw new NotFoundException('Không tìm thấy sinh viên.');
   }
 
   async saveMyProfile(userId: number, profile: StudentProfileDto) {

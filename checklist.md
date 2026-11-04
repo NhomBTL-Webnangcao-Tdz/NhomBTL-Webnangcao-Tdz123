@@ -141,7 +141,7 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 * [x] 4.1 (BE) Áp `JwtAuthGuard + RolesGuard` cho Student, Contract, UtilityBill. Mọi controller nghiệp vụ đã có guard (commit `fde890e`)
 * [~] 4.2 (BE, Tân) DTO + class-validator cho Student, Contract, UtilityBill, Payment [Đề 3d, 4c]. Đã có DTO cho room, meter-reading, residence-request, tariff, general charge, hồ sơ SV, Contract, Student, UtilityBill, từ chối đơn (log `docs/Phan 4/4.2-dto-contract.md`, `docs/Phan 4/4.2-dto-student-utility-bill.md`). Còn: DTO Payment, làm sau 4.3
 * [ ] 4.3 (BE, Nam) `PaymentModule`: CRUD, lọc theo hợp đồng
-* [ ] 4.4 (BE, Tân) Mã lỗi nhất quán: 400 sai dữ liệu, 401, 403, 404 không tìm thấy, 409 vi phạm ràng buộc
+* [~] 4.4 (BE, Tân) Mã lỗi nhất quán: 400 sai dữ liệu, 401, 403, 404 không tìm thấy, 409 vi phạm ràng buộc. Log `docs/Phan 4/4.4-4.12-xu-ly-loi.md`. Còn: 404 của `/contract/:id`, Nam sửa cùng 5.1, 5.2
 * [ ] 4.5 (BE, Tân) API tài khoản cho ADMIN: `GET /users`, `POST /users` (tạo MANAGER), `PATCH /users/:id/role`
 * [ ] 4.6 (BE, Tân kiểm) API đơn giá: `GET /settings` (ADMIN, MANAGER), `PUT /settings` (ADMIN)
 * [ ] 4.7 (BE, Tân kiểm) API phòng còn chỗ và danh sách SV đang ở trong phòng
@@ -149,7 +149,7 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 * [ ] 4.9 (BE, Tân) Bảo mật: giới hạn số lần đăng nhập sai, header bảo mật (`helmet`) [Đề 3d, 4c]
 * [ ] 4.10 (BE, Tân) Tài liệu hóa API theo hướng dẫn trên lớp (tạm hiểu là Swagger/OpenAPI, chờ 2.15): endpoint, quyền, ví dụ request/response, mã lỗi [Đề 4b]
 * [ ] 4.11 (BE + FE, bỏ: giữ localStorage, rủi ro ghi trong luat-dao-duc.md) Phiên đăng nhập và cookie: giữ token ở `localStorage` hay chuyển sang cookie `httpOnly; Secure; SameSite` (khi đó cần chống CSRF); đăng xuất, hết hạn phiên; transaction DB cho thao tác ghi nhiều bảng [Đề 4c]
-* [ ] 4.12 (BE, Tân) Exception filter chung: trả lỗi cùng một dạng, không lộ stack trace hay câu SQL ra client [Đề 7a]
+* [x] 4.12 (BE, Tân) Exception filter chung: trả lỗi cùng một dạng, không lộ stack trace hay câu SQL ra client [Đề 7a]. Log `docs/Phan 4/4.4-4.12-xu-ly-loi.md`
 
 ## 5. Backend nghiệp vụ
 
