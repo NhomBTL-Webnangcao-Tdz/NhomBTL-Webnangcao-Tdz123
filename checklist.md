@@ -168,7 +168,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 
 ## 6. Frontend khu quản lý (ADMIN / MANAGER)
 
-* [ ] 6.1 (FE, Tân) Kiểm thử các trang admin hiện có trên app thật với API mới (tải / rỗng / lỗi, 375px, console, XSS), ghi lại lỗi
+* [x] 6.1 (FE, Tân) Kiểm thử các trang admin hiện có trên app thật với API mới (tải / rỗng / lỗi, 375px, console, XSS), ghi lại lỗi. Log `docs/Phan 6/6.1-kiem-thu-trang-admin.md`
 * [ ] 6.2 (FE, Tân) Phần dùng chung: toast thành công/lỗi, hộp xác nhận trước khi xóa, validate form khớp DTO backend
 * [x] 6.3 (FE) Xử lý phiên: 401 → đăng xuất, về đăng nhập kèm thông báo; 403 → báo "Không có quyền" [Đề 3d, 4c]. Log `docs/Phan 6/6.3-xu-ly-phien.md`
 * [x] 6.4 (FE) Sidebar theo vai trò: ẩn menu quản lý với STUDENT, ẩn mục chỉ-ADMIN với MANAGER. Code có từ `fde890e`, thêm test. Log `docs/Phan 6/6.4-sidebar-theo-vai-tro.md`
