@@ -10,6 +10,9 @@ Tài liệu của dự án và log từng mục checklist. Ở gốc repo chỉ 
 * `wireframe-luong-xu-ly.md`: wireframe màn hình chính và sơ đồ luồng xử lý thông tin (Đề 3a, 3b; bản nháp).
 * `ca-kiem-thu.md`: ca kiểm thử thành công / lỗi kèm kết quả (Đề 7d; bản nháp).
 * `luat-dao-duc.md`: luật, đạo đức nghề nghiệp, đạo đức xã hội, tự kiểm tra an ninh (Đề 9; bản nháp).
+* `phan-tich-orm.md`: phân tích ORM và truy vấn (Đề 6b).
+* `trien-khai.md`: hướng dẫn triển khai Vercel, Render.
+* `postman/`: Postman collection (Đề 4b).
 * `ke-hoach.md`: thiết kế đích (bản đề xuất, chờ nhóm duyệt).
 * `baocao-bt-th-2.md`: báo cáo bài thực hành số 2 (thực thể, quan hệ, UML).
 * `luu-tru/`: bản cũ không dùng nữa. `checklist-v1.md` là checklist trước khi sắp xếp lại ở mục 1.7.
@@ -61,6 +64,8 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 5.10: chuyển toàn bộ spec sang `test/unit/`. Ghi trong `Phan 5/5.9-5.10-unit-test.md`. Xong phần chuyển
 * 4.10 (phần 2): Postman collection. `Phan 4/4.10-postman.md`. Xong
 * 6.12 (phần 2): react-bootstrap cho các trang sau đăng nhập. `Phan 6/6.12-react-bootstrap-trang-trong.md`. Còn ContractsPage
+* 6.13: đếm thao tác các tác vụ chính. `Phan 6/6.13-usability.md`. Còn tạo hợp đồng
+* 9.4: chuẩn bị triển khai Vercel, Render. `Phan 9/9.4-chuan-bi-trien-khai.md`. Chờ Tân deploy
 
 Việc ngoài checklist (không có log riêng):
 

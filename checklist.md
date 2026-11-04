@@ -180,7 +180,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [x] 6.10 (FE, Tân) Tổng quan: thẻ số liệu, biểu đồ lấp đầy theo tòa, thu tiền 6 tháng, danh sách việc cần làm. Log `docs/Phan 6/6.10-tong-quan.md`
 * [x] 6.11 (FE, Tân) Cài đặt: đơn giá điện/nước, quản lý tài khoản cán bộ (chỉ ADMIN). Log `docs/Phan 6/6.11-cai-dat.md`
 * [~] 6.12 (FE, Tân) Chuyển giao diện sang `react-bootstrap` theo phạm vi chốt ở 2.10; trang chủ theo mẫu React Native (3 ảnh chụp kèm đề) [Đề 5b]. Xong trang chủ (log `docs/Phan 6/6.12-landing-react-bootstrap.md`) và các trang sau đăng nhập (log `docs/Phan 6/6.12-react-bootstrap-trang-trong.md`). Còn: `ContractsPage`, sau khi Nam xong 6.7
-* [ ] 6.13 (FE, Tân) Rà usability: mỗi tác vụ chính ≤ 4 thao tác, gợi ý / tự điền, thông báo không gây phiền; ghi số thao tác vào báo cáo [Đề 5c]
+* [~] 6.13 (FE, Tân) Rà usability: mỗi tác vụ chính ≤ 4 thao tác, gợi ý / tự điền, thông báo không gây phiền; ghi số thao tác vào báo cáo [Đề 5c]. Đã đếm, log `docs/Phan 6/6.13-usability.md`. Còn: tạo hợp đồng 5 thao tác, chờ 6.7 của Nam
 
 ## 7. Frontend cổng sinh viên (STUDENT)
 
@@ -201,7 +201,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [x] 9.1 (FE) Rà soát toàn bộ giao diện: 375px, không lỗi console, không render HTML từ dữ liệu người dùng, không `console.log` dữ liệu người dùng [Đề 3d, 7e]. Thử với backend giả; sửa tải ảnh bỏ qua 401, thông báo tiếng Nga, tắt source map. Log `docs/Phan 9/9.1-ra-soat-frontend.md`
 * [ ] 9.2 (FE, Tân) Test component chính ở frontend (form, guard, xử lý phiên) [Đề 7e]
 * [ ] 9.3 (Nhóm, Tân) E2E luồng chính: lập HĐ → nhập điện nước → SV xem hóa đơn → ghi thanh toán → kết thúc HĐ [Đề 7c]
-* [ ] 9.4 (Nhóm, Tân) Triển khai backend, frontend, DB lên cloud; cấu hình CORS + biến môi trường
+* [~] 9.4 (Nhóm, Tân) Triển khai backend, frontend, DB lên cloud; cấu hình CORS + biến môi trường. Đã có `render.yaml`, hướng dẫn `docs/trien-khai.md`, log `docs/Phan 9/9.4-chuan-bi-trien-khai.md`. Còn: Tân tạo tài khoản Vercel, Render và deploy
 * [ ] 9.5 (Nhóm, Tân) Kiểm thử trên bản đã triển khai với 3 tài khoản demo
 * [ ] 9.6 (Nhóm, Tân) (Tùy chọn) Tự chạy lint + test khi push (GitHub Actions)
 * [~] 9.7 (Nhóm, cả nhóm) Danh sách ca kiểm thử: đầu vào, kết quả mong đợi, kết quả thực tế, ảnh chụp; gồm cả ca lỗi và ca thành công [Đề 7d]. Nháp `docs/ca-kiem-thu.md` (46 ca, BE 27/27, FE 25/25). Còn: ảnh chụp, ca E2E. Log `docs/Phan 9/9.7-ca-kiem-thu.md`
@@ -220,7 +220,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 ## 11. Việc tồn đọng / cần xác nhận
 
 * [ ] (Nam) Nam xác nhận đã đổi mật khẩu Aiven (1.1); mật khẩu cũ vẫn nằm trong lịch sử git nên chỉ an toàn khi đã đổi
-* [ ] (Tân) Xác minh phiên bản Node.js tối thiểu cho NestJS 12 và ghi vào readme mục 7.1
+* [x] (Tân) Xác minh phiên bản Node.js tối thiểu cho NestJS 12 và ghi vào readme mục 7.1: từ Node 20
 * [ ] Token đang lưu ở `localStorage`: đã chuyển thành mục 4.11
 * [ ] (BE, Nam) `backend/package-lock.json` lệch `package.json`, `npm ci` lỗi (thiếu `@emnapi/core`, `@emnapi/runtime`): chạy `npm install` rồi commit lock file
 

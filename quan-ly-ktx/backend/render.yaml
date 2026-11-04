@@ -1,0 +1,38 @@
+# Cấu hình backend trên Render. Giá trị bí mật điền trên trang Render, không ghi ở đây.
+services:
+  - type: web
+    name: ktx-care-api
+    runtime: node
+    plan: free
+    rootDir: quan-ly-ktx/backend
+    # Render đặt NODE_ENV=production nên phải cài cả devDependencies để có Nest CLI.
+    buildCommand: npm install --include=dev --no-package-lock && npm run build
+    startCommand: npm run start:prod
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: 24
+      - key: NODE_ENV
+        value: production
+      - key: DB_SYNCHRONIZE
+        value: false
+      - key: DB_SSL
+        value: true
+      - key: DB_SSL_REJECT_UNAUTHORIZED
+        value: true
+      - key: DB_SSL_CA
+        value: /etc/secrets/ca.pem
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        value: quan_ly_ktx
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        sync: false
