@@ -92,7 +92,7 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 
 ## 1. Dọn dẹp, an toàn & tài liệu khởi đầu
 
-* [x] 1.1 (Nhóm/BE) Đổi mật khẩu DB Aiven và bỏ thông tin DB khỏi code (code sạch từ commit `1c56b71`; Nam đánh dấu xong ở `7864eac`, xem phần 11)
+* [~] 1.1 (Nhóm/BE) Đổi mật khẩu DB Aiven và bỏ thông tin DB khỏi code (code sạch từ commit `1c56b71`). Kiểm tra 04/11: mật khẩu Aiven của Nam chưa đổi, vẫn trùng lịch sử git. Bản nộp dùng Aiven khác của Tân. Còn: Nam đổi mật khẩu hoặc tắt service cũ
 * [x] 1.2 (BE) Chuyển cấu hình sang `.env` (commit `1c56b71`)
 * [x] 1.3 (FE) Xóa file thừa `App 2.js`, `logo.svg`, `reportWebVitals.js` (commit `1c56b71`)
 * [x] 1.4 (FE) Rà soát `readme.md` cho khớp code hiện tại. Log `docs/Phan 1/1.4-ra-soat-readme.md`
@@ -139,7 +139,7 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 ## 4. Backend API nền tảng
 
 * [x] 4.1 (BE) Áp `JwtAuthGuard + RolesGuard` cho Student, Contract, UtilityBill. Mọi controller nghiệp vụ đã có guard (commit `fde890e`)
-* [~] 4.2 (BE, Tân) DTO + class-validator cho Student, Contract, UtilityBill, Payment [Đề 3d, 4c]. Đã có DTO cho room, meter-reading, residence-request, tariff, general charge, hồ sơ SV. Còn: `POST/PUT` của Contract, Student, UtilityBill nhận `Partial<Entity>` (ValidationPipe bỏ qua kiểu này nên body không được kiểm tra, nguy cơ mass assignment); `PATCH residence-requests/:id/reject` dùng kiểu inline
+* [~] 4.2 (BE, Tân) DTO + class-validator cho Student, Contract, UtilityBill, Payment [Đề 3d, 4c]. Đã có DTO cho room, meter-reading, residence-request, tariff, general charge, hồ sơ SV, Contract (log `docs/Phan 4/4.2-dto-contract.md`). Còn: `POST/PUT` của Student, UtilityBill nhận `Partial<Entity>` (ValidationPipe bỏ qua kiểu này nên body không được kiểm tra, nguy cơ mass assignment); `PATCH residence-requests/:id/reject` dùng kiểu inline
 * [ ] 4.3 (BE, Nam) `PaymentModule`: CRUD, lọc theo hợp đồng
 * [ ] 4.4 (BE, Tân) Mã lỗi nhất quán: 400 sai dữ liệu, 401, 403, 404 không tìm thấy, 409 vi phạm ràng buộc
 * [ ] 4.5 (BE, Tân) API tài khoản cho ADMIN: `GET /users`, `POST /users` (tạo MANAGER), `PATCH /users/:id/role`

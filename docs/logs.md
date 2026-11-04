@@ -40,7 +40,8 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 10.6: nháp luật, đạo đức, tự kiểm tra an ninh. `Phan 10/10.6-luat-dao-duc.md`. Nháp xong, `3761e69`
 * 2.16: chốt dùng trang chủ của Nam. Ghi trong checklist, không có log riêng. `93135ee`
 * 6.12 (phần 1): trang chủ dùng react-bootstrap. `Phan 6/6.12-landing-react-bootstrap.md`. Xong phần 1, `93135ee`
-* 2.2: phân công theo người, mốc thời gian 1–8/11. `Phan 2/2.2-phan-cong.md`. Xong, chờ commit
+* 2.2: phân công theo người, mốc thời gian 1–8/11. `Phan 2/2.2-phan-cong.md`. Xong, `23199ff`
+* 4.2 (phần 1): DTO cho Contract. `Phan 4/4.2-dto-contract.md`. Xong phần 1, chờ commit
 
 Việc ngoài checklist (không có log riêng):
 

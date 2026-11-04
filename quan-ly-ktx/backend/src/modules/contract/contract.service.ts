@@ -1,6 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { Contract } from './contract.entity';
+import { CreateContractDto } from './dto/create-contract.dto';
+import { UpdateContractDto } from './dto/update-contract.dto';
 
 @Injectable()
 export class ContractService {
@@ -20,12 +22,12 @@ export class ContractService {
     });
   }
 
-  async create(contractData: Partial<Contract>): Promise<Contract> {
-    const newContract = this.contractRepository.create(contractData);
+  async create(contractData: CreateContractDto): Promise<Contract> {
+    const newContract = this.contractRepository.create(contractData as unknown as DeepPartial<Contract>);
     return this.contractRepository.save(newContract);
   }
 
-  async update(id: number, contractData: Partial<Contract>): Promise<Contract | null> {
+  async update(id: number, contractData: UpdateContractDto): Promise<Contract | null> {
     const contract = await this.contractRepository.findOneBy({ contract_id: id });
     if (!contract) return null;
     Object.assign(contract, contractData);
