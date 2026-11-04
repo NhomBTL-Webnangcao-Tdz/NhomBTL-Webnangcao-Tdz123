@@ -45,7 +45,8 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 4.2 (phần 2): DTO cho Student, UtilityBill, từ chối đơn. `Phan 4/4.2-dto-student-utility-bill.md`. Xong phần 2, còn Payment, `499a811`
 * 3.5: `database/init.sql` đủ 11 bảng. `Phan 3/3.5-init-sql.md`. Xong, `24d14a0`
 * 3.6: script seed, 3 tài khoản demo. `Phan 3/3.6-seed.md`. Xong, `d55d190`
-* 4.4 + 4.12: mã lỗi nhất quán, exception filter chung. `Phan 4/4.4-4.12-xu-ly-loi.md`. 4.12 xong, 4.4 còn contract, chờ commit
+* 4.4 + 4.12: mã lỗi nhất quán, exception filter chung. `Phan 4/4.4-4.12-xu-ly-loi.md`. 4.12 xong, 4.4 còn contract, `36a326e`
+* 4.10: tài liệu API bằng Swagger. `Phan 4/4.10-swagger.md`. Xong, chờ commit
 
 Việc ngoài checklist (không có log riêng):
 

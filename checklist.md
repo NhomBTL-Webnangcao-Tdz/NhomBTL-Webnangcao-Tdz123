@@ -147,7 +147,7 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 * [ ] 4.7 (BE, Tân kiểm) API phòng còn chỗ và danh sách SV đang ở trong phòng
 * [ ] 4.8 (BE, Tân) Phân trang + tìm kiếm + lọc (`?page=&limit=&q=&building=&status=`) cho danh sách
 * [ ] 4.9 (BE, Tân) Bảo mật: giới hạn số lần đăng nhập sai, header bảo mật (`helmet`) [Đề 3d, 4c]
-* [ ] 4.10 (BE, Tân) Tài liệu hóa API theo hướng dẫn trên lớp (tạm hiểu là Swagger/OpenAPI, chờ 2.15): endpoint, quyền, ví dụ request/response, mã lỗi [Đề 4b]
+* [x] 4.10 (BE, Tân) Tài liệu hóa API theo hướng dẫn trên lớp (tạm hiểu là Swagger/OpenAPI, chờ 2.15): endpoint, quyền, ví dụ request/response, mã lỗi [Đề 4b]. Swagger ở `/api-docs`. Log `docs/Phan 4/4.10-swagger.md`
 * [ ] 4.11 (BE + FE, bỏ: giữ localStorage, rủi ro ghi trong luat-dao-duc.md) Phiên đăng nhập và cookie: giữ token ở `localStorage` hay chuyển sang cookie `httpOnly; Secure; SameSite` (khi đó cần chống CSRF); đăng xuất, hết hạn phiên; transaction DB cho thao tác ghi nhiều bảng [Đề 4c]
 * [x] 4.12 (BE, Tân) Exception filter chung: trả lỗi cùng một dạng, không lộ stack trace hay câu SQL ra client [Đề 7a]. Log `docs/Phan 4/4.4-4.12-xu-ly-loi.md`
 
