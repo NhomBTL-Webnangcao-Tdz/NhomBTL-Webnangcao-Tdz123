@@ -132,7 +132,7 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 * [ ] 3.3 (BE, bỏ: không đổi schema sát hạn) Áp dụng quy ước tên/khóa (2.4) và trạng thái enum cho hợp đồng, hóa đơn (2.6, 2.7)
 * [ ] 3.4 (BE, bỏ: đã có utility_tariff) Bảng `SETTINGS` (nếu chốt ở 2.8) và các bảng mở rộng (nếu chốt ở 2.9)
 * [x] 3.5 (BE, Tân) Tạo bảng cho môi trường production: `database/init.sql` đủ 11 bảng. Log `docs/Phan 3/3.5-init-sql.md`
-* [ ] 3.6 (BE, Tân) Script seed: vài tòa, phòng, SV, HĐ, hóa đơn + tài khoản ADMIN đầu tiên và 3 tài khoản demo (admin/manager/student), dữ liệu dễ nhận ra
+* [x] 3.6 (BE, Tân) Script seed: vài tòa, phòng, SV, HĐ, hóa đơn + 3 tài khoản demo (admin/manager/student), dữ liệu dễ nhận ra. Chạy `npm run seed`. Log `docs/Phan 3/3.6-seed.md`
 * [ ] 3.7 (Nhóm, Tân) Kiểm tra mọi thành viên chạy được backend với DB (máy cá nhân hoặc Aiven) theo readme
 * [ ] 3.8 (BE, Tân) Viết phân tích ORM cho báo cáo: cấu hình DataSource, entity ↔ bảng, quan hệ ↔ khóa ngoại, repository; kèm câu SQL thật do TypeORM sinh ra (bật `logging` để lấy) [Đề 6b]
 

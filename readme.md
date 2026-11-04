@@ -395,6 +395,7 @@ Chưa có API. Hiện mới có entity `Payment` và repository provider.
    - Thời hạn token hiện cố định 1 giờ trong code.
    - `FRONTEND_URL` có thể ghi nhiều địa chỉ, cách nhau bằng dấu phẩy. `localhost:3000` và `127.0.0.1:3000` luôn được cho phép.
    - Không ghi mật khẩu hoặc secret thật vào readme, code hay bất kỳ file nào đưa lên git.
+   - Dữ liệu demo: đặt `SEED_DEMO_PASSWORD` (ít nhất 8 ký tự) trong `.env`, tạo xong bảng thì chạy `npm run seed`. Lệnh tạo 3 tài khoản `demo_admin`, `demo_manager`, `demo_student` dùng chung mật khẩu đó. Đã có dữ liệu demo thì lệnh không làm gì.
 
 5. **Khởi chạy máy chủ Backend:**
    - Chế độ phát triển (hot reload):
