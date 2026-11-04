@@ -55,8 +55,9 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 6.9: trang hóa đơn, lọc, chi tiết, in. `Phan 6/6.9-trang-hoa-don.md`. Xong, `3fb9d00`
 * 6.10: trang tổng quan. `Phan 6/6.10-tong-quan.md`. Xong, `4691d12`
 * 5.9 + 5.10: unit test trong `test/unit/`, bổ sung R6, R9. `Phan 5/5.9-5.10-unit-test.md`. Còn phần chờ Nam, Sơn, `db1115f`
-* 3.8: phân tích ORM. `Phan 3/3.8-phan-tich-orm.md`. Xong, chờ commit
-* Kiểm 3.1, 3.2, 4.6, 4.7, 5.6, 6.5, 6.8, 8.1, 8.3; sửa lỗi xem ảnh trên Windows. `Phan 8/8.1-kiem-luong-nghiep-vu.md`. Xong, chờ commit
+* 3.8: phân tích ORM. `Phan 3/3.8-phan-tich-orm.md`. Xong, `8f498b2`
+* Kiểm 3.1, 3.2, 4.6, 4.7, 5.6, 6.5, 6.8, 8.1, 8.3; sửa lỗi xem ảnh trên Windows. `Phan 8/8.1-kiem-luong-nghiep-vu.md`. Xong, `8f498b2`
+
 Việc ngoài checklist (không có log riêng):
 
 * Đơn giản hóa định dạng các file md (bỏ bảng, bỏ in đậm thừa, bỏ link markdown) để dễ đọc trong text editor và khi xem diff. Xong, `8514e3d`
