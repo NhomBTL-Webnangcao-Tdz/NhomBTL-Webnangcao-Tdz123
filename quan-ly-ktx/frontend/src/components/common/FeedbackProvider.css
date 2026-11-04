@@ -8,3 +8,9 @@
   background: rgba(23, 34, 39, 0.42);
   z-index: 1990;
 }
+
+/* App.css đặt .modal-body cho modal riêng nên phải trả lại lề ở đây. */
+.feedback-confirm .modal-body {
+  font-size: 14px;
+  padding: 18px 16px 12px;
+}
