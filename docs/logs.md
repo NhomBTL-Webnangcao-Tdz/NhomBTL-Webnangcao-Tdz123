@@ -47,7 +47,8 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 3.6: script seed, 3 tài khoản demo. `Phan 3/3.6-seed.md`. Xong, `d55d190`
 * 4.4 + 4.12: mã lỗi nhất quán, exception filter chung. `Phan 4/4.4-4.12-xu-ly-loi.md`. 4.12 xong, 4.4 còn contract, `36a326e`
 * 4.10: tài liệu API bằng Swagger. `Phan 4/4.10-swagger.md`. Xong, `0467126`
-* 4.5: API tài khoản cho ADMIN. `Phan 4/4.5-api-tai-khoan.md`. Xong, chờ commit
+* 4.5: API tài khoản cho ADMIN. `Phan 4/4.5-api-tai-khoan.md`. Xong, `2783496`
+* 6.11: trang Cài đặt, quản lý tài khoản cán bộ. `Phan 6/6.11-cai-dat.md`. Xong, chờ commit
 
 Việc ngoài checklist (không có log riêng):
 

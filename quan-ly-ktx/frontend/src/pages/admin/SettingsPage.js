@@ -1,13 +1,17 @@
 import { getApiBaseUrl } from '../../api/client';
 import PageHeading from '../../components/common/PageHeading';
 import { useAuth } from '../../context/AuthContext';
+import { UtilityTariffForm } from './MeterReadingsPanel';
+import StaffAccountsPanel from './StaffAccountsPanel';
 import './SettingsPage.css';
 
 export default function SettingsPage() {
   const { user } = useAuth();
   return (
     <>
-      <PageHeading eyebrow="THIẾT LẬP HỆ THỐNG" title="Cài đặt hệ thống" description="Thông tin tài khoản và kết nối hiện tại." />
+      <PageHeading eyebrow="THIẾT LẬP HỆ THỐNG" title="Cài đặt hệ thống" description="Đơn giá, tài khoản cán bộ và thông tin kết nối." />
+      <UtilityTariffForm />
+      <StaffAccountsPanel />
       <section className="panel settings-panel">
         <div className="settings-row"><span>Tài khoản</span><strong>{user?.username || '—'}</strong></div>
         <div className="settings-row"><span>Vai trò</span><strong>{user?.role || '—'}</strong></div>

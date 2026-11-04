@@ -77,7 +77,7 @@ function ReadingReviewDialog({ submission, onClose, onReviewed }) {
   );
 }
 
-function UtilityTariffForm() {
+export function UtilityTariffForm() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [reloadKey, setReloadKey] = useState(0);

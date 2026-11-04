@@ -178,7 +178,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [ ] 6.8 (FE, Tân kiểm) Chỉ số điện nước: bảng nhập nhanh cả tòa theo tháng, chỉ số cũ tự điền, báo lỗi ngay, xem trước số tiền
 * [ ] 6.9 (FE, Tân) Hóa đơn: lọc tháng/tòa/trạng thái, đánh dấu đã thu, xem/in hóa đơn
 * [ ] 6.10 (FE, Tân) Tổng quan: thẻ số liệu, biểu đồ lấp đầy theo tòa, thu tiền 6 tháng, danh sách việc cần làm
-* [ ] 6.11 (FE, Tân) Cài đặt: đơn giá điện/nước, quản lý tài khoản cán bộ (chỉ ADMIN)
+* [x] 6.11 (FE, Tân) Cài đặt: đơn giá điện/nước, quản lý tài khoản cán bộ (chỉ ADMIN). Log `docs/Phan 6/6.11-cai-dat.md`
 * [~] 6.12 (FE, Tân) Chuyển giao diện sang `react-bootstrap` theo phạm vi chốt ở 2.10; trang chủ theo mẫu React Native (3 ảnh chụp kèm đề) [Đề 5b]. Xong trang chủ (Navbar, Container, Row/Col, Card, Button, Stack), log `docs/Phan 6/6.12-landing-react-bootstrap.md`. Còn: các trang sau đăng nhập
 * [ ] 6.13 (FE, Tân) Rà usability: mỗi tác vụ chính ≤ 4 thao tác, gợi ý / tự điền, thông báo không gây phiền; ghi số thao tác vào báo cáo [Đề 5c]
 

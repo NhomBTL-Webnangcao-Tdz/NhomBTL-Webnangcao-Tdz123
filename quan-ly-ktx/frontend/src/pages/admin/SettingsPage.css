@@ -34,3 +34,43 @@
 .settings-note code {
   color: #237c75;
 }
+
+.staff-accounts-panel {
+  margin-bottom: 14px;
+  padding: 14px 17px;
+}
+
+.staff-accounts-panel .form-select {
+  min-width: 112px;
+}
+
+.staff-accounts-panel .btn-primary {
+  --bs-btn-bg: var(--teal);
+  --bs-btn-border-color: var(--teal);
+  --bs-btn-hover-bg: var(--teal-dark);
+  --bs-btn-hover-border-color: var(--teal-dark);
+  --bs-btn-active-bg: var(--teal-dark);
+  --bs-btn-disabled-bg: var(--teal);
+  --bs-btn-disabled-border-color: var(--teal);
+}
+
+.staff-accounts-panel .form-label {
+  font-size: 11px;
+  font-weight: 650;
+  margin-bottom: 4px;
+}
+
+.staff-accounts-panel .form-select {
+  font-size: 12px;
+}
+
+.staff-accounts-panel .records-table {
+  min-width: 0;
+}
+
+@media (max-width: 576px) {
+  .staff-accounts-panel th:last-child,
+  .staff-accounts-panel td:last-child {
+    display: none;
+  }
+}
