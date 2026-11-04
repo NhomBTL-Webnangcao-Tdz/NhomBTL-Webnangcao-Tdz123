@@ -57,6 +57,20 @@ const endpoints: Record<string, EndpointDoc> = {
   },
   'GET /auth/profile': { summary: 'Xem tài khoản đang đăng nhập', roles: LOGGED_IN },
 
+  'GET /users': { summary: 'Danh sách tài khoản', roles: ADMIN },
+  'POST /users': {
+    summary: 'Tạo tài khoản cán bộ (MANAGER)',
+    roles: ADMIN,
+    conflict: 'Tên đăng nhập đã tồn tại',
+    request: { username: 'canbo01', password: 'mat-khau-6-ky-tu' },
+  },
+  'PATCH /users/{id}/role': {
+    summary: 'Đổi vai trò tài khoản',
+    roles: ADMIN,
+    conflict: 'Tự đổi vai trò của mình hoặc hạ ADMIN cuối cùng',
+    request: { role: 'MANAGER' },
+  },
+
   'GET /rooms': { summary: 'Danh sách phòng', roles: STAFF },
   'POST /rooms': { summary: 'Tạo phòng', roles: STAFF, request: roomExample },
   'GET /rooms/{id}': { summary: 'Chi tiết phòng', roles: STAFF },

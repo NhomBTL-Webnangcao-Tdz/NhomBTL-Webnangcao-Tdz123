@@ -142,7 +142,7 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 * [~] 4.2 (BE, Tân) DTO + class-validator cho Student, Contract, UtilityBill, Payment [Đề 3d, 4c]. Đã có DTO cho room, meter-reading, residence-request, tariff, general charge, hồ sơ SV, Contract, Student, UtilityBill, từ chối đơn (log `docs/Phan 4/4.2-dto-contract.md`, `docs/Phan 4/4.2-dto-student-utility-bill.md`). Còn: DTO Payment, làm sau 4.3
 * [ ] 4.3 (BE, Nam) `PaymentModule`: CRUD, lọc theo hợp đồng
 * [~] 4.4 (BE, Tân) Mã lỗi nhất quán: 400 sai dữ liệu, 401, 403, 404 không tìm thấy, 409 vi phạm ràng buộc. Log `docs/Phan 4/4.4-4.12-xu-ly-loi.md`. Còn: 404 của `/contract/:id`, Nam sửa cùng 5.1, 5.2
-* [ ] 4.5 (BE, Tân) API tài khoản cho ADMIN: `GET /users`, `POST /users` (tạo MANAGER), `PATCH /users/:id/role`
+* [x] 4.5 (BE, Tân) API tài khoản cho ADMIN: `GET /users`, `POST /users` (tạo MANAGER), `PATCH /users/:id/role`. Log `docs/Phan 4/4.5-api-tai-khoan.md`
 * [ ] 4.6 (BE, Tân kiểm) API đơn giá: `GET /settings` (ADMIN, MANAGER), `PUT /settings` (ADMIN)
 * [ ] 4.7 (BE, Tân kiểm) API phòng còn chỗ và danh sách SV đang ở trong phòng
 * [ ] 4.8 (BE, Tân) Phân trang + tìm kiếm + lọc (`?page=&limit=&q=&building=&status=`) cho danh sách

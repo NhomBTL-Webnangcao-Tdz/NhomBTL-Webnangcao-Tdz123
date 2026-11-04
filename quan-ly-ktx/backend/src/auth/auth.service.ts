@@ -2,6 +2,7 @@ import { Injectable, BadRequestException, UnauthorizedException, ConflictExcepti
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from './entities/users.service';
+import { Role } from '../common/role.enum';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 
@@ -33,21 +34,7 @@ export class AuthService {
     * @throws ConflictException nếu username đã tồn tại
    */
    async register(registerDto: RegisterDto) {
-     const username = registerDto.username.trim().toLowerCase();
-     const { password } = registerDto;
-    if (Buffer.byteLength(password, 'utf8') > 72) {
-      throw new BadRequestException('Mật khẩu không được vượt quá 72 byte UTF-8.');
-    }
-
-    // Kiểm tra username đã tồn tại chưa
-    const existingUser = await this.usersService.findByUsername(username);
-    if (existingUser) {
-      throw new ConflictException(`Username "${username}" đã được sử dụng.`);
-    }
-
-    // Băm mật khẩu bằng bcrypt trước khi lưu vào DB
-    // bcrypt.hash() tự động tạo salt và kết hợp vào chuỗi hash
-    const hashedPassword = await bcrypt.hash(password, this.SALT_ROUNDS);
+    const { username, hashedPassword } = await this.prepareAccount(registerDto);
 
     // Lưu user vào database với mật khẩu đã băm
     const newUser = await this.usersService.createUser(username, hashedPassword);
@@ -62,6 +49,33 @@ export class AuthService {
         createdAt: newUser.createdAt,
       },
     };
+  }
+
+  /** ADMIN tạo tài khoản cán bộ (POST /users) */
+  async createManager(account: RegisterDto) {
+    const { username, hashedPassword } = await this.prepareAccount(account);
+    const user = await this.usersService.createUser(username, hashedPassword, Role.MANAGER);
+    return { id: user.id, username: user.username, role: user.role, createdAt: user.createdAt };
+  }
+
+  /** Chuẩn hóa tên đăng nhập, kiểm tra trùng và băm mật khẩu */
+  private async prepareAccount(account: RegisterDto) {
+    const username = account.username.trim().toLowerCase();
+    const { password } = account;
+    if (Buffer.byteLength(password, 'utf8') > 72) {
+      throw new BadRequestException('Mật khẩu không được vượt quá 72 byte UTF-8.');
+    }
+
+    // Kiểm tra username đã tồn tại chưa
+    const existingUser = await this.usersService.findByUsername(username);
+    if (existingUser) {
+      throw new ConflictException(`Username "${username}" đã được sử dụng.`);
+    }
+
+    // Băm mật khẩu bằng bcrypt trước khi lưu vào DB
+    // bcrypt.hash() tự động tạo salt và kết hợp vào chuỗi hash
+    const hashedPassword = await bcrypt.hash(password, this.SALT_ROUNDS);
+    return { username, hashedPassword };
   }
 
   // =========================================================
