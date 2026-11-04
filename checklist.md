@@ -158,13 +158,13 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [ ] 5.1 (BE, Nam) Tạo hợp đồng: kiểm tra phòng còn chỗ, 1 SV chỉ 1 HĐ `ACTIVE`, cập nhật sĩ số trong transaction (R1–R4)
 * [ ] 5.2 (BE, Nam) Kết thúc / gia hạn hợp đồng, tự chuyển `EXPIRED` khi quá hạn
 * [ ] 5.3 (BE, Nam) Chặn xóa cứng phòng/SV còn HĐ hoặc còn nợ, dùng xóa mềm (R5)
-* [ ] 5.4 (BE, Tân kiểm) Hóa đơn điện nước: chỉ số cũ lấy từ tháng trước, mới ≥ cũ, server tự tính tiền, không trùng (phòng, tháng, năm), hóa đơn đã thu thì không sửa (R6–R9)
+* [~] 5.4 (BE, Tân kiểm) Hóa đơn điện nước: chỉ số cũ lấy từ tháng trước, mới ≥ cũ, server tự tính tiền, không trùng (phòng, tháng, năm), hóa đơn đã thu thì không sửa (R6–R9). Đã đủ ở luồng duyệt chỉ số; `POST /utility-bill` có R6, R9. Còn: API nhập tay vẫn nhận `total_amount` từ client (R8)
 * [ ] 5.5 (BE, bỏ: thay bằng SV tự gửi chỉ số) Nhập chỉ số hàng loạt cả tòa: `GET /utility-bill/draft`, `POST /utility-bill/batch`
 * [ ] 5.6 (BE, Tân kiểm) API cho sinh viên: `GET/PATCH /me/student`, `GET /me/contract`, `/me/bills`, `/me/payments` (R10)
 * [ ] 5.7 (BE, Tân) Đổi mật khẩu cho người dùng đang đăng nhập
 * [ ] 5.8 (BE, Nam) Báo cáo `GET /reports/summary?month=&year=` (lấp đầy theo tòa, đã thu, công nợ, HĐ sắp hết hạn)
-* [ ] 5.9 (BE, Tân) Unit test cho các quy tắc R1–R10
-* [ ] 5.10 (BE, Tân) Unit test cho mọi user story của 2.12, đặt trong thư mục `test/` (chờ 2.15 xác nhận); hiện còn thiếu spec cho room, contract, utility-bill, notification [Đề 7b]
+* [~] 5.9 (BE, Tân) Unit test cho các quy tắc R1–R10. Có R3, R6–R10, log `docs/Phan 5/5.9-5.10-unit-test.md`. Còn: R1, R2, R4, R5 sau khi Nam xong 5.1–5.3
+* [~] 5.10 (BE, Tân) Unit test cho mọi user story của 2.12, đặt trong thư mục `test/` (chờ 2.15 xác nhận) [Đề 7b]. Đã thêm `test/unit/`, log `docs/Phan 5/5.9-5.10-unit-test.md`. Còn: US-05, 16, 21, 24 và chuyển spec cũ nếu 2.15 yêu cầu
 
 ## 6. Frontend khu quản lý (ADMIN / MANAGER)
 

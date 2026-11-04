@@ -38,6 +38,7 @@ const receiptImageTypes = new Map([
   ['image/webp', '.webp'],
 ]);
 const maxReceiptSize = 5 * 1024 * 1024;
+const readingFields = ['old_electric_index', 'new_electric_index', 'old_water_index', 'new_water_index'] as const;
 
 @Injectable()
 export class UtilityBillService {
@@ -83,6 +84,13 @@ export class UtilityBillService {
   }
 
   async create(utilityBillData: CreateUtilityBillDto): Promise<UtilityBill> {
+    const roomId = utilityBillData.room?.id;
+    if (roomId) {
+      const duplicate = await this.utilityBillRepository.exists({
+        where: { room: { id: roomId }, month: utilityBillData.month, year: utilityBillData.year, billType: 'UTILITY' },
+      });
+      if (duplicate) throw new ConflictException('Phòng này đã có hóa đơn cho kỳ đó.');
+    }
     const newBill = this.utilityBillRepository.create(utilityBillData as unknown as DeepPartial<UtilityBill>);
     return this.utilityBillRepository.save(newBill);
   }
@@ -278,6 +286,12 @@ export class UtilityBillService {
   async update(id: number, utilityBillData: UpdateUtilityBillDto) {
     const bill = await this.utilityBillRepository.findOneBy({ bill_id: id });
     if (!bill) throw new NotFoundException('Không tìm thấy hóa đơn.');
+    const readingChanged = readingFields.some((field) => (
+      utilityBillData[field] !== undefined && Number(utilityBillData[field]) !== Number(bill[field])
+    ));
+    if (bill.is_paid && readingChanged) {
+      throw new ConflictException('Hóa đơn đã thanh toán không được sửa chỉ số.');
+    }
     Object.assign(bill, utilityBillData);
     await this.utilityBillRepository.save(bill);
     if (utilityBillData.is_paid !== undefined) {
