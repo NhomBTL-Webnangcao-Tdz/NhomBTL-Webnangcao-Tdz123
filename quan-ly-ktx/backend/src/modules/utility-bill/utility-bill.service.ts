@@ -11,13 +11,15 @@ import { randomUUID } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 import { mkdir, stat, unlink, writeFile } from 'node:fs/promises';
 import { extname, resolve } from 'node:path';
-import { DataSource, In, Repository } from 'typeorm';
+import { DataSource, DeepPartial, In, Repository } from 'typeorm';
 import { User } from '../../auth/entities/user.entity';
 import { Role } from '../../common/role.enum';
 import { Contract } from '../contract/contract.entity';
 import { Notification } from '../notification/notification.entity';
 import { Room } from '../room/room.entity';
 import { CreateGeneralChargeDto } from './dto/create-general-charge.dto';
+import { CreateUtilityBillDto } from './dto/create-utility-bill.dto';
+import { UpdateUtilityBillDto } from './dto/update-utility-bill.dto';
 import { UtilityBill } from './utility-bill.entity';
 import { UtilityBillShare } from './utility-bill-share.entity';
 import { splitUtilityAmount } from '../meter-reading/meter-reading-calculations';
@@ -62,8 +64,8 @@ export class UtilityBillService {
     return bill ? this.serializeBill(bill) : null;
   }
 
-  async create(utilityBillData: Partial<UtilityBill>): Promise<UtilityBill> {
-    const newBill = this.utilityBillRepository.create(utilityBillData);
+  async create(utilityBillData: CreateUtilityBillDto): Promise<UtilityBill> {
+    const newBill = this.utilityBillRepository.create(utilityBillData as unknown as DeepPartial<UtilityBill>);
     return this.utilityBillRepository.save(newBill);
   }
 
@@ -255,7 +257,7 @@ export class UtilityBillService {
     return { stream: createReadStream(bill.receiptImagePath), mimeType };
   }
 
-  async update(id: number, utilityBillData: Partial<UtilityBill>) {
+  async update(id: number, utilityBillData: UpdateUtilityBillDto) {
     const bill = await this.utilityBillRepository.findOneBy({ bill_id: id });
     if (!bill) return null;
     Object.assign(bill, utilityBillData);

@@ -7,6 +7,7 @@ import { Roles } from '../../common/roles.decorator';
 import { Role } from '../../common/role.enum';
 import { StudentProfileDto } from './dto/student-profile.dto';
 import { ResidenceRequestDto } from './dto/residence-request.dto';
+import { UpdateStudentDto } from './dto/update-student.dto';
 
 interface AuthenticatedStudentRequest {
   user: { sub: number };
@@ -60,14 +61,14 @@ export class StudentController {
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MANAGER)
-  async create(@Body() studentData: Partial<Student>): Promise<Student> {
+  async create(@Body() studentData: StudentProfileDto): Promise<Student> {
     return this.studentService.create(studentData);
   }
 
   @Put(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MANAGER)
-  async update(@Param('id') id: string, @Body() studentData: Partial<Student>): Promise<Student | null> {
+  async update(@Param('id') id: string, @Body() studentData: UpdateStudentDto): Promise<Student | null> {
     return this.studentService.update(id, studentData);
   }
 

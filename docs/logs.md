@@ -41,7 +41,8 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 2.16: chốt dùng trang chủ của Nam. Ghi trong checklist, không có log riêng. `93135ee`
 * 6.12 (phần 1): trang chủ dùng react-bootstrap. `Phan 6/6.12-landing-react-bootstrap.md`. Xong phần 1, `93135ee`
 * 2.2: phân công theo người, mốc thời gian 1–8/11. `Phan 2/2.2-phan-cong.md`. Xong, `23199ff`
-* 4.2 (phần 1): DTO cho Contract. `Phan 4/4.2-dto-contract.md`. Xong phần 1, chờ commit
+* 4.2 (phần 1): DTO cho Contract. `Phan 4/4.2-dto-contract.md`. Xong phần 1, `26dbda7`
+* 4.2 (phần 2): DTO cho Student, UtilityBill, từ chối đơn. `Phan 4/4.2-dto-student-utility-bill.md`. Xong phần 2, còn Payment, chờ commit
 
 Việc ngoài checklist (không có log riêng):
 

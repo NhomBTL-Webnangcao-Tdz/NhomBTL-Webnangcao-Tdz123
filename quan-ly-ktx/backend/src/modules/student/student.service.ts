@@ -42,7 +42,7 @@ export class StudentService {
   }
 
   async update(id: string, studentData: Partial<Student>): Promise<Student | null> {
-    await this.studentRepository.update(id, studentData);
+    if (Object.keys(studentData).length) await this.studentRepository.update(id, studentData);
     return this.findOne(id);
   }
 

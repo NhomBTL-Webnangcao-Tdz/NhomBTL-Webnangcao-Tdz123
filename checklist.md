@@ -139,7 +139,7 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 ## 4. Backend API nền tảng
 
 * [x] 4.1 (BE) Áp `JwtAuthGuard + RolesGuard` cho Student, Contract, UtilityBill. Mọi controller nghiệp vụ đã có guard (commit `fde890e`)
-* [~] 4.2 (BE, Tân) DTO + class-validator cho Student, Contract, UtilityBill, Payment [Đề 3d, 4c]. Đã có DTO cho room, meter-reading, residence-request, tariff, general charge, hồ sơ SV, Contract (log `docs/Phan 4/4.2-dto-contract.md`). Còn: `POST/PUT` của Student, UtilityBill nhận `Partial<Entity>` (ValidationPipe bỏ qua kiểu này nên body không được kiểm tra, nguy cơ mass assignment); `PATCH residence-requests/:id/reject` dùng kiểu inline
+* [~] 4.2 (BE, Tân) DTO + class-validator cho Student, Contract, UtilityBill, Payment [Đề 3d, 4c]. Đã có DTO cho room, meter-reading, residence-request, tariff, general charge, hồ sơ SV, Contract, Student, UtilityBill, từ chối đơn (log `docs/Phan 4/4.2-dto-contract.md`, `docs/Phan 4/4.2-dto-student-utility-bill.md`). Còn: DTO Payment, làm sau 4.3
 * [ ] 4.3 (BE, Nam) `PaymentModule`: CRUD, lọc theo hợp đồng
 * [ ] 4.4 (BE, Tân) Mã lỗi nhất quán: 400 sai dữ liệu, 401, 403, 404 không tìm thấy, 409 vi phạm ràng buộc
 * [ ] 4.5 (BE, Tân) API tài khoản cho ADMIN: `GET /users`, `POST /users` (tạo MANAGER), `PATCH /users/:id/role`

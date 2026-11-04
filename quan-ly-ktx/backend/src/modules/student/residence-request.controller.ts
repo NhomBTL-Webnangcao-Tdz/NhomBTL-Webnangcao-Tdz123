@@ -13,6 +13,7 @@ import { Roles } from '../../common/roles.decorator';
 import { RolesGuard } from '../../common/roles.guard';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { ApproveResidenceRequestDto } from './dto/approve-residence-request.dto';
+import { RejectResidenceRequestDto } from './dto/reject-residence-request.dto';
 import { StudentService } from './student.service';
 
 interface AuthenticatedManagerRequest {
@@ -43,7 +44,7 @@ export class ResidenceRequestController {
   reject(
     @Param('id', ParseIntPipe) id: number,
     @Request() req: AuthenticatedManagerRequest,
-    @Body() details: { reviewNote?: string },
+    @Body() details: RejectResidenceRequestDto,
   ) {
     return this.studentService.reviewResidenceRequest(id, req.user.sub, 'reject', details);
   }

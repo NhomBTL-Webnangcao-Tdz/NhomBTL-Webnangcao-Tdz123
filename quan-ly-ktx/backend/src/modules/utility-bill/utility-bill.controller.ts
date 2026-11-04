@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Put,
@@ -24,6 +25,9 @@ import { RolesGuard } from '../../common/roles.guard';
 import { Roles } from '../../common/roles.decorator';
 import { Role } from '../../common/role.enum';
 import { CreateGeneralChargeDto } from './dto/create-general-charge.dto';
+import { CreateUtilityBillDto } from './dto/create-utility-bill.dto';
+import { UpdateSharePaymentDto } from './dto/update-share-payment.dto';
+import { UpdateUtilityBillDto } from './dto/update-utility-bill.dto';
 
 interface AuthenticatedBillRequest {
   user: { sub: number; role: Role };
@@ -60,23 +64,23 @@ export class UtilityBillController {
   @Get(':id/receipt')
   @Roles(Role.ADMIN, Role.MANAGER, Role.STUDENT)
   async getReceipt(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Request() req: AuthenticatedBillRequest,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const image = await this.utilityBillService.getReceiptImage(+id, req.user.sub, req.user.role);
+    const image = await this.utilityBillService.getReceiptImage(id, req.user.sub, req.user.role);
     response.setHeader('Content-Type', image.mimeType);
     response.setHeader('Cache-Control', 'private, no-store');
     return new StreamableFile(image.stream);
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.utilityBillService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.utilityBillService.findOne(id);
   }
 
   @Post()
-  async create(@Body() utilityBillData: Partial<UtilityBill>): Promise<UtilityBill> {
+  async create(@Body() utilityBillData: CreateUtilityBillDto): Promise<UtilityBill> {
     return this.utilityBillService.create(utilityBillData);
   }
 
@@ -90,30 +94,30 @@ export class UtilityBillController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() utilityBillData: Partial<UtilityBill>) {
-    return this.utilityBillService.update(+id, utilityBillData);
+  async update(@Param('id', ParseIntPipe) id: number, @Body() utilityBillData: UpdateUtilityBillDto) {
+    return this.utilityBillService.update(id, utilityBillData);
   }
 
   @Patch(':id/shares/:sid')
   async updateSharePayment(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Param('sid') studentSid: string,
-    @Body('isPaid') isPaid: boolean,
+    @Body() details: UpdateSharePaymentDto,
   ) {
-    return this.utilityBillService.updateSharePayment(+id, studentSid, isPaid);
+    return this.utilityBillService.updateSharePayment(id, studentSid, details.isPaid);
   }
 
   @Post(':id/shares/:sid/remind')
   async remindStudent(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Param('sid') studentSid: string,
   ) {
-    return this.utilityBillService.remindStudent(+id, studentSid);
+    return this.utilityBillService.remindStudent(id, studentSid);
   }
 
   @Delete(':id')
   @Roles(Role.ADMIN)
-  async remove(@Param('id') id: string): Promise<void> {
-    return this.utilityBillService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.utilityBillService.remove(id);
   }
 }
