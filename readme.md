@@ -78,7 +78,7 @@ NhomBTL-Webnangcao-Tdz123/
     │   ├── certs/
     │   │   └── ca.pem                  # Chứng chỉ CA dùng khi kết nối MySQL qua SSL (Aiven)
     │   ├── database/
-    │   │   └── init.sql                # Script tạo database quan_ly_ktx và bảng users
+    │   │   └── init.sql                # Script tạo database quan_ly_ktx và toàn bộ 11 bảng
     │   ├── src/
     │   │   ├── main.ts                 # Điểm khởi chạy backend (CORS, ValidationPipe, cổng mặc định 5001)
     │   │   ├── app.module.ts           # Root module: ConfigModule (.env), Database, Auth và các feature modules
@@ -368,7 +368,7 @@ Chưa có API. Hiện mới có entity `Payment` và repository provider.
    ```
 
 3. **Chuẩn bị database:**
-   Với MySQL cài trên máy, có thể chạy `database/init.sql` để tạo database `quan_ly_ktx` và bảng `users`. Các bảng còn lại do TypeORM tự tạo khi `DB_SYNCHRONIZE` bật (mặc định bật khi `NODE_ENV` khác `production`).
+   Chạy `database/init.sql` để tạo database `quan_ly_ktx` và toàn bộ bảng. Bắt buộc với production vì `DB_SYNCHRONIZE` tắt mặc định khi `NODE_ENV=production`. Khi phát triển, TypeORM tự tạo bảng nếu `DB_SYNCHRONIZE` bật. Đổi entity thì phải cập nhật lại `init.sql`.
 
 4. **Tạo file `quan-ly-ktx/backend/.env` (bắt buộc):**
    File `.env` không được đưa lên git. Mỗi thành viên tự tạo theo mẫu dưới đây và tự điền giá trị thật:
