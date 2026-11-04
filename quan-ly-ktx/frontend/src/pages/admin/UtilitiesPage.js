@@ -6,6 +6,7 @@ import DataTable from '../../components/common/DataTable';
 import Modal from '../../components/common/Modal';
 import PageHeading from '../../components/common/PageHeading';
 import MeterReadingsPanel from './MeterReadingsPanel';
+import { useFeedback } from '../../components/common/FeedbackProvider';
 import useApiResource from '../../hooks/useApiResource';
 import './UtilitiesPage.css';
 
@@ -19,12 +20,14 @@ export default function UtilitiesPage() {
   const [saving, setSaving] = useState(false);
   const selectedBills = useMemo(() => bills.filter((bill) => Number(bill.month) === Number(month) && Number(bill.year) === Number(year)), [bills, month, year]);
 
+  const { notify } = useFeedback();
   const saveReadings = async (bill) => {
     setSaving(true);
     setSaveError('');
     try {
       if (activeBill) await billApi.update(activeBill.bill_id, bill);
       else await billApi.create(bill);
+      notify('Đã lưu chỉ số.');
       setActiveBill(null);
       refresh();
     } catch (requestError) {

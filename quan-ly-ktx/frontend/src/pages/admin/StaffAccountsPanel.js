@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { userApi } from '../../api/user.api';
 import DataTable from '../../components/common/DataTable';
+import { useFeedback } from '../../components/common/FeedbackProvider';
 import { useAuth } from '../../context/AuthContext';
 import useApiResource from '../../hooks/useApiResource';
 
@@ -14,6 +15,7 @@ const emptyAccount = { username: '', password: '' };
 
 export default function StaffAccountsPanel() {
   const { user } = useAuth();
+  const { confirm } = useFeedback();
   const { data: accounts, isLoading, error, refresh } = useApiResource(userApi.list);
   const [account, setAccount] = useState(emptyAccount);
   const [notice, setNotice] = useState(null);
@@ -42,7 +44,7 @@ export default function StaffAccountsPanel() {
 
   const changeRole = async (target, role) => {
     if (role === target.role) return;
-    if (!window.confirm(`Đổi vai trò của ${target.username} thành ${roleLabels[role]}?`)) return;
+    if (!(await confirm(`Đổi vai trò của ${target.username} thành ${roleLabels[role]}?`, 'Đổi vai trò'))) return;
     setNotice(null);
     try {
       await userApi.updateRole(target.id, role);

@@ -4,6 +4,7 @@ import DataTable from '../../components/common/DataTable';
 import Modal from '../../components/common/Modal';
 import PageHeading from '../../components/common/PageHeading';
 import StatusBadge from '../../components/common/StatusBadge';
+import { useFeedback } from '../../components/common/FeedbackProvider';
 import useApiResource from '../../hooks/useApiResource';
 import { setHashQuery } from '../../utils/hashRoute';
 import './RoomsPage.css';
@@ -94,12 +95,14 @@ export default function RoomsPage({ segments, params }) {
     setActiveRoom(null);
     setSaveError('');
   };
+  const { notify, confirm } = useFeedback();
   const saveRoom = async (room) => {
     setSaving(true);
     setSaveError('');
     try {
       if (formMode === 'edit') await roomApi.update(activeRoom.id, room);
       else await roomApi.create(room);
+      notify(formMode === 'edit' ? 'Đã cập nhật phòng.' : 'Đã thêm phòng.');
       closeForm();
       refresh();
     } catch (requestError) {
@@ -109,13 +112,14 @@ export default function RoomsPage({ segments, params }) {
     }
   };
   const deleteRoom = async (room) => {
-    if (!window.confirm(`Xóa phòng ${room.roomNumber}?`)) return;
+    if (!(await confirm(`Xóa phòng ${room.roomNumber}?`, 'Xóa'))) return;
     try {
       await roomApi.remove(room.id);
       setHashQuery('viewRoom', null);
+      notify('Đã xóa phòng.');
       refresh();
     } catch (requestError) {
-      setSaveError(requestError.message);
+      notify(requestError.message, 'error');
     }
   };
 

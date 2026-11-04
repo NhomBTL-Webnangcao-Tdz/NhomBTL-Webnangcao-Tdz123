@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/all-exceptions.filter';
+import { validationExceptionFactory } from './common/validation-exception';
 import { setupSwagger } from './swagger';
 
 async function bootstrap() {
@@ -29,6 +30,7 @@ async function bootstrap() {
       whitelist: true,       // Loại bỏ các field không khai báo trong DTO
       forbidNonWhitelisted: true, // Báo lỗi nếu có field lạ
       transform: true,       // Tự động transform kiểu dữ liệu
+      exceptionFactory: validationExceptionFactory, // Thông báo lỗi tiếng Việt
     }),
   );
 

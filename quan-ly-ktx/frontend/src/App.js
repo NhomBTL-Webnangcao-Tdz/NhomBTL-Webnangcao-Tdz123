@@ -3,6 +3,7 @@ import './App.css';
 import { LoadingState } from './components/common/AsyncState';
 import AppLayout from './components/layout/AppLayout';
 import RoleBasedRoute from './components/guards/RoleBasedRoute';
+import { FeedbackProvider } from './components/common/FeedbackProvider';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import BillsPage from './pages/admin/BillsPage';
 import ContractsPage from './pages/admin/ContractsPage';
@@ -130,7 +131,9 @@ function RoutedContent() {
 export default function App() {
   return (
     <AuthProvider>
-      <RoutedContent />
+      <FeedbackProvider>
+        <RoutedContent />
+      </FeedbackProvider>
     </AuthProvider>
   );
 }

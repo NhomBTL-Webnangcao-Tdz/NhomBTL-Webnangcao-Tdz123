@@ -9,6 +9,7 @@ import Modal from '../../components/common/Modal';
 import PageHeading from '../../components/common/PageHeading';
 import StatusBadge from '../../components/common/StatusBadge';
 import { useAuth } from '../../context/AuthContext';
+import { useFeedback } from '../../components/common/FeedbackProvider';
 import useApiResource from '../../hooks/useApiResource';
 import './BillsPage.css';
 import './Stats.css';
@@ -44,6 +45,7 @@ export default function BillsPage() {
     return matches && (statusFilter === 'all' || (statusFilter === 'paid' ? bill.is_paid : !bill.is_paid));
   }), [bills, search, statusFilter]);
 
+  const { notify, confirm } = useFeedback();
   const closeForm = () => { setFormOpen(false); setActiveBill(null); setSaveError(''); };
   const saveBill = async (bill) => {
     setSaving(true);
@@ -51,6 +53,7 @@ export default function BillsPage() {
     try {
       if (activeBill) await billApi.update(activeBill.bill_id, bill);
       else await billApi.create(bill);
+      notify(activeBill ? 'Đã cập nhật hóa đơn.' : 'Đã tạo hóa đơn.');
       closeForm();
       refresh();
     } catch (requestError) {
@@ -65,6 +68,7 @@ export default function BillsPage() {
     try {
       await billApi.createGeneralCharge(charge);
       setGeneralChargeOpen(false);
+      notify('Đã tạo khoản thu.');
       refresh();
     } catch (requestError) {
       setGeneralChargeError(requestError.message);
@@ -73,14 +77,13 @@ export default function BillsPage() {
     }
   };
   const removeBill = async (bill) => {
-    if (!window.confirm(`Xóa hóa đơn #${bill.bill_id}?`)) return;
+    if (!(await confirm(`Xóa hóa đơn #${bill.bill_id}?`, 'Xóa'))) return;
     try {
       await billApi.remove(bill.bill_id);
+      notify('Đã xóa hóa đơn.');
       refresh();
     } catch (requestError) {
-      setSaveError(requestError.message);
-      setActiveBill(bill);
-      setFormOpen(true);
+      notify(requestError.message, 'error');
     }
   };
 

@@ -6,6 +6,7 @@ import Modal from '../../components/common/Modal';
 import PageHeading from '../../components/common/PageHeading';
 import RoomPicker from '../../components/common/RoomPicker';
 import StatusBadge from '../../components/common/StatusBadge';
+import { useFeedback } from '../../components/common/FeedbackProvider';
 import useApiResource from '../../hooks/useApiResource';
 
 const statusLabels = { PENDING: 'Chờ duyệt', APPROVED: 'Đã duyệt', REJECTED: 'Từ chối' };
@@ -59,12 +60,14 @@ export default function ResidenceRequestsPage() {
     ? requests
     : requests.filter((request) => request.status === filter), [filter, requests]);
 
+  const { notify } = useFeedback();
   const approve = async (id, details) => {
     setSaving(true);
     setSaveError('');
     try {
       await residenceApi.approve(id, details);
       setSelectedRequest(null);
+      notify('Đã duyệt yêu cầu và xếp phòng.');
       refresh();
     } catch (requestError) {
       setSaveError(requestError.message);
@@ -78,9 +81,10 @@ export default function ResidenceRequestsPage() {
     if (reviewNote === null) return;
     try {
       await residenceApi.reject(request.id, reviewNote.trim());
+      notify('Đã từ chối yêu cầu.');
       refresh();
     } catch (requestError) {
-      setSaveError(requestError.message);
+      notify(requestError.message, 'error');
     }
   };
 

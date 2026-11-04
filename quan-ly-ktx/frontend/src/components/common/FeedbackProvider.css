@@ -1,0 +1,10 @@
+.feedback-toasts {
+  position: fixed;
+  z-index: 2000;
+}
+
+/* Tự làm lớp phủ vì App.css đã dùng class .modal-backdrop cho Modal riêng của dự án. */
+.feedback-confirm {
+  background: rgba(23, 34, 39, 0.42);
+  z-index: 1990;
+}
