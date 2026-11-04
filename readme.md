@@ -349,7 +349,7 @@ Chưa có API. Hiện mới có entity `Payment` và repository provider.
 ## 🚀 7. Hướng Dẫn Cài Đặt và Khởi Chạy
 
 ### 7.1. Yêu cầu tiên quyết (Prerequisites)
-- [Node.js](https://nodejs.org/) bản LTS mới (máy phát triển đang dùng v24).
+- [Node.js](https://nodejs.org/) từ bản 20 trở lên, theo yêu cầu của NestJS 12 (máy phát triển đang dùng v24).
 - Trình quản lý gói `npm` (đi kèm Node.js).
 - MySQL Server cục bộ hoặc tài khoản MySQL trên Cloud (như [Aiven](https://aiven.io/)).
 
