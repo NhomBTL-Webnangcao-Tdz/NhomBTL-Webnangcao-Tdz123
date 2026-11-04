@@ -38,8 +38,9 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 9.1: rà soát bảo mật, giao diện FE; sửa 3 lỗi. `Phan 9/9.1-ra-soat-frontend.md`. Xong, `9ff17dc`
 * 9.7: nháp 46 ca kiểm thử (BE 27/27, FE 25/25). `Phan 9/9.7-ca-kiem-thu.md`. Nháp xong, `3761e69`
 * 10.6: nháp luật, đạo đức, tự kiểm tra an ninh. `Phan 10/10.6-luat-dao-duc.md`. Nháp xong, `3761e69`
-* 2.16: chốt dùng trang chủ của Nam. Ghi trong checklist, không có log riêng. Chờ commit
-* 6.12 (phần 1): trang chủ dùng react-bootstrap. `Phan 6/6.12-landing-react-bootstrap.md`. Xong phần 1, chờ commit
+* 2.16: chốt dùng trang chủ của Nam. Ghi trong checklist, không có log riêng. `93135ee`
+* 6.12 (phần 1): trang chủ dùng react-bootstrap. `Phan 6/6.12-landing-react-bootstrap.md`. Xong phần 1, `93135ee`
+* 2.2: phân công theo người, mốc thời gian 1–8/11. `Phan 2/2.2-phan-cong.md`. Xong, chờ commit
 
 Việc ngoài checklist (không có log riêng):
 

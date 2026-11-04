@@ -38,5 +38,5 @@ Viết để đọc được trong text editor và khi xem diff, theo kiểu c�
 ## Làm việc với nhóm
 
 * Mỗi thành viên tự commit và push. AI không tự commit, push, merge hay đổi nhánh.
-* Không sửa phần người khác phụ trách (VD backend khi đang làm frontend): ghi thành đề xuất trong checklist hoặc log.
+* Từ 01/11/2026 Tân được ủy quyền làm cả backend và frontend. Người phụ trách từng mục ghi trong ngoặc ở `checklist.md` (phần "Phân công"); không làm mục đã giao cho Nam hoặc Sơn, cần thay đổi ở đó thì ghi đề xuất.
 * Không commit file `.env`, thư mục `quan-ly-ktx/backend/storage/` hay dữ liệu thật của người dùng.
