@@ -10,7 +10,7 @@ import {
 import { randomUUID } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 import { mkdir, stat, unlink, writeFile } from 'node:fs/promises';
-import { extname, resolve } from 'node:path';
+import { extname, resolve, sep } from 'node:path';
 import { DataSource, In, Repository } from 'typeorm';
 import { User } from '../../auth/entities/user.entity';
 import { Role } from '../../common/role.enum';
@@ -273,7 +273,7 @@ export class MeterReadingService {
       throw new ForbiddenException('Bạn không có quyền xem ảnh của bản gửi này.');
     }
     const filePath = meter === 'electric' ? submission.electricPhotoPath : submission.waterPhotoPath;
-    if (resolve(filePath).startsWith(`${this.storageDirectory}/`) === false) {
+    if (resolve(filePath).startsWith(`${this.storageDirectory}${sep}`) === false) {
       throw new NotFoundException('Không tìm thấy ảnh công tơ.');
     }
     try {

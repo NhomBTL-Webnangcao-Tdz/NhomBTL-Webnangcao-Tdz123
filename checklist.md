@@ -127,14 +127,14 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 
 ## 3. Database & dữ liệu (BE)
 
-* [ ] 3.1 (BE, Tân kiểm) Nối quan hệ: Contract↔Room, Contract↔Payment, UtilityBill↔Room (đang comment trong entity)
-* [ ] 3.2 (BE, Tân kiểm) Liên kết `User`–`Student` theo 2.5
+* [x] 3.1 (BE, Tân kiểm) Nối quan hệ: Contract↔Room, Contract↔Payment, UtilityBill↔Room (đang comment trong entity). Đủ khóa ngoại trên DB thật. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
+* [x] 3.2 (BE, Tân kiểm) Liên kết `User`–`Student` theo 2.5. Liên kết qua `users.student_sid`, có chỉ mục duy nhất. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [ ] 3.3 (BE, bỏ: không đổi schema sát hạn) Áp dụng quy ước tên/khóa (2.4) và trạng thái enum cho hợp đồng, hóa đơn (2.6, 2.7)
 * [ ] 3.4 (BE, bỏ: đã có utility_tariff) Bảng `SETTINGS` (nếu chốt ở 2.8) và các bảng mở rộng (nếu chốt ở 2.9)
 * [x] 3.5 (BE, Tân) Tạo bảng cho môi trường production: `database/init.sql` đủ 11 bảng. Log `docs/Phan 3/3.5-init-sql.md`
 * [x] 3.6 (BE, Tân) Script seed: vài tòa, phòng, SV, HĐ, hóa đơn + 3 tài khoản demo (admin/manager/student), dữ liệu dễ nhận ra. Chạy `npm run seed`. Log `docs/Phan 3/3.6-seed.md`
 * [ ] 3.7 (Nhóm, Tân) Kiểm tra mọi thành viên chạy được backend với DB (máy cá nhân hoặc Aiven) theo readme
-* [ ] 3.8 (BE, Tân) Viết phân tích ORM cho báo cáo: cấu hình DataSource, entity ↔ bảng, quan hệ ↔ khóa ngoại, repository; kèm câu SQL thật do TypeORM sinh ra (bật `logging` để lấy) [Đề 6b]
+* [x] 3.8 (BE, Tân) Viết phân tích ORM cho báo cáo: cấu hình DataSource, entity ↔ bảng, quan hệ ↔ khóa ngoại, repository; kèm câu SQL thật do TypeORM sinh ra (bật `logging` để lấy) [Đề 6b]. Xem `docs/phan-tich-orm.md`. Log `docs/Phan 3/3.8-phan-tich-orm.md`
 
 ## 4. Backend API nền tảng
 
@@ -143,8 +143,8 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 * [ ] 4.3 (BE, Nam) `PaymentModule`: CRUD, lọc theo hợp đồng
 * [~] 4.4 (BE, Tân) Mã lỗi nhất quán: 400 sai dữ liệu, 401, 403, 404 không tìm thấy, 409 vi phạm ràng buộc. Log `docs/Phan 4/4.4-4.12-xu-ly-loi.md`. Còn: 404 của `/contract/:id`, Nam sửa cùng 5.1, 5.2
 * [x] 4.5 (BE, Tân) API tài khoản cho ADMIN: `GET /users`, `POST /users` (tạo MANAGER), `PATCH /users/:id/role`. Log `docs/Phan 4/4.5-api-tai-khoan.md`
-* [ ] 4.6 (BE, Tân kiểm) API đơn giá: `GET /settings` (ADMIN, MANAGER), `PUT /settings` (ADMIN)
-* [ ] 4.7 (BE, Tân kiểm) API phòng còn chỗ và danh sách SV đang ở trong phòng
+* [~] 4.6 (BE, Tân kiểm) API đơn giá: `GET /settings` (ADMIN, MANAGER), `PUT /settings` (ADMIN). Đã có ở `utility-bill/tariff`. Còn: chốt `PUT` chỉ ADMIN hay cả MANAGER. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
+* [~] 4.7 (BE, Tân kiểm) API phòng còn chỗ và danh sách SV đang ở trong phòng. Có `GET /rooms?status=available`. Còn: API sinh viên trong phòng. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [~] 4.8 (BE, Tân) Phân trang + tìm kiếm + lọc (`?page=&limit=&q=&building=&status=`) cho danh sách. Xong phòng, sinh viên, hóa đơn, log `docs/Phan 4/4.8-phan-trang-tim-kiem.md`. Còn: hợp đồng, sau khi Nam xong 5.1, 5.2
 * [ ] 4.9 (BE, Tân) Bảo mật: giới hạn số lần đăng nhập sai, header bảo mật (`helmet`) [Đề 3d, 4c]
 * [x] 4.10 (BE, Tân) Tài liệu hóa API theo hướng dẫn trên lớp (tạm hiểu là Swagger/OpenAPI, chờ 2.15): endpoint, quyền, ví dụ request/response, mã lỗi [Đề 4b]. Swagger ở `/api-docs`. Log `docs/Phan 4/4.10-swagger.md`
@@ -160,7 +160,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [ ] 5.3 (BE, Nam) Chặn xóa cứng phòng/SV còn HĐ hoặc còn nợ, dùng xóa mềm (R5)
 * [~] 5.4 (BE, Tân kiểm) Hóa đơn điện nước: chỉ số cũ lấy từ tháng trước, mới ≥ cũ, server tự tính tiền, không trùng (phòng, tháng, năm), hóa đơn đã thu thì không sửa (R6–R9). Đã đủ ở luồng duyệt chỉ số; `POST /utility-bill` có R6, R9. Còn: API nhập tay vẫn nhận `total_amount` từ client (R8)
 * [ ] 5.5 (BE, bỏ: thay bằng SV tự gửi chỉ số) Nhập chỉ số hàng loạt cả tòa: `GET /utility-bill/draft`, `POST /utility-bill/batch`
-* [ ] 5.6 (BE, Tân kiểm) API cho sinh viên: `GET/PATCH /me/student`, `GET /me/contract`, `/me/bills`, `/me/payments` (R10)
+* [~] 5.6 (BE, Tân kiểm) API cho sinh viên: `GET/PATCH /me/student`, `GET /me/contract`, `/me/bills`, `/me/payments` (R10). Đã có `GET /student/me/portal`, `PUT /student/me/profile`, kiểm trên API thật. Còn: `/me/payments`, chờ 4.3. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [ ] 5.7 (BE, Tân) Đổi mật khẩu cho người dùng đang đăng nhập
 * [ ] 5.8 (BE, Nam) Báo cáo `GET /reports/summary?month=&year=` (lấp đầy theo tòa, đã thu, công nợ, HĐ sắp hết hạn)
 * [~] 5.9 (BE, Tân) Unit test cho các quy tắc R1–R10. Có R3, R6–R10, log `docs/Phan 5/5.9-5.10-unit-test.md`. Còn: R1, R2, R4, R5 sau khi Nam xong 5.1–5.3
@@ -172,10 +172,10 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [x] 6.2 (FE, Tân) Phần dùng chung: toast thành công/lỗi, hộp xác nhận trước khi xóa, validate form khớp DTO backend. Log `docs/Phan 6/6.2-toast-xac-nhan.md`
 * [x] 6.3 (FE) Xử lý phiên: 401 → đăng xuất, về đăng nhập kèm thông báo; 403 → báo "Không có quyền" [Đề 3d, 4c]. Log `docs/Phan 6/6.3-xu-ly-phien.md`
 * [x] 6.4 (FE) Sidebar theo vai trò: ẩn menu quản lý với STUDENT, ẩn mục chỉ-ADMIN với MANAGER. Code có từ `fde890e`, thêm test. Log `docs/Phan 6/6.4-sidebar-theo-vai-tro.md`
-* [ ] 6.5 (FE, Tân kiểm) Tòa nhà & Phòng: lưới phòng theo tòa/tầng, màu theo trạng thái, lọc, chi tiết phòng (SV đang ở, lịch sử HĐ)
+* [~] 6.5 (FE, Tân kiểm) Tòa nhà & Phòng: lưới phòng theo tòa/tầng, màu theo trạng thái, lọc, chi tiết phòng (SV đang ở, lịch sử HĐ). Đã có lưới phòng, lọc, thêm, sửa, xóa. Còn: chi tiết phòng (SV đang ở, lịch sử HĐ), chờ 4.7. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [ ] 6.6 (FE, bỏ: Nam đã bỏ trang danh sách SV, hỏi lại Nam nếu cần) Sinh viên: tìm kiếm, lọc, trang chi tiết (hồ sơ, tài khoản liên kết, phòng, HĐ, công nợ)
 * [ ] 6.7 (FE, Nam) Hợp đồng: tab theo trạng thái, form theo bước (SV → phòng còn chỗ → thời hạn, cọc), Gia hạn / Kết thúc, ghi nhận thanh toán
-* [ ] 6.8 (FE, Tân kiểm) Chỉ số điện nước: bảng nhập nhanh cả tòa theo tháng, chỉ số cũ tự điền, báo lỗi ngay, xem trước số tiền
+* [x] 6.8 (FE, Tân kiểm) Chỉ số điện nước: bảng nhập nhanh cả tòa theo tháng, chỉ số cũ tự điền, báo lỗi ngay, xem trước số tiền. Đổi thành SV gửi chỉ số, cán bộ duyệt (5.5 bỏ); đã kiểm cả luồng. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [x] 6.9 (FE, Tân) Hóa đơn: lọc tháng/tòa/trạng thái, đánh dấu đã thu, xem/in hóa đơn. Log `docs/Phan 6/6.9-trang-hoa-don.md`
 * [x] 6.10 (FE, Tân) Tổng quan: thẻ số liệu, biểu đồ lấp đầy theo tòa, thu tiền 6 tháng, danh sách việc cần làm. Log `docs/Phan 6/6.10-tong-quan.md`
 * [x] 6.11 (FE, Tân) Cài đặt: đơn giá điện/nước, quản lý tài khoản cán bộ (chỉ ADMIN). Log `docs/Phan 6/6.11-cai-dat.md`
@@ -191,9 +191,9 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 
 ## 8. Mở rộng (theo phạm vi chốt ở 2.9)
 
-* [~] 8.1 (BE + FE, Tân kiểm) Đơn đăng ký ở trực tuyến: SV chọn phòng còn chỗ → gửi đơn → cán bộ duyệt. Đã có API `residence-requests` + `ResidenceRequestsPage` (commit `fde890e`), chưa kiểm thử
+* [x] 8.1 (BE + FE, Tân kiểm) Đơn đăng ký ở trực tuyến: SV chọn phòng còn chỗ → gửi đơn → cán bộ duyệt. Đã có API `residence-requests` + `ResidenceRequestsPage` (commit `fde890e`). Đã kiểm cả luồng trên API thật. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [ ] 8.2 (BE + FE, Sơn, nếu còn thời gian) Yêu cầu sửa chữa: SV gửi, cán bộ cập nhật trạng thái
-* [~] 8.3 (BE + FE, Tân kiểm) Thông báo trong hệ thống (HĐ sắp hết hạn, có hóa đơn mới). Đã có API `notifications/me` (commit `fde890e`), chưa kiểm thử
+* [~] 8.3 (BE + FE, Tân kiểm) Thông báo trong hệ thống (HĐ sắp hết hạn, có hóa đơn mới). Đã có API `notifications/me` (commit `fde890e`). Đã kiểm thông báo duyệt đơn, hóa đơn, nhắc đóng tiền. Còn: thông báo HĐ sắp hết hạn. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [ ] 8.4 (FE, Sơn) Xuất Excel/PDF danh sách, hóa đơn
 
 ## 9. Kiểm thử & triển khai
@@ -266,6 +266,8 @@ NhomBTL-Webnangcao-Tdz123/
 ---
 
 ## Current Milestone
+
+**Cập nhật 04/11/2026:** Backend bảo mật, tài liệu API, DB, seed, trang Cài đặt, hóa đơn, tổng quan, toast đã xong trên `feature/tandz`. DB bản nộp là Aiven của Tân. Đang chờ Nam push 4.3, 5.1–5.3, 5.8, 6.7 để chạy E2E. 4.9, 5.7, 9.2 để lại cho Sơn. Xem `docs/logs.md`.
 
 **Cập nhật 01/11/2026:** Đã chốt phân công (phần "Phân công" ở đầu file). Đã xong trên nhánh `feature/tandz`: 6.3, 6.4, 9.1, 6.12 phần 1 (trang chủ react-bootstrap); nháp 2.12–2.14, 9.7, 10.6; LICENSE MIT. Việc tiếp theo của Tân: kiểm các mục "Tân kiểm", rồi đợt A.
 

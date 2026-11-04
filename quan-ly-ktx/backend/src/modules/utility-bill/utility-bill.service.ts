@@ -10,7 +10,7 @@ import {
 import { randomUUID } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 import { mkdir, stat, unlink, writeFile } from 'node:fs/promises';
-import { extname, resolve } from 'node:path';
+import { extname, resolve, sep } from 'node:path';
 import { DataSource, DeepPartial, In, Repository } from 'typeorm';
 import { User } from '../../auth/entities/user.entity';
 import { Role } from '../../common/role.enum';
@@ -265,7 +265,7 @@ export class UtilityBillService {
         throw new ForbiddenException('Bạn không có quyền xem ảnh hóa đơn này.');
       }
     }
-    if (!resolve(bill.receiptImagePath).startsWith(`${this.receiptDirectory}/`)) {
+    if (!resolve(bill.receiptImagePath).startsWith(`${this.receiptDirectory}${sep}`)) {
       throw new NotFoundException('Không tìm thấy ảnh hóa đơn.');
     }
     try {
