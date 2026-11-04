@@ -57,6 +57,7 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 5.9 + 5.10: unit test trong `test/unit/`, bổ sung R6, R9. `Phan 5/5.9-5.10-unit-test.md`. Còn phần chờ Nam, Sơn, `db1115f`
 * 3.8: phân tích ORM. `Phan 3/3.8-phan-tich-orm.md`. Xong, `8f498b2`
 * Kiểm 3.1, 3.2, 4.6, 4.7, 5.6, 6.5, 6.8, 8.1, 8.3; sửa lỗi xem ảnh trên Windows. `Phan 8/8.1-kiem-luong-nghiep-vu.md`. Xong, `8f498b2`
+* 2.15: ghi câu trả lời 5 điểm chưa rõ của đề, chốt đơn giá. `Phan 2/2.15-tra-loi-de.md`. Xong, chờ commit
 
 Việc ngoài checklist (không có log riêng):
 

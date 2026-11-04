@@ -125,19 +125,19 @@ Khi có câu trả lời, ghi vào dòng "Trả lời" và sửa phần yêu c�
 
 1. Câu 4c: "XORs" là gì?
    * Tạm hiểu: có thể là XSS hoặc CSRF, làm cả hai.
-   * Trả lời:
+   * Trả lời (Tân ghi lại 04/11/2026): CORS, đề gõ nhầm. XSS, CSRF vẫn giữ như đã làm.
 2. Câu 4b: tài liệu API theo định dạng nào đã hướng dẫn trên lớp?
    * Tạm hiểu: Swagger/OpenAPI.
-   * Trả lời:
+   * Trả lời (Tân ghi lại 04/11/2026): Trên lớp cô dùng Postman và Thunder Client. Nhóm nộp Postman collection, giữ thêm Swagger.
 3. Câu 5b: dựng lại trang giống reactnative.dev, hay áp phong cách đó cho giao diện KTX? 3 ảnh chụp là phần nào?
    * Tạm hiểu: áp bố cục, phong cách đó cho trang chủ và giao diện KTX.
-   * Trả lời:
+   * Trả lời (Tân ghi lại 04/11/2026): Không cần dựng lại y hệt, nhìn giống reactnative.dev là được, bám giao diện Nam đã làm.
 4. Câu 7b: test có bắt buộc đặt trong thư mục `test/` không?
    * Tạm hiểu: đặt trong `test/` cho chắc.
-   * Trả lời:
+   * Trả lời (Tân ghi lại 04/11/2026): Theo Tân, cô không ràng buộc vị trí. Đề vẫn ghi thư mục test nên nhóm đặt hết trong `test/`.
 5. Câu 4c: "xử lý phiên giao dịch" là session hay transaction DB?
    * Tạm hiểu: làm cả hai.
-   * Trả lời:
+   * Trả lời (Tân ghi lại 04/11/2026): Làm cả session và transaction DB.
 
 ## 5. Cách dùng file này
 

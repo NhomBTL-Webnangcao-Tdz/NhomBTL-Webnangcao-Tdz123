@@ -35,7 +35,7 @@ Chi tiết từng câu: `docs/de-bai.md`.
 * Câu 3c, NestJS phân lớp, React, LICENSE: phần 0 (đã có), 1.10
 * Câu 3d, security backend, FE không lộ dữ liệu: 1.11, 4.1, 4.2, 4.9, 4.11, 9.1
 * Câu 4a, API nghiệp vụ: 4.3 đến 4.8, 5.1 đến 5.8
-* Câu 4b, tài liệu hóa API: 4.10
+* Câu 4b, tài liệu hóa API (Postman, Swagger): 4.10
 * Câu 4c, token, hash, phiên, cookie, CORS, XSS/CSRF, xác thực: 4.9, 4.11, 6.3
 * Câu 5a, bố cục FE khớp wireframe: 2.14, phần 6, phần 7
 * Câu 5b, UI theo mẫu React Native, react-bootstrap: 2.10, 2.16, 6.12
@@ -122,7 +122,7 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 * [~] 2.12 (Nhóm, cả nhóm duyệt) User stories: tối thiểu 12 câu, đúng định dạng "Là <vai trò>, tôi muốn <hành động> để <lợi ích>.", đánh mã US-xx, mỗi câu ứng với API, màn hình, test [Đề 1]. Bản nháp 24 câu ở `docs/user-stories.md` (log `docs/Phan 2/2.12-user-stories.md`). Còn: nhóm duyệt
 * [~] 2.13 (Nhóm, cả nhóm duyệt) Phân tích yêu cầu, đối tượng, quan hệ, phương thức; sơ đồ thuật toán (flowchart) cho các nghiệp vụ chính [Đề 2a, 2b]. Bản nháp ở `docs/phan-tich-thiet-ke.md` (UML + 6 flowchart, log `docs/Phan 2/2.13-phan-tich-thiet-ke.md`). Còn: nhóm duyệt
 * [~] 2.14 (Nhóm, cả nhóm duyệt) Wireframe các màn hình chính; sơ đồ luồng xử lý thông tin (người dùng → React → API → Controller → Service → DB) cho 2–3 luồng chính [Đề 3a, 3b]. Bản nháp ở `docs/wireframe-luong-xu-ly.md` (log `docs/Phan 2/2.14-wireframe-luong-xu-ly.md`). Còn: nhóm duyệt, vẽ lại trang chủ sau 6.12
-* [ ] 2.15 (Nhóm, cả nhóm) Hỏi giáo viên 5 điểm chưa rõ của đề, ghi câu trả lời vào mục 4 của `docs/de-bai.md`
+* [x] 2.15 (Nhóm, cả nhóm) Hỏi giáo viên 5 điểm chưa rõ của đề, ghi câu trả lời vào mục 4 của `docs/de-bai.md`. Log `docs/Phan 2/2.15-tra-loi-de.md`
 * [x] 2.16 (Nhóm) Chọn một trang chủ: `pages/landing/` trên `main` (Nam) hay `pages/public/` ở nhánh `feature/trang-chu-tandz` (Tân, chưa merge); merge hoặc bỏ nhánh còn lại [Đề 5b]. Chốt 01/11/2026: dùng `pages/landing/` của Nam; nhánh `feature/trang-chu-tandz` không merge
 
 ## 3. Database & dữ liệu (BE)
@@ -143,7 +143,7 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 * [ ] 4.3 (BE, Nam) `PaymentModule`: CRUD, lọc theo hợp đồng
 * [~] 4.4 (BE, Tân) Mã lỗi nhất quán: 400 sai dữ liệu, 401, 403, 404 không tìm thấy, 409 vi phạm ràng buộc. Log `docs/Phan 4/4.4-4.12-xu-ly-loi.md`. Còn: 404 của `/contract/:id`, Nam sửa cùng 5.1, 5.2
 * [x] 4.5 (BE, Tân) API tài khoản cho ADMIN: `GET /users`, `POST /users` (tạo MANAGER), `PATCH /users/:id/role`. Log `docs/Phan 4/4.5-api-tai-khoan.md`
-* [~] 4.6 (BE, Tân kiểm) API đơn giá: `GET /settings` (ADMIN, MANAGER), `PUT /settings` (ADMIN). Đã có ở `utility-bill/tariff`. Còn: chốt `PUT` chỉ ADMIN hay cả MANAGER. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
+* [x] 4.6 (BE, Tân kiểm) API đơn giá: `utility-bill/tariff`, `GET` và `PUT` cho ADMIN, MANAGER (Tân chốt 04/11). Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [~] 4.7 (BE, Tân kiểm) API phòng còn chỗ và danh sách SV đang ở trong phòng. Có `GET /rooms?status=available`. Còn: API sinh viên trong phòng. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [~] 4.8 (BE, Tân) Phân trang + tìm kiếm + lọc (`?page=&limit=&q=&building=&status=`) cho danh sách. Xong phòng, sinh viên, hóa đơn, log `docs/Phan 4/4.8-phan-trang-tim-kiem.md`. Còn: hợp đồng, sau khi Nam xong 5.1, 5.2
 * [ ] 4.9 (BE, Tân) Bảo mật: giới hạn số lần đăng nhập sai, header bảo mật (`helmet`) [Đề 3d, 4c]
