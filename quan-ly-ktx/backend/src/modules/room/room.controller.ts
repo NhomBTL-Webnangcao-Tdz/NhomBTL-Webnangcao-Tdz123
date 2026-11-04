@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Query, Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { RoomListQueryDto } from './dto/room-list-query.dto';
 import { RoomService } from './room.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { CreateRoomDto } from './dto/create-room.dto';
@@ -20,8 +21,8 @@ export class RoomController {
 
   @Get()
   @Roles(Role.ADMIN, Role.MANAGER)
-  findAll() {
-    return this.roomService.findAll();
+  findAll(@Query() query: RoomListQueryDto) {
+    return this.roomService.findAll(query);
   }
 
   @Get(':id')

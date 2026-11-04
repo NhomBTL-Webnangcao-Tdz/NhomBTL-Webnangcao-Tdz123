@@ -50,7 +50,8 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 4.5: API tài khoản cho ADMIN. `Phan 4/4.5-api-tai-khoan.md`. Xong, `2783496`
 * 6.11: trang Cài đặt, quản lý tài khoản cán bộ. `Phan 6/6.11-cai-dat.md`. Xong, `4cae30c`
 * 6.1: kiểm các trang trên app thật, ghi lỗi. `Phan 6/6.1-kiem-thu-trang-admin.md`. Xong, `ba3f229`
-* 6.2: toast, hộp xác nhận, lỗi tiếng Việt. `Phan 6/6.2-toast-xac-nhan.md`. Xong, chờ commit
+* 6.2: toast, hộp xác nhận, lỗi tiếng Việt. `Phan 6/6.2-toast-xac-nhan.md`. Xong, `1e2f14b`, `2842f89`
+* 4.8: phân trang, tìm kiếm, lọc cho phòng, sinh viên, hóa đơn. `Phan 4/4.8-phan-trang-tim-kiem.md`. Còn hợp đồng, chờ commit
 
 Việc ngoài checklist (không có log riêng):
 

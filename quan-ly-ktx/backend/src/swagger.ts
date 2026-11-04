@@ -71,13 +71,13 @@ const endpoints: Record<string, EndpointDoc> = {
     request: { role: 'MANAGER' },
   },
 
-  'GET /rooms': { summary: 'Danh sách phòng', roles: STAFF },
+  'GET /rooms': { summary: 'Danh sách phòng. Có page thì trả { items, total, page, limit }, không có thì trả mảng', roles: STAFF },
   'POST /rooms': { summary: 'Tạo phòng', roles: STAFF, request: roomExample },
   'GET /rooms/{id}': { summary: 'Chi tiết phòng', roles: STAFF },
   'PATCH /rooms/{id}': { summary: 'Sửa phòng', roles: STAFF, request: { price: 1300000 } },
   'DELETE /rooms/{id}': { summary: 'Xóa phòng', roles: STAFF, conflict: 'Phòng đang được dữ liệu khác sử dụng' },
 
-  'GET /student': { summary: 'Danh sách sinh viên', roles: STAFF },
+  'GET /student': { summary: 'Danh sách sinh viên. Có page thì trả { items, total, page, limit }, không có thì trả mảng', roles: STAFF },
   'POST /student': { summary: 'Tạo hồ sơ sinh viên', roles: STAFF, conflict: 'Mã sinh viên đã tồn tại', request: studentExample },
   'GET /student/{id}': { summary: 'Chi tiết sinh viên', roles: STAFF },
   'PUT /student/{id}': { summary: 'Sửa sinh viên, không đổi được mã', roles: STAFF, request: { phone: '0911111111' } },
@@ -106,7 +106,7 @@ const endpoints: Record<string, EndpointDoc> = {
   'PUT /contract/{id}': { summary: 'Sửa, gia hạn hoặc thanh lý hợp đồng', roles: STAFF, request: { is_active: false } },
   'DELETE /contract/{id}': { summary: 'Xóa hợp đồng', roles: ADMIN },
 
-  'GET /utility-bill': { summary: 'Danh sách hóa đơn', roles: STAFF },
+  'GET /utility-bill': { summary: 'Danh sách hóa đơn. Có page thì trả { items, total, page, limit }, không có thì trả mảng', roles: STAFF },
   'POST /utility-bill': { summary: 'Tạo hóa đơn điện nước', roles: STAFF, request: billExample },
   'POST /utility-bill/general': { summary: 'Tạo khoản thu chung, gửi multipart/form-data, ảnh ở trường receiptImage', roles: STAFF, conflict: 'Phòng chưa có sinh viên đang ở' },
   'GET /utility-bill/{id}': { summary: 'Chi tiết hóa đơn', roles: STAFF },

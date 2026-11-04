@@ -15,7 +15,7 @@ async function messages(metatype: new () => object, body: unknown): Promise<stri
     await pipe.transform(body, { type: 'body', metatype });
   } catch (error) {
     expect(error).toBeInstanceOf(BadRequestException);
-    return (error as BadRequestException).getResponse()['message'];
+    return ((error as BadRequestException).getResponse() as { message: string[] }).message;
   }
   throw new Error('Mong đợi lỗi validate');
 }

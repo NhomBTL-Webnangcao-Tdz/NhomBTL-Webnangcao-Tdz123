@@ -18,6 +18,8 @@ import { Contract } from '../contract/contract.entity';
 import { Notification } from '../notification/notification.entity';
 import { Room } from '../room/room.entity';
 import { CreateGeneralChargeDto } from './dto/create-general-charge.dto';
+import { isPaged, likePattern, pageWindow } from '../../common/list-query.dto';
+import { BillListQueryDto } from './dto/bill-list-query.dto';
 import { CreateUtilityBillDto } from './dto/create-utility-bill.dto';
 import { UpdateUtilityBillDto } from './dto/update-utility-bill.dto';
 import { UtilityBill } from './utility-bill.entity';
@@ -49,11 +51,26 @@ export class UtilityBillService {
     private readonly dataSource: DataSource,
   ) {}
 
-  async findAll() {
-    const bills = await this.utilityBillRepository.find({
-      relations: { room: true, shares: { student: true } },
-    });
-    return bills.map((bill) => this.serializeBill(bill));
+  async findAll(query: BillListQueryDto = {}) {
+    const builder = this.utilityBillRepository.createQueryBuilder('bill')
+      .leftJoinAndSelect('bill.room', 'room')
+      .leftJoinAndSelect('bill.shares', 'share')
+      .leftJoinAndSelect('share.student', 'student')
+      .orderBy('bill.year', 'DESC')
+      .addOrderBy('bill.month', 'DESC')
+      .addOrderBy('bill.bill_id', 'DESC');
+    if (query.q?.trim()) {
+      builder.andWhere('(bill.title LIKE :q OR room.roomNumber LIKE :q OR student.sname LIKE :q)', { q: likePattern(query.q) });
+    }
+    if (query.month) builder.andWhere('bill.month = :month', { month: query.month });
+    if (query.year) builder.andWhere('bill.year = :year', { year: query.year });
+    if (query.building) builder.andWhere('room.building = :building', { building: query.building });
+    if (query.status) builder.andWhere('bill.is_paid = :paid', { paid: query.status === 'paid' });
+
+    if (!isPaged(query)) return (await builder.getMany()).map((bill) => this.serializeBill(bill));
+    const { page, limit, skip } = pageWindow(query);
+    const [bills, total] = await builder.skip(skip).take(limit).getManyAndCount();
+    return { items: bills.map((bill) => this.serializeBill(bill)), total, page, limit };
   }
 
   async findOne(id: number) {

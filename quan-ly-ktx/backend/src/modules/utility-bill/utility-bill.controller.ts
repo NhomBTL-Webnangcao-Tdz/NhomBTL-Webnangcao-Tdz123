@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   Request,
   Res,
   StreamableFile,
@@ -24,6 +25,7 @@ import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/roles.guard';
 import { Roles } from '../../common/roles.decorator';
 import { Role } from '../../common/role.enum';
+import { BillListQueryDto } from './dto/bill-list-query.dto';
 import { CreateGeneralChargeDto } from './dto/create-general-charge.dto';
 import { CreateUtilityBillDto } from './dto/create-utility-bill.dto';
 import { UpdateSharePaymentDto } from './dto/update-share-payment.dto';
@@ -57,8 +59,8 @@ export class UtilityBillController {
   constructor(private readonly utilityBillService: UtilityBillService) {}
 
   @Get()
-  async findAll() {
-    return this.utilityBillService.findAll();
+  async findAll(@Query() query: BillListQueryDto) {
+    return this.utilityBillService.findAll(query);
   }
 
   @Get(':id/receipt')

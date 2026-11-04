@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, Query, Request, UseGuards } from '@nestjs/common';
+import { ListQueryDto } from '../../common/list-query.dto';
 import { StudentService } from './student.service';
 import { Student } from './student.entity';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
@@ -47,8 +48,8 @@ export class StudentController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MANAGER)
-  async findAll(): Promise<Student[]> {
-    return this.studentService.findAll();
+  async findAll(@Query() query: ListQueryDto) {
+    return this.studentService.findAll(query);
   }
 
   @Get(':id')

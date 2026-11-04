@@ -13,6 +13,7 @@ import { Notification } from '../notification/notification.entity';
 import { Room } from '../room/room.entity';
 import { UtilityBill } from '../utility-bill/utility-bill.entity';
 import { splitUtilityAmount } from '../meter-reading/meter-reading-calculations';
+import { isPaged, likePattern, ListQueryDto, pageWindow, PagedResult } from '../../common/list-query.dto';
 import { ApproveResidenceRequestDto } from './dto/approve-residence-request.dto';
 import { ResidenceRequestDto } from './dto/residence-request.dto';
 import { StudentProfileDto } from './dto/student-profile.dto';
@@ -28,8 +29,18 @@ export class StudentService {
     private readonly dataSource: DataSource,
   ) {}
 
-  async findAll(): Promise<Student[]> {
-    return this.studentRepository.find();
+  async findAll(query: ListQueryDto = {}): Promise<Student[] | PagedResult<Student>> {
+    const builder = this.studentRepository.createQueryBuilder('student').orderBy('student.sid');
+    if (query.q?.trim()) {
+      builder.andWhere(
+        '(student.sid LIKE :q OR student.sname LIKE :q OR student.email LIKE :q OR student.phone LIKE :q)',
+        { q: likePattern(query.q) },
+      );
+    }
+    if (!isPaged(query)) return builder.getMany();
+    const { page, limit, skip } = pageWindow(query);
+    const [items, total] = await builder.skip(skip).take(limit).getManyAndCount();
+    return { items, total, page, limit };
   }
 
   async findOne(id: string): Promise<Student> {
