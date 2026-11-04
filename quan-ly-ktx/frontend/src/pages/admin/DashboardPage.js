@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { billApi } from '../../api/bill.api';
 import { contractApi } from '../../api/contract.api';
+import { residenceApi } from '../../api/residence.api';
 import { roomApi } from '../../api/room.api';
-import { studentApi } from '../../api/student.api';
 import PageHeading from '../../components/common/PageHeading';
 import StatusBadge from '../../components/common/StatusBadge';
+import { buildTodos, countResidents, occupancyByBuilding, revenueLastMonths } from './dashboardStats';
 import './DashboardPage.css';
 import './Stats.css';
 
@@ -21,12 +22,12 @@ export default function DashboardPage() {
     let active = true;
     Promise.allSettled([
       roomApi.list(),
-      studentApi.list(),
+      residenceApi.list(),
       contractApi.list(),
       billApi.list(),
     ]).then((results) => {
       if (!active) return;
-      const [roomsResult, studentsResult, contractsResult, billsResult] = results;
+      const [roomsResult, requestsResult, contractsResult, billsResult] = results;
       const available = results.filter((result) => result.status === 'fulfilled');
       if (!available.length) {
         setLoadError('Không thể tải số liệu tổng quan. Vui lòng đăng nhập hoặc kiểm tra kết nối máy chủ.');
@@ -34,16 +35,19 @@ export default function DashboardPage() {
       }
 
       const rooms = roomsResult.status === 'fulfilled' ? roomsResult.value : null;
-      const students = studentsResult.status === 'fulfilled' ? studentsResult.value : null;
+      const requests = requestsResult.status === 'fulfilled' ? requestsResult.value : null;
       const contracts = contractsResult.status === 'fulfilled' ? contractsResult.value : null;
       const bills = billsResult.status === 'fulfilled' ? billsResult.value : null;
       setStats({
         roomCount: rooms?.length ?? null,
         occupied: rooms ? countOccupied(rooms) : null,
-        studentCount: students?.length ?? null,
+        residentCount: contracts ? countResidents(contracts) : null,
         activeContracts: contracts?.filter((contract) => contract.is_active).length ?? null,
         unpaidBills: bills?.filter((bill) => !bill.is_paid).length ?? null,
         occupancy: rooms ? (rooms.length ? Math.round((countOccupied(rooms) / rooms.length) * 100) : 0) : null,
+        buildings: rooms ? occupancyByBuilding(rooms) : [],
+        revenue: bills ? revenueLastMonths(bills) : [],
+        todos: buildTodos({ requests, contracts, bills }),
       });
       setRecentBills(bills?.slice().sort((a, b) => (
         Number(b.year) - Number(a.year) || Number(b.month) - Number(a.month)
@@ -68,7 +72,7 @@ export default function DashboardPage() {
       {loadError && <div className="inline-notice" role="status">{loadError}</div>}
       <div className="stat-grid">
         <article className="stat-card"><span className="stat-icon teal">▦</span><span className="stat-label">Tổng số phòng</span><strong>{stats?.roomCount ?? '—'}</strong><span className="stat-foot">Trong toàn bộ các tòa</span></article>
-        <article className="stat-card"><span className="stat-icon blue">♙</span><span className="stat-label">Sinh viên lưu trú</span><strong>{stats?.studentCount ?? '—'}</strong><span className="stat-foot">Hồ sơ đã đăng ký</span></article>
+        <article className="stat-card"><span className="stat-icon blue">♙</span><span className="stat-label">Sinh viên lưu trú</span><strong>{stats?.residentCount ?? '—'}</strong><span className="stat-foot">Có hợp đồng và phòng</span></article>
         <article className="stat-card"><span className="stat-icon green">▤</span><span className="stat-label">Hợp đồng hiệu lực</span><strong>{stats?.activeContracts ?? '—'}</strong><span className="stat-foot">Đang có hiệu lực</span></article>
         <article className="stat-card"><span className="stat-icon amber">▧</span><span className="stat-label">Hóa đơn chưa thu</span><strong>{stats?.unpaidBills ?? '—'}</strong><span className="stat-foot">Cần theo dõi thanh toán</span></article>
       </div>
@@ -77,11 +81,18 @@ export default function DashboardPage() {
           <div className="panel-heading"><div><h3>Công suất phòng</h3><p>Tỷ lệ phòng đang có người ở</p></div><span className="occupancy-value">{stats ? `${stats.occupancy}%` : '—'}</span></div>
           <div className="progress-track"><span style={{ width: `${stats?.occupancy || 0}%` }} /></div>
           <div className="progress-labels"><span>{stats?.occupied ?? '—'} phòng đang có người</span><span>{stats?.roomCount ?? '—'} phòng tổng</span></div>
-          <div className="dashboard-shortcuts">
-            <a href="#rooms">Quản lý phòng <span>→</span></a>
-            <a href="#students">Danh sách sinh viên <span>→</span></a>
-            <a href="#contracts">Theo dõi hợp đồng <span>→</span></a>
-          </div>
+          <h4 className="dashboard-subtitle">Lấp đầy theo tòa</h4>
+          {stats?.buildings?.length ? (
+            <ul className="bar-list">
+              {stats.buildings.map((item) => (
+                <li key={item.building}>
+                  <span>{item.building}</span>
+                  <span className="bar-track" role="img" aria-label={`${item.building}: ${item.percent}%`}><span style={{ width: `${item.percent}%` }} /></span>
+                  <strong>{item.occupied}/{item.capacity}</strong>
+                </li>
+              ))}
+            </ul>
+          ) : <p className="empty-inline">Chưa có dữ liệu phòng.</p>}
         </section>
         <section className="panel recent-panel">
           <div className="panel-heading"><div><h3>Hóa đơn gần đây</h3><p>Trạng thái hóa đơn điện nước</p></div><a href="#invoices" className="text-link">Xem tất cả</a></div>
@@ -99,6 +110,30 @@ export default function DashboardPage() {
           ) : (
             <p className="empty-inline">{loadError || 'Chưa có hóa đơn để hiển thị.'}</p>
           )}
+        </section>
+        <section className="panel revenue-panel">
+          <div className="panel-heading"><div><h3>Tiền đã thu 6 tháng</h3><p>Theo kỳ hóa đơn</p></div></div>
+          {stats?.revenue?.some((item) => item.amount > 0) ? (
+            <ul className="revenue-chart">
+              {stats.revenue.map((item) => (
+                <li key={item.label} title={`${item.amount.toLocaleString('vi-VN')} ₫`}>
+                  <small>{item.amount ? `${(item.amount / 1000000).toLocaleString('vi-VN', { maximumFractionDigits: 1 })}tr` : '0'}</small>
+                  <span className="revenue-column"><span style={{ height: `${item.percent}%` }} /></span>
+                  <small>{item.label.slice(0, 2)}</small>
+                </li>
+              ))}
+            </ul>
+          ) : <p className="empty-inline">Chưa có khoản đã thu trong 6 tháng qua.</p>}
+        </section>
+        <section className="panel todo-panel">
+          <div className="panel-heading"><div><h3>Việc cần làm</h3><p>Những mục đang chờ xử lý</p></div></div>
+          {stats?.todos?.length ? (
+            <ul className="todo-list">
+              {stats.todos.map((todo) => (
+                <li key={todo.key}><a href={todo.href}><strong>{todo.count}</strong> {todo.label}<span aria-hidden="true">→</span></a></li>
+              ))}
+            </ul>
+          ) : <p className="empty-inline">Không có việc đang chờ.</p>}
         </section>
       </div>
     </>

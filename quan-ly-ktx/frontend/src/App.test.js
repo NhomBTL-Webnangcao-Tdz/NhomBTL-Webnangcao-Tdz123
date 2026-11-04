@@ -72,9 +72,8 @@ test('signs in and loads dashboard data from the API', async () => {
   global.fetch.mockImplementation(async (url) => {
     if (url.endsWith('/auth/login')) return jsonResponse({ access_token: 'test-token' });
     if (url.endsWith('/auth/profile')) return jsonResponse({ id: 1, username: 'manager', role: 'MANAGER' });
-    if (url.endsWith('/rooms')) return jsonResponse([{ id: 'r1', currentOccupancy: 2, maxCapacity: 4 }]);
-    if (url.endsWith('/student')) return jsonResponse([{ sid: 'SV001' }]);
-    if (url.endsWith('/contract')) return jsonResponse([{ is_active: true }]);
+    if (url.endsWith('/rooms')) return jsonResponse([{ id: 'r1', building: 'Tòa A', currentOccupancy: 2, maxCapacity: 4 }]);
+    if (url.endsWith('/contract')) return jsonResponse([{ is_active: true, end_date: '2099-01-01', room: { id: 'r1' }, student: { sid: 'SV001' } }]);
     if (url.endsWith('/utility-bill')) return jsonResponse([{ bill_id: 1, is_paid: false, total_amount: 50000 }]);
     return jsonResponse([]);
   });
@@ -88,10 +87,10 @@ test('signs in and loads dashboard data from the API', async () => {
   expect(screen.getByRole('heading', { name: 'Chào mừng trở lại' })).toBeInTheDocument();
   expect(document.querySelector('.welcome-banner')).toBeInTheDocument();
   await waitFor(() => expect(global.fetch).toHaveBeenCalledWith(
-    'http://localhost:5001/student',
+    'http://localhost:5001/contract',
     expect.objectContaining({ headers: expect.any(Headers) }),
   ));
-  expect(screen.getByText('Sinh viên lưu trú').parentElement).toHaveTextContent('1');
+  await waitFor(() => expect(screen.getByText('Sinh viên lưu trú').parentElement).toHaveTextContent('1'));
   expect(localStorage.getItem('ktx_access_token')).toBe('test-token');
 });
 

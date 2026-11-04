@@ -141,3 +141,99 @@
     margin-left: 37px;
   }
 }
+
+.dashboard-subtitle {
+  font-size: 11px;
+  font-weight: 650;
+  margin: 18px 0 8px;
+}
+
+.bar-list,
+.todo-list,
+.revenue-chart {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bar-list li {
+  align-items: center;
+  display: grid;
+  font-size: 11px;
+  gap: 10px;
+  grid-template-columns: 64px minmax(0, 1fr) 42px;
+  padding: 5px 0;
+}
+
+.bar-list strong {
+  text-align: right;
+}
+
+.bar-track {
+  background: #edf0f1;
+  border-radius: 999px;
+  display: block;
+  height: 8px;
+  overflow: hidden;
+}
+
+.bar-track span {
+  background: var(--teal);
+  display: block;
+  height: 100%;
+}
+
+.revenue-chart {
+  align-items: stretch;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  height: 150px;
+}
+
+.revenue-chart li {
+  display: flex;
+  flex-direction: column;
+  font-size: 10px;
+  gap: 4px;
+  min-width: 0;
+  text-align: center;
+}
+
+.revenue-column {
+  align-items: flex-end;
+  display: flex;
+  flex: 1;
+}
+
+.revenue-column span {
+  background: var(--teal);
+  border-radius: 4px 4px 0 0;
+  display: block;
+  min-height: 2px;
+  width: 100%;
+}
+
+.todo-list li + li {
+  border-top: 1px solid #edf0f1;
+}
+
+.todo-list a {
+  align-items: center;
+  color: inherit;
+  display: flex;
+  font-size: 12px;
+  gap: 6px;
+  padding: 11px 0;
+  text-decoration: none;
+}
+
+.todo-list a span {
+  color: var(--teal);
+  margin-left: auto;
+}
+
+.todo-list strong {
+  color: var(--teal-dark);
+  font-size: 15px;
+}

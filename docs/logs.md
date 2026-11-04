@@ -52,7 +52,8 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 6.1: kiểm các trang trên app thật, ghi lỗi. `Phan 6/6.1-kiem-thu-trang-admin.md`. Xong, `ba3f229`
 * 6.2: toast, hộp xác nhận, lỗi tiếng Việt. `Phan 6/6.2-toast-xac-nhan.md`. Xong, `1e2f14b`, `2842f89`
 * 4.8: phân trang, tìm kiếm, lọc cho phòng, sinh viên, hóa đơn. `Phan 4/4.8-phan-trang-tim-kiem.md`. Còn hợp đồng, `18c2f35`
-* 6.9: trang hóa đơn, lọc, chi tiết, in. `Phan 6/6.9-trang-hoa-don.md`. Xong, chờ commit
+* 6.9: trang hóa đơn, lọc, chi tiết, in. `Phan 6/6.9-trang-hoa-don.md`. Xong, `3fb9d00`
+* 6.10: trang tổng quan. `Phan 6/6.10-tong-quan.md`. Xong, chờ commit
 
 Việc ngoài checklist (không có log riêng):
 
