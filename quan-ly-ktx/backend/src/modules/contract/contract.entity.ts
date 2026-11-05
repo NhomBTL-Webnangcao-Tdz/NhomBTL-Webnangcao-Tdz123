@@ -1,6 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Student } from '../student/student.entity';
 import { Room } from '../room/room.entity';
+import { Payment } from '../payment/payment.entity';
 
 @Entity('contract')
 export class Contract {
@@ -26,4 +34,7 @@ export class Contract {
   @ManyToOne(() => Room, (room) => room.contracts, { nullable: true })
   @JoinColumn({ name: 'room_id' })
   room: Room | null;
+
+  @OneToMany(() => Payment, (payment) => payment.contract)
+  payments: Payment[];
 }

@@ -11,6 +11,8 @@ import { ConfigModule } from '@nestjs/config';
 import { resolve } from 'node:path';
 import { NotificationModule } from './modules/notification/notification.module';
 import { MeterReadingModule } from './modules/meter-reading/meter-reading.module';
+import { PaymentModule } from './modules/payment/payment.module';
+import { ReportModule } from './modules/report/report.module';
 
 @Module({
   imports: [
@@ -36,6 +38,8 @@ import { MeterReadingModule } from './modules/meter-reading/meter-reading.module
     UtilityBillModule,
     NotificationModule,
     MeterReadingModule,
+    PaymentModule,
+    ReportModule,
   ],
   controllers: [AppController],
   providers: [AppService],

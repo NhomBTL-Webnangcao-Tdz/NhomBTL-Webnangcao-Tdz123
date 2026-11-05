@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { contractApi } from '../../api/contract.api';
+import { paymentApi } from '../../api/payment.api';
 import { roomApi } from '../../api/room.api';
 import { studentApi } from '../../api/student.api';
 import DataTable from '../../components/common/DataTable';
@@ -22,6 +23,98 @@ function getContractState(contract) {
 }
 
 const stateLabels = { active: 'Hiệu lực', upcoming: 'Sắp hết hạn', overdue: 'Quá hạn', terminated: 'Đã thanh lý' };
+
+function getLocalDateTime() {
+  const date = new Date();
+  date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+  return date.toISOString().slice(0, 16);
+}
+
+function PaymentDialog({ contract, onClose }) {
+  const [payments, setPayments] = useState([]);
+  const [paymentType, setPaymentType] = useState('Tiền phòng');
+  const [amount, setAmount] = useState('');
+  const [paymentDate, setPaymentDate] = useState(getLocalDateTime);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+  const [reloadKey, setReloadKey] = useState(0);
+
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    paymentApi.list(contract.contract_id)
+      .then((result) => {
+        if (active) setPayments(result);
+      })
+      .catch((requestError) => {
+        if (active) setError(requestError.message);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => { active = false; };
+  }, [contract.contract_id, reloadKey]);
+
+  const recordPayment = async (event) => {
+    event.preventDefault();
+    setSaving(true);
+    setError('');
+    try {
+      await paymentApi.create({
+        contractId: contract.contract_id,
+        amount: Number(amount),
+        payment_date: new Date(paymentDate).toISOString(),
+        payment_type: paymentType,
+      });
+      setAmount('');
+      setReloadKey((key) => key + 1);
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Modal title={`Ghi nhận thanh toán · HĐ-${String(contract.contract_id).padStart(4, '0')}`} onClose={onClose} wide>
+      <form className="form-grid payment-form" onSubmit={recordPayment}>
+        <label>Khoản thu
+          <select value={paymentType} onChange={(event) => setPaymentType(event.target.value)}>
+            <option>Tiền phòng</option>
+            <option>Điện nước</option>
+            <option>Sửa chữa</option>
+            <option>Khoản thu khác</option>
+          </select>
+        </label>
+        <label>Số tiền (₫)
+          <input type="number" min="0.01" step="0.01" value={amount} onChange={(event) => setAmount(event.target.value)} required />
+        </label>
+        <label className="form-wide">Thời điểm thanh toán
+          <input type="datetime-local" value={paymentDate} onChange={(event) => setPaymentDate(event.target.value)} required />
+        </label>
+        {error && <p className="form-error form-wide" role="alert">{error}</p>}
+        <div className="form-actions form-wide">
+          <button type="button" className="button button-secondary" onClick={onClose}>Đóng</button>
+          <button type="submit" className="button button-primary" disabled={saving}>{saving ? 'Đang lưu...' : 'Ghi nhận thanh toán'}</button>
+        </div>
+      </form>
+      <section className="payment-history">
+        <h3>Lịch sử thanh toán</h3>
+        {loading ? <p className="async-state">Đang tải giao dịch...</p> : payments.length ? (
+          <div className="payment-history-list">
+            {payments.map((payment) => (
+              <div className="payment-history-row" key={payment.payment_id}>
+                <span><strong>{payment.payment_type}</strong><small>{new Date(payment.payment_date).toLocaleString('vi-VN')}</small></span>
+                <strong>{Number(payment.amount).toLocaleString('vi-VN')} ₫</strong>
+              </div>
+            ))}
+          </div>
+        ) : <p className="async-state">Chưa có thanh toán nào được ghi nhận.</p>}
+      </section>
+    </Modal>
+  );
+}
 
 function ContractForm({ initialValue, students, rooms, onSave, onCancel, saving, error }) {
   const [step, setStep] = useState(1);
@@ -92,6 +185,8 @@ export default function ContractsPage() {
   const [activeContract, setActiveContract] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
   const [saveError, setSaveError] = useState('');
+  const [actionError, setActionError] = useState('');
+  const [paymentContract, setPaymentContract] = useState(null);
   const [saving, setSaving] = useState(false);
 
   const filtered = useMemo(() => contracts.filter((contract) => {
@@ -118,14 +213,34 @@ export default function ContractsPage() {
     }
   };
   const terminate = async (contract) => {
-    if (!window.confirm(`Thanh lý hợp đồng #${contract.contract_id}?`)) return;
+    if (!window.confirm(`Kết thúc hợp đồng #${contract.contract_id}?`)) return;
     try {
-      await contractApi.update(contract.contract_id, { is_active: false });
+      await contractApi.end(contract.contract_id);
+      setActionError('');
       refresh();
     } catch (requestError) {
-      setSaveError(requestError.message);
-      setActiveContract(contract);
-      setFormOpen(true);
+      setActionError(requestError.message);
+    }
+  };
+  const renew = async (contract) => {
+    const endDate = window.prompt('Nhập ngày kết thúc mới (YYYY-MM-DD):', String(contract.end_date).slice(0, 10));
+    if (!endDate) return;
+    try {
+      await contractApi.renew(contract.contract_id, endDate);
+      setActionError('');
+      refresh();
+    } catch (requestError) {
+      setActionError(requestError.message);
+    }
+  };
+  const liquidate = async (contract) => {
+    if (!window.confirm(`Thanh lý hợp đồng #${contract.contract_id} từ hôm nay?`)) return;
+    try {
+      await contractApi.liquidate(contract.contract_id);
+      setActionError('');
+      refresh();
+    } catch (requestError) {
+      setActionError(requestError.message);
     }
   };
 
@@ -136,13 +251,26 @@ export default function ContractsPage() {
     { key: 'term', label: 'Thời hạn', render: (contract) => `${new Date(contract.start_date).toLocaleDateString('vi-VN')} – ${new Date(contract.end_date).toLocaleDateString('vi-VN')}` },
     { key: 'deposit_amount', label: 'Tiền đặt cọc', render: (contract) => `${Number(contract.deposit_amount).toLocaleString('vi-VN')} ₫` },
     { key: 'status', label: 'Trạng thái', render: (contract) => <StatusBadge value={getContractState(contract)} label={stateLabels[getContractState(contract)]} /> },
-    { key: 'actions', label: '', render: (contract) => <div className="row-actions"><button className="text-button" onClick={() => { setActiveContract(contract); setFormOpen(true); }}>Sửa / Gia hạn</button>{contract.is_active && <button className="text-button danger-text" onClick={() => terminate(contract)}>Thanh lý</button>}</div> },
+    { key: 'actions', label: 'Thao tác', render: (contract) => (
+      <div className="contract-actions">
+        <button className="contract-action-button payment" onClick={() => setPaymentContract(contract)}>Thanh toán</button>
+        <button className="contract-action-button edit" onClick={() => { setActiveContract(contract); setFormOpen(true); }}>Sửa</button>
+        {contract.is_active && (
+          <>
+            <button className="contract-action-button renew" onClick={() => renew(contract)}>Gia hạn</button>
+            <button className="contract-action-button end" onClick={() => terminate(contract)}>Kết thúc</button>
+            <button className="contract-action-button liquidate" onClick={() => liquidate(contract)}>Thanh lý</button>
+          </>
+        )}
+      </div>
+    ) },
   ];
 
   return (
     <>
       <PageHeading eyebrow="THỜI HẠN LƯU TRÚ" title="Danh sách hợp đồng" description="Theo dõi thời hạn hợp đồng và trạng thái lưu trú." action={<button className="button button-primary" onClick={() => setFormOpen(true)}>＋ Tạo hợp đồng</button>} />
       <section className="panel">
+        {actionError && <p className="form-error contract-action-error" role="alert">{actionError}</p>}
         <div className="table-toolbar contract-toolbar">
           <label className="search-field"><span aria-hidden="true">⌕</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Tìm mã hợp đồng hoặc sinh viên" aria-label="Tìm hợp đồng" /></label>
           <label className="compact-select">Trạng thái<select value={filter} onChange={(event) => setFilter(event.target.value)}><option value="all">Tất cả</option><option value="active">Hiệu lực</option><option value="upcoming">Sắp hết hạn</option><option value="overdue">Quá hạn</option><option value="terminated">Đã thanh lý</option></select></label>
@@ -152,6 +280,7 @@ export default function ContractsPage() {
         <DataTable columns={columns} rows={filtered} rowKey={(contract) => contract.contract_id} isLoading={isLoading} error={error} onRetry={refresh} emptyMessage="Không tìm thấy hợp đồng phù hợp." />
       </section>
       {formOpen && <Modal title={activeContract ? 'Cập nhật / gia hạn hợp đồng' : 'Tạo hợp đồng thuê'} onClose={closeForm} wide><ContractForm initialValue={activeContract} students={students} rooms={rooms} onSave={saveContract} onCancel={closeForm} saving={saving} error={saveError} /></Modal>}
+      {paymentContract && <PaymentDialog contract={paymentContract} onClose={() => setPaymentContract(null)} />}
       {!isLoading && !error && contracts.some((contract) => !contract.student) && <p className="form-hint page-footnote">API hợp đồng hiện chưa trả quan hệ sinh viên đầy đủ; một số hồ sơ được đánh dấu “Chưa liên kết”.</p>}
     </>
   );

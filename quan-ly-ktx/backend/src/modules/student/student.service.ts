@@ -12,6 +12,7 @@ import { Contract } from '../contract/contract.entity';
 import { Notification } from '../notification/notification.entity';
 import { Room } from '../room/room.entity';
 import { UtilityBill } from '../utility-bill/utility-bill.entity';
+import { UtilityBillShare } from '../utility-bill/utility-bill-share.entity';
 import { splitUtilityAmount } from '../meter-reading/meter-reading-calculations';
 import { ApproveResidenceRequestDto } from './dto/approve-residence-request.dto';
 import { ResidenceRequestDto } from './dto/residence-request.dto';
@@ -47,7 +48,68 @@ export class StudentService {
   }
 
   async remove(id: string): Promise<void> {
+    const student = await this.studentRepository.findOneBy({ sid: id });
+    if (!student) throw new NotFoundException('Không tìm thấy sinh viên.');
+
+    const activeContractCount = await this.dataSource.getRepository(Contract).createQueryBuilder('contract')
+      .innerJoin('contract.student', 'student')
+      .where('student.sid = :sid', { sid: id })
+      .andWhere('contract.is_active = :isActive', { isActive: true })
+      .andWhere('contract.end_date >= CURRENT_DATE()')
+      .getCount();
+    if (activeContractCount) {
+      throw new ConflictException('Không thể xóa sinh viên còn hợp đồng lưu trú.');
+    }
+
+    const unpaidShare = await this.dataSource.getRepository(UtilityBillShare).findOne({
+      where: { student: { sid: id }, isPaid: false },
+      select: { id: true },
+    });
+    if (unpaidShare) {
+      throw new ConflictException('Không thể xóa sinh viên còn hóa đơn chưa thanh toán.');
+    }
+    const paidShare = await this.dataSource.getRepository(UtilityBillShare).findOne({
+      where: { student: { sid: id } },
+      select: { id: true },
+    });
+    if (paidShare) {
+      throw new ConflictException('Không thể xóa sinh viên đang được lưu trong lịch sử hóa đơn.');
+    }
+
+    const [contracts, unpaidBills] = await Promise.all([
+      this.dataSource.getRepository(Contract).find({
+        where: { student: { sid: id } },
+        relations: { room: true },
+      }),
+      this.dataSource.getRepository(UtilityBill).find({
+        where: { is_paid: false },
+        relations: { room: true, shares: true },
+      }),
+    ]);
+    const unpaidLegacyBill = unpaidBills.some((bill) => {
+      if (!bill.room || bill.shares?.length) return false;
+      const month = String(bill.month).padStart(2, '0');
+      const cycleStart = `${bill.year}-${month}-01`;
+      const cycleEnd = new Date(Date.UTC(bill.year, bill.month, 0)).toISOString().slice(0, 10);
+      return contracts.some((contract) => (
+        contract.room?.id === bill.room?.id
+        && this.asDay(contract.start_date) <= cycleEnd
+        && this.asDay(contract.end_date) >= cycleStart
+      ));
+    });
+    if (unpaidLegacyBill) {
+      throw new ConflictException('Không thể xóa sinh viên còn hóa đơn chưa thanh toán.');
+    }
+    if (contracts.length) {
+      throw new ConflictException('Không thể xóa sinh viên đang được lưu trong lịch sử hợp đồng.');
+    }
+
     await this.studentRepository.delete(id);
+  }
+
+  private asDay(value: string | Date): string {
+    if (value instanceof Date) return value.toISOString().slice(0, 10);
+    return String(value).slice(0, 10);
   }
 
   async saveMyProfile(userId: number, profile: StudentProfileDto) {

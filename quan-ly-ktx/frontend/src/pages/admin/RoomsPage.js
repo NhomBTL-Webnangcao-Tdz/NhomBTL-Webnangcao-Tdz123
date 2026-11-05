@@ -1,6 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { roomApi } from '../../api/room.api';
-import DataTable from '../../components/common/DataTable';
 import Modal from '../../components/common/Modal';
 import PageHeading from '../../components/common/PageHeading';
 import StatusBadge from '../../components/common/StatusBadge';
@@ -8,10 +7,10 @@ import useApiResource from '../../hooks/useApiResource';
 import { setHashQuery } from '../../utils/hashRoute';
 import './RoomsPage.css';
 
-const emptyRoom = { roomNumber: '', building: '', maxCapacity: 1, price: 0 };
+const emptyRoom = { roomNumber: '', building: '', maxCapacity: 1, price: 0, isMaintenance: false };
 
 function getRoomStatus(room) {
-  if (room.status?.toLowerCase().includes('bảo trì')) return 'maintenance';
+  if (room.isMaintenance || room.status?.toLowerCase().includes('bảo trì')) return 'maintenance';
   if (Number(room.currentOccupancy) >= Number(room.maxCapacity)) return 'full';
   if (Number(room.currentOccupancy) > 0) return 'occupied';
   return 'available';
@@ -36,15 +35,73 @@ function RoomForm({ initialValue, onSave, onCancel, saving, error }) {
         building: room.building,
         maxCapacity: Number(room.maxCapacity),
         price: Number(room.price),
+        isMaintenance: Boolean(room.isMaintenance),
       });
     }}>
       <label>Tòa nhà<input name="building" value={room.building} onChange={handleChange} required /></label>
       <label>Số phòng<input name="roomNumber" value={room.roomNumber} onChange={handleChange} required /></label>
       <label>Sức chứa tối đa<input name="maxCapacity" type="number" min="1" max="10" value={room.maxCapacity} onChange={handleChange} required /></label>
       <label>Giá thuê hàng tháng (₫)<input name="price" type="number" min="0" value={room.price} onChange={handleChange} required /></label>
+      <label className="form-wide">Trạng thái phòng<select name="isMaintenance" value={room.isMaintenance ? 'true' : 'false'} onChange={(event) => setRoom((current) => ({ ...current, isMaintenance: event.target.value === 'true' }))}><option value="false">Đang sử dụng</option><option value="true">Bảo trì</option></select></label>
       <p className="form-hint form-wide">Số người ở do hợp đồng quản lý; API hiện tại tự khởi tạo phòng mới với 0 người. Tòa nhà được suy ra từ thông tin phòng, chưa có API tạo tòa riêng.</p>
       {error && <p className="form-error form-wide" role="alert">{error}</p>}
       <div className="form-actions form-wide"><button type="button" className="button button-secondary" onClick={onCancel}>Hủy</button><button type="submit" className="button button-primary" disabled={saving}>{saving ? 'Đang lưu...' : 'Lưu phòng'}</button></div>
+    </form>
+  );
+}
+
+function BulkRoomPricesForm({ rooms, onSave, onCancel, saving, error }) {
+  const [prices, setPrices] = useState(() => rooms.map((room) => ({
+    id: room.id,
+    roomNumber: room.roomNumber,
+    price: String(room.price),
+    selected: true,
+  })));
+  const selectedCount = prices.filter((room) => room.selected).length;
+
+  return (
+    <form className="bulk-prices-form" onSubmit={(event) => {
+      event.preventDefault();
+      onSave(prices
+        .filter((room) => room.selected)
+        .map((room) => ({ id: room.id, price: Number(room.price) })));
+    }}>
+      <p className="form-hint">Chọn các phòng cần cập nhật và nhập giá thuê mới cho từng phòng.</p>
+      <div className="bulk-price-list">
+        {prices.map((room, index) => (
+          <label className={`bulk-price-row${room.selected ? ' selected' : ''}`} key={room.id}>
+            <input
+              type="checkbox"
+              checked={room.selected}
+              onChange={(event) => setPrices((current) => current.map((item, itemIndex) => (
+                itemIndex === index ? { ...item, selected: event.target.checked } : item
+              )))}
+              aria-label={`Cập nhật giá phòng ${room.roomNumber}`}
+            />
+            <strong>P.{room.roomNumber}</strong>
+            <span>₫ / tháng</span>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              value={room.price}
+              onChange={(event) => setPrices((current) => current.map((item, itemIndex) => (
+                itemIndex === index ? { ...item, price: event.target.value } : item
+              )))}
+              aria-label={`Giá mới phòng ${room.roomNumber}`}
+              disabled={!room.selected}
+              required={room.selected}
+            />
+          </label>
+        ))}
+      </div>
+      {error && <p className="form-error" role="alert">{error}</p>}
+      <div className="form-actions">
+        <button type="button" className="button button-secondary" onClick={onCancel}>Hủy</button>
+        <button type="submit" className="button button-primary" disabled={saving || !selectedCount}>
+          {saving ? 'Đang cập nhật...' : `Cập nhật ${selectedCount} phòng`}
+        </button>
+      </div>
     </form>
   );
 }
@@ -70,9 +127,39 @@ export default function RoomsPage({ segments, params }) {
   const [activeRoom, setActiveRoom] = useState(null);
   const [saveError, setSaveError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [residents, setResidents] = useState([]);
+  const [residentsLoading, setResidentsLoading] = useState(false);
+  const [residentsError, setResidentsError] = useState('');
+  const [bulkPricesOpen, setBulkPricesOpen] = useState(false);
+  const [bulkPricesError, setBulkPricesError] = useState('');
+  const [updatingPrices, setUpdatingPrices] = useState(false);
   const buildingFromRoute = segments.length > 1 ? decodeURIComponent(segments[1]) : '';
   const selectedRoomId = params.get('viewRoom');
   const selectedRoom = rooms.find((room) => room.id === selectedRoomId);
+
+  useEffect(() => {
+    if (!selectedRoomId) {
+      setResidents([]);
+      setResidentsError('');
+      return undefined;
+    }
+
+    let active = true;
+    setResidentsLoading(true);
+    setResidentsError('');
+    roomApi.residents(selectedRoomId)
+      .then((result) => {
+        if (active) setResidents(result);
+      })
+      .catch((requestError) => {
+        if (active) setResidentsError(requestError.message);
+      })
+      .finally(() => {
+        if (active) setResidentsLoading(false);
+      });
+
+    return () => { active = false; };
+  }, [selectedRoomId]);
 
   const buildings = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
@@ -119,13 +206,19 @@ export default function RoomsPage({ segments, params }) {
     }
   };
 
-  const columns = [
-    { key: 'roomNumber', label: 'Phòng', render: (room) => `P.${room.roomNumber}` },
-    { key: 'building', label: 'Tòa nhà' },
-    { key: 'currentOccupancy', label: 'Đang ở', render: (room) => `${room.currentOccupancy} / ${room.maxCapacity}` },
-    { key: 'price', label: 'Giá thuê', render: (room) => `${Number(room.price).toLocaleString('vi-VN')} ₫` },
-    { key: 'status', label: 'Trạng thái', render: (room) => <StatusBadge value={getRoomStatus(room)} /> },
-  ];
+  const updateBulkPrices = async (roomPrices) => {
+    setUpdatingPrices(true);
+    setBulkPricesError('');
+    try {
+      await roomApi.updatePrices(roomPrices);
+      setBulkPricesOpen(false);
+      refresh();
+    } catch (requestError) {
+      setBulkPricesError(requestError.message);
+    } finally {
+      setUpdatingPrices(false);
+    }
+  };
 
   return (
     <>
@@ -136,6 +229,7 @@ export default function RoomsPage({ segments, params }) {
             <div className="room-filter-bar">
               <a className="text-link" href="#rooms">← Tất cả tòa nhà</a>
               <label className="compact-select">Trạng thái<select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}><option value="all">Tất cả</option><option value="available">Còn chỗ</option><option value="occupied">Đang ở</option><option value="full">Đã đầy</option><option value="maintenance">Bảo trì</option></select></label>
+              <button className="button button-secondary" onClick={() => { setBulkPricesError(''); setBulkPricesOpen(true); }} disabled={!filteredRooms.length}>Chỉnh giá nhiều phòng</button>
             </div>
           ) : (
             <label className="search-field"><span aria-hidden="true">⌕</span><input value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} placeholder="Tìm theo tên tòa nhà" aria-label="Tìm tòa nhà" /></label>
@@ -149,7 +243,7 @@ export default function RoomsPage({ segments, params }) {
                 <div className="room-map">
                   <div className="room-overview-strip">
                     <span><strong>{buildingRooms.length}</strong> phòng</span>
-                    <span><strong>{buildingRooms.filter((room) => Number(room.currentOccupancy) < Number(room.maxCapacity)).length}</strong> còn chỗ</span>
+                    <span><strong>{buildingRooms.filter((room) => !room.isMaintenance && Number(room.currentOccupancy) < Number(room.maxCapacity)).length}</strong> còn chỗ</span>
                     <span><strong>{buildingRooms.reduce((sum, room) => sum + Number(room.currentOccupancy || 0), 0)}</strong> sinh viên đang ở</span>
                   </div>
                   {!filteredRooms.length ? <p className="async-state">Không có phòng phù hợp với bộ lọc.</p> : floorGroups.map((floor) => (
@@ -166,7 +260,7 @@ export default function RoomsPage({ segments, params }) {
                   {buildings.map((building) => {
                     const buildingData = rooms.filter((room) => room.building === building);
                     const occupiedCount = buildingData.filter((room) => Number(room.currentOccupancy) > 0).length;
-                    const vacancyCount = buildingData.filter((room) => Number(room.currentOccupancy) < Number(room.maxCapacity)).length;
+                    const vacancyCount = buildingData.filter((room) => !room.isMaintenance && Number(room.currentOccupancy) < Number(room.maxCapacity)).length;
                     const capacity = buildingData.reduce((sum, room) => sum + Number(room.maxCapacity || 0), 0);
                     const residents = buildingData.reduce((sum, room) => sum + Number(room.currentOccupancy || 0), 0);
                     const fill = buildingData.length ? Math.round((occupiedCount / buildingData.length) * 100) : 0;
@@ -184,9 +278,7 @@ export default function RoomsPage({ segments, params }) {
                 </div>
               )}
       </section>
-      {buildingFromRoute && !error && !isLoading && (
-        <section className="panel data-panel secondary-panel"><div className="panel-heading"><div><h3>Danh sách phòng</h3><p>Bảng dữ liệu chi tiết của {buildingFromRoute}</p></div></div><DataTable columns={columns} rows={filteredRooms} rowKey={(room) => room.id} isLoading={false} error="" emptyMessage="Tòa nhà chưa có phòng." /></section>
-      )}
+      {bulkPricesOpen && <Modal title={`Chỉnh giá phòng · ${buildingFromRoute}`} onClose={() => setBulkPricesOpen(false)}><BulkRoomPricesForm rooms={filteredRooms} onSave={updateBulkPrices} onCancel={() => setBulkPricesOpen(false)} saving={updatingPrices} error={bulkPricesError} /></Modal>}
       {formMode && <Modal title={formMode === 'edit' ? 'Cập nhật phòng' : 'Thêm phòng mới'} onClose={closeForm}><RoomForm initialValue={activeRoom} onSave={saveRoom} onCancel={closeForm} saving={saving} error={saveError} /></Modal>}
       {selectedRoom && (
         <Modal title={`Chi tiết phòng ${selectedRoom.roomNumber}`} onClose={() => setHashQuery('viewRoom', null)}>
@@ -199,7 +291,28 @@ export default function RoomsPage({ segments, params }) {
               <div><dt>Đơn giá phòng</dt><dd>{Number(selectedRoom.price).toLocaleString('vi-VN')} ₫ / tháng</dd></div>
               <div><dt>Tầng</dt><dd>{getFloor(selectedRoom.roomNumber)}</dd></div>
             </dl>
-            <p className="form-hint">API hiện tại chưa liên kết phòng với sinh viên, chỉ số công tơ, hợp đồng hoặc lịch sử hóa đơn.</p>
+            <section className="room-residents">
+              <h3>Sinh viên đang ở ({residents.length})</h3>
+              {residentsLoading ? <p className="async-state">Đang tải danh sách sinh viên...</p>
+                : residentsError ? <div className="async-error" role="alert"><p>{residentsError}</p><button className="text-button" onClick={() => {
+                  setResidentsLoading(true);
+                  setResidentsError('');
+                  roomApi.residents(selectedRoom.id)
+                    .then(setResidents)
+                    .catch((requestError) => setResidentsError(requestError.message))
+                    .finally(() => setResidentsLoading(false));
+                }}>Thử lại</button></div>
+                  : residents.length ? (
+                    <ul className="room-resident-list">
+                      {residents.map((student) => (
+                        <li key={student.sid}>
+                          <span className="room-resident-avatar" aria-hidden="true">{student.sname?.charAt(0) || student.sid.charAt(0)}</span>
+                          <span><strong>{student.sname}</strong><small>{student.sid} · {student.phone}</small></span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : <p className="form-hint">Hiện chưa có sinh viên đang lưu trú tại phòng này.</p>}
+            </section>
             <div className="form-actions"><button className="button button-secondary" onClick={() => { setActiveRoom(selectedRoom); setFormMode('edit'); setHashQuery('viewRoom', null); }}>Chỉnh sửa</button><button className="button button-danger" onClick={() => deleteRoom(selectedRoom)}>Xóa phòng</button></div>
           </div>
         </Modal>
