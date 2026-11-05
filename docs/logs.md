@@ -65,7 +65,7 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 4.10 (phần 2): Postman collection. `Phan 4/4.10-postman.md`. Xong
 * 6.12 (phần 2): react-bootstrap cho các trang sau đăng nhập. `Phan 6/6.12-react-bootstrap-trang-trong.md`. Còn ContractsPage
 * 6.13: đếm thao tác các tác vụ chính. `Phan 6/6.13-usability.md`. Còn tạo hợp đồng
-* 9.4: chuẩn bị triển khai Vercel, Render. `Phan 9/9.4-chuan-bi-trien-khai.md`. Chờ Tân deploy
+* 9.4: chuẩn bị triển khai Vercel, Render. `Phan 9/9.4-chuan-bi-trien-khai.md`. Xong, đã deploy, `3cf5bf9`
 
 Việc ngoài checklist (không có log riêng):
 

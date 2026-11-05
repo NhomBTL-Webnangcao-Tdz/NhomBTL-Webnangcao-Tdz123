@@ -201,7 +201,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [x] 9.1 (FE) Rà soát toàn bộ giao diện: 375px, không lỗi console, không render HTML từ dữ liệu người dùng, không `console.log` dữ liệu người dùng [Đề 3d, 7e]. Thử với backend giả; sửa tải ảnh bỏ qua 401, thông báo tiếng Nga, tắt source map. Log `docs/Phan 9/9.1-ra-soat-frontend.md`
 * [ ] 9.2 (FE, Tân) Test component chính ở frontend (form, guard, xử lý phiên) [Đề 7e]
 * [ ] 9.3 (Nhóm, Tân) E2E luồng chính: lập HĐ → nhập điện nước → SV xem hóa đơn → ghi thanh toán → kết thúc HĐ [Đề 7c]
-* [~] 9.4 (Nhóm, Tân) Triển khai backend, frontend, DB lên cloud; cấu hình CORS + biến môi trường. Đã có `render.yaml`, hướng dẫn `docs/trien-khai.md`, log `docs/Phan 9/9.4-chuan-bi-trien-khai.md`. Còn: Tân tạo tài khoản Vercel, Render và deploy
+* [x] 9.4 (Nhóm, Tân) Triển khai backend, frontend, DB lên cloud; cấu hình CORS + biến môi trường. Đã có `render.yaml`, hướng dẫn `docs/trien-khai.md`, log `docs/Phan 9/9.4-chuan-bi-trien-khai.md`. Link: `https://ktx-care.vercel.app`, `https://ktx-care-api.onrender.com`
 * [ ] 9.5 (Nhóm, Tân) Kiểm thử trên bản đã triển khai với 3 tài khoản demo
 * [ ] 9.6 (Nhóm, Tân) (Tùy chọn) Tự chạy lint + test khi push (GitHub Actions)
 * [~] 9.7 (Nhóm, cả nhóm) Danh sách ca kiểm thử: đầu vào, kết quả mong đợi, kết quả thực tế, ảnh chụp; gồm cả ca lỗi và ca thành công [Đề 7d]. Nháp `docs/ca-kiem-thu.md` (46 ca, BE 27/27, FE 25/25). Còn: ảnh chụp, ca E2E. Log `docs/Phan 9/9.7-ca-kiem-thu.md`
