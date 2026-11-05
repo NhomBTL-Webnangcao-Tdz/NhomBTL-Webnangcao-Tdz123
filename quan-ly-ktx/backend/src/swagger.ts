@@ -75,7 +75,10 @@ const endpoints: Record<string, EndpointDoc> = {
   'POST /rooms': { summary: 'Tạo phòng', roles: STAFF, request: roomExample },
   'GET /rooms/{id}': { summary: 'Chi tiết phòng', roles: STAFF },
   'PATCH /rooms/{id}': { summary: 'Sửa phòng', roles: STAFF, request: { price: 1300000 } },
-  'DELETE /rooms/{id}': { summary: 'Xóa phòng', roles: STAFF, conflict: 'Phòng đang được dữ liệu khác sử dụng' },
+  'DELETE /rooms/{id}': { summary: 'Xóa phòng', roles: STAFF, conflict: 'Phòng còn hợp đồng hoặc hóa đơn' },
+
+  'GET /rooms/{id}/residents': { summary: 'Sinh viên đang ở trong phòng', roles: STAFF },
+  'PATCH /rooms/prices': { summary: 'Chỉnh giá nhiều phòng', roles: STAFF },
 
   'GET /student': { summary: 'Danh sách sinh viên. Có page thì trả { items, total, page, limit }, không có thì trả mảng', roles: STAFF },
   'POST /student': { summary: 'Tạo hồ sơ sinh viên', roles: STAFF, conflict: 'Mã sinh viên đã tồn tại', request: studentExample },
@@ -105,6 +108,27 @@ const endpoints: Record<string, EndpointDoc> = {
   'GET /contract/{id}': { summary: 'Chi tiết hợp đồng', roles: STAFF },
   'PUT /contract/{id}': { summary: 'Sửa, gia hạn hoặc thanh lý hợp đồng', roles: STAFF, request: { is_active: false } },
   'DELETE /contract/{id}': { summary: 'Xóa hợp đồng', roles: ADMIN },
+
+  'PATCH /contract/{id}/end': { summary: 'Kết thúc hợp đồng, giảm sĩ số phòng', roles: STAFF, conflict: 'Hợp đồng đã kết thúc' },
+  'PATCH /contract/{id}/renew': {
+    summary: 'Gia hạn hợp đồng',
+    roles: STAFF,
+    conflict: 'Hợp đồng đã kết thúc, trùng hợp đồng khác hoặc phòng hết chỗ',
+    request: { end_date: '2027-12-31' },
+  },
+  'PATCH /contract/{id}/liquidate': { summary: 'Thanh lý hợp đồng trước hạn', roles: STAFF, conflict: 'Hợp đồng đã kết thúc' },
+
+  'GET /payments': { summary: 'Danh sách thanh toán, lọc theo hợp đồng', roles: STAFF },
+  'POST /payments': {
+    summary: 'Ghi nhận thanh toán',
+    roles: STAFF,
+    request: { amount: 500000, payment_date: '2026-11-05', payment_type: 'Tiền cọc', contractId: 1 },
+  },
+  'GET /payments/{id}': { summary: 'Chi tiết thanh toán', roles: STAFF },
+  'PATCH /payments/{id}': { summary: 'Sửa thanh toán', roles: STAFF, request: { amount: 600000 } },
+  'DELETE /payments/{id}': { summary: 'Xóa thanh toán', roles: ADMIN },
+
+  'GET /reports/summary': { summary: 'Báo cáo tổng hợp theo tháng: lấp đầy, đã thu, công nợ, hợp đồng sắp hết hạn', roles: STAFF },
 
   'GET /utility-bill': { summary: 'Danh sách hóa đơn. Có page thì trả { items, total, page, limit }, không có thì trả mảng', roles: STAFF },
   'POST /utility-bill': { summary: 'Tạo hóa đơn điện nước', roles: STAFF, request: billExample },

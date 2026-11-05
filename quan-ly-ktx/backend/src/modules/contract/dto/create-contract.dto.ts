@@ -5,8 +5,6 @@ import {
   IsDefined,
   IsNumber,
   IsOptional,
-  IsString,
-  Length,
   Max,
   Min,
   Validate,
@@ -15,6 +13,10 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
+import {
+  RoomContractReferenceDto,
+  StudentContractReferenceDto,
+} from './contract-reference.dto';
 
 @ValidatorConstraint({ name: 'endDateNotBeforeStart' })
 class EndDateNotBeforeStart implements ValidatorConstraintInterface {
@@ -29,29 +31,17 @@ class EndDateNotBeforeStart implements ValidatorConstraintInterface {
   }
 }
 
-export class ContractStudentRefDto {
-  @IsString()
-  @Length(1, 15)
-  sid: string;
-}
-
-export class ContractRoomRefDto {
-  @IsString()
-  @Length(1, 36)
-  id: string;
-}
-
 export class CreateContractDto {
   @IsDefined()
   @ValidateNested()
-  @Type(() => ContractStudentRefDto)
-  student: ContractStudentRefDto;
+  @Type(() => StudentContractReferenceDto)
+  student: StudentContractReferenceDto;
 
   // room = null nghĩa là hợp đồng chưa xếp phòng.
   @IsOptional()
   @ValidateNested()
-  @Type(() => ContractRoomRefDto)
-  room?: ContractRoomRefDto | null;
+  @Type(() => RoomContractReferenceDto)
+  room?: RoomContractReferenceDto | null;
 
   @IsDateString({ strict: true })
   start_date: string;

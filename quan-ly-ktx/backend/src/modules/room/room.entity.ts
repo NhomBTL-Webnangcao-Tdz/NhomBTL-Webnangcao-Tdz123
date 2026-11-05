@@ -21,6 +21,9 @@ export class Room extends BaseEntity {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: number;
 
+  @Column({ name: 'is_maintenance', type: 'boolean', default: false })
+  isMaintenance: boolean;
+
   @OneToMany(() => Contract, (contract) => contract.room)
   contracts: Contract[];
 

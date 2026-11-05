@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Param, ParseIntPipe, Put, Delete, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { ContractService } from './contract.service';
 import { Contract } from './contract.entity';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
@@ -7,6 +18,8 @@ import { Roles } from '../../common/roles.decorator';
 import { Role } from '../../common/role.enum';
 import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
+import { RenewContractDto } from './dto/renew-contract.dto';
+import { LiquidateContractDto } from './dto/liquidate-contract.dto';
 
 @Controller('contract')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -20,7 +33,7 @@ export class ContractController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Contract | null> {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Contract> {
     return this.contractService.findOne(id);
   }
 
@@ -33,8 +46,29 @@ export class ContractController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() contractData: UpdateContractDto,
-  ): Promise<Contract | null> {
+  ): Promise<Contract> {
     return this.contractService.update(id, contractData);
+  }
+
+  @Patch(':id/end')
+  async terminate(@Param('id', ParseIntPipe) id: number): Promise<Contract> {
+    return this.contractService.terminate(id);
+  }
+
+  @Patch(':id/renew')
+  async renew(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() details: RenewContractDto,
+  ): Promise<Contract> {
+    return this.contractService.renew(id, details);
+  }
+
+  @Patch(':id/liquidate')
+  async liquidate(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() details: LiquidateContractDto,
+  ): Promise<Contract> {
+    return this.contractService.liquidate(id, details);
   }
 
   @Delete(':id')

@@ -29,6 +29,11 @@ const fieldLabels: Record<string, string> = {
   is_paid: 'Trạng thái thanh toán',
   isPaid: 'Trạng thái thanh toán',
   reviewNote: 'Ghi chú',
+  amount: 'Số tiền',
+  payment_date: 'Ngày thanh toán',
+  payment_type: 'Loại thanh toán',
+  contractId: 'Hợp đồng',
+  isMaintenance: 'Trạng thái phòng',
 };
 
 // Câu có dấu tiếng Việt là thông báo viết riêng trong DTO, giữ nguyên.

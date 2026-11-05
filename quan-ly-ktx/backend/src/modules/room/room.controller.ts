@@ -4,6 +4,7 @@ import { RoomService } from './room.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import { UpdateRoomPricesDto } from './dto/update-room-prices.dto';
 import { Role } from '../../common/role.enum';
 import { Roles } from '../../common/roles.decorator';
 import { RolesGuard } from '../../common/roles.guard';
@@ -29,6 +30,18 @@ export class RoomController {
   @Roles(Role.ADMIN, Role.MANAGER)
   findOne(@Param('id') id: string) {
     return this.roomService.findOne(id);
+  }
+
+  @Get(':id/residents')
+  @Roles(Role.ADMIN, Role.MANAGER)
+  findResidents(@Param('id') id: string) {
+    return this.roomService.findResidents(id);
+  }
+
+  @Patch('prices')
+  @Roles(Role.ADMIN, Role.MANAGER)
+  updatePrices(@Body() updateRoomPricesDto: UpdateRoomPricesDto) {
+    return this.roomService.updatePrices(updateRoomPricesDto);
   }
 
   @Patch(':id')

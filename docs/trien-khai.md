@@ -29,6 +29,16 @@ Repo thuộc acc phụ của nhóm nên Vercel không import được, deploy b�
 * Trên Render đặt `FRONTEND_URL` là link Vercel, không có dấu `/` ở cuối, rồi deploy lại.
 * Mở link Vercel, đăng nhập `demo_admin`.
 
+## Khi code có đổi bảng
+
+Production không tự đổi bảng. Trước khi deploy code có đổi entity, phải đổi bảng trên Aiven trước, nếu không app lỗi.
+
+Đưa `feature/gop-main` lên bản online: chạy câu sau trong Workbench, rồi đổi nhánh trên Render:
+
+```sql
+ALTER TABLE quan_ly_ktx.rooms ADD COLUMN is_maintenance tinyint NOT NULL DEFAULT 0;
+```
+
 ## Lưu ý
 
 * Bảng và dữ liệu demo đã có trong Aiven. DB mới thì chạy `database/init.sql` rồi `npm run seed`.

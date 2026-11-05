@@ -7,6 +7,7 @@ function getRoomFloor(roomNumber) {
 }
 
 function getRoomAvailability(room) {
+  if (room.isMaintenance) return 0;
   return Math.max(0, Number(room.maxCapacity) - Number(room.currentOccupancy));
 }
 
@@ -134,21 +135,23 @@ export default function RoomPicker({ rooms = [], selectedRoomId = '', onSelect, 
             <div className="room-grid room-picker-grid">
               {floorRooms.map((room) => {
                 const slots = getRoomAvailability(room);
-                const full = slots === 0;
-                const disabled = full && availableOnly && room.id !== selectedRoomId;
+                const maintenance = Boolean(room.isMaintenance);
+                const full = slots === 0 && !maintenance;
+                const disabled = (maintenance && room.id !== selectedRoomId)
+                  || (full && availableOnly && room.id !== selectedRoomId);
                 return (
                   <button
                     type="button"
                     key={room.id}
-                    className={`room-card room-picker-card${full ? ' room-full' : slots === Number(room.maxCapacity) ? ' room-available' : ' room-occupied'}${selectedRoomId === room.id ? ' selected' : ''}`}
+                    className={`room-card room-picker-card${maintenance ? ' room-maintenance' : full ? ' room-full' : slots === Number(room.maxCapacity) ? ' room-available' : ' room-occupied'}${selectedRoomId === room.id ? ' selected' : ''}`}
                     onClick={() => onSelect(room)}
                     disabled={disabled}
                     aria-pressed={selectedRoomId === room.id}
-                    aria-label={`Phòng ${room.roomNumber}, ${full ? 'đã đầy' : `còn ${slots} chỗ`}, ${room.currentOccupancy} trên ${room.maxCapacity} người`}
+                    aria-label={`Phòng ${room.roomNumber}, ${maintenance ? 'đang bảo trì' : full ? 'đã đầy' : `còn ${slots} chỗ`}, ${room.currentOccupancy} trên ${room.maxCapacity} người`}
                   >
                     <div className="room-card-top">
                       <span className="room-door" aria-hidden="true">⌂</span>
-                      <span className={`room-picker-status${full ? ' full' : ''}`}>{full ? 'Đã đầy' : `Còn ${slots} chỗ`}</span>
+                      <span className={`room-picker-status${full || maintenance ? ' full' : ''}`}>{maintenance ? 'Bảo trì' : full ? 'Đã đầy' : `Còn ${slots} chỗ`}</span>
                     </div>
                     <strong className="room-number">P.{room.roomNumber}</strong>
                     <span className="room-occupancy">{room.currentOccupancy} / {room.maxCapacity} người</span>

@@ -743,6 +743,49 @@
               ]
             }
           }
+        },
+        {
+          "name": "Sinh viên đang ở trong phòng",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rooms/:id/residents",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rooms",
+                ":id",
+                "residents"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Chỉnh giá nhiều phòng",
+          "request": {
+            "method": "PATCH",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rooms/prices",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rooms",
+                "prices"
+              ]
+            }
+          }
         }
       ]
     },
@@ -873,6 +916,95 @@
               "path": [
                 "contract",
                 ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Kết thúc hợp đồng, giảm sĩ số phòng",
+          "request": {
+            "method": "PATCH",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/contract/:id/end",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contract",
+                ":id",
+                "end"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Gia hạn hợp đồng",
+          "request": {
+            "method": "PATCH",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/contract/:id/renew",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contract",
+                ":id",
+                "renew"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"end_date\": \"2027-12-31\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Thanh lý hợp đồng trước hạn",
+          "request": {
+            "method": "PATCH",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/contract/:id/liquidate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contract",
+                ":id",
+                "liquidate"
               ],
               "variable": [
                 {
@@ -1386,6 +1518,175 @@
                   "key": "id",
                   "value": ""
                 }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "payments",
+      "item": [
+        {
+          "name": "Danh sách thanh toán, lọc theo hợp đồng",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/payments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments"
+              ],
+              "query": [
+                {
+                  "key": "contractId",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ghi nhận thanh toán",
+          "request": {
+            "method": "POST",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 500000,\n  \"payment_date\": \"2026-11-05\",\n  \"payment_type\": \"Tiền cọc\",\n  \"contractId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Chi tiết thanh toán",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/payments/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sửa thanh toán",
+          "request": {
+            "method": "PATCH",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payments/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 600000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Xóa thanh toán",
+          "request": {
+            "method": "DELETE",
+            "description": "Quyền: ADMIN",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/payments/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "reports",
+      "item": [
+        {
+          "name": "Báo cáo tổng hợp theo tháng: lấp đầy, đã thu, công nợ, hợp đồng sắp hết hạn",
+          "request": {
+            "method": "GET",
+            "description": "Quyền: ADMIN, MANAGER",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/summary",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reports",
+                "summary"
               ]
             }
           }

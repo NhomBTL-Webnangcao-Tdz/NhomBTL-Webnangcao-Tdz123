@@ -1,8 +1,7 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, } from 'typeorm';
-
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Contract } from '../contract/contract.entity';
 
-@Entity()
+@Entity('payment')
 export class Payment {
   @PrimaryGeneratedColumn()
   payment_id: number;
@@ -16,7 +15,7 @@ export class Payment {
   @Column({ length: 50 })
   payment_type: string;
 
-  @ManyToOne(() => Contract)
+  @ManyToOne(() => Contract, (contract) => contract.payments)
   @JoinColumn({ name: 'contract_id' })
   contract: Contract;
 }
