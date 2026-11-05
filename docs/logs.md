@@ -13,6 +13,7 @@ Tài liệu của dự án và log từng mục checklist. Ở gốc repo chỉ 
 * `phan-tich-orm.md`: phân tích ORM và truy vấn (Đề 6b).
 * `trien-khai.md`: hướng dẫn triển khai Vercel, Render.
 * `postman/`: Postman collection (Đề 4b).
+* `bao-cao.md`: nháp báo cáo cuối kỳ (Đề 8).
 * `ke-hoach.md`: thiết kế đích (bản đề xuất, chờ nhóm duyệt).
 * `baocao-bt-th-2.md`: báo cáo bài thực hành số 2 (thực thể, quan hệ, UML).
 * `luu-tru/`: bản cũ không dùng nữa. `checklist-v1.md` là checklist trước khi sắp xếp lại ở mục 1.7.
@@ -66,6 +67,7 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 6.12 (phần 2): react-bootstrap cho các trang sau đăng nhập. `Phan 6/6.12-react-bootstrap-trang-trong.md`. Còn ContractsPage
 * 6.13: đếm thao tác các tác vụ chính. `Phan 6/6.13-usability.md`. Còn tạo hợp đồng
 * 9.4: chuẩn bị triển khai Vercel, Render. `Phan 9/9.4-chuan-bi-trien-khai.md`. Xong, đã deploy, `3cf5bf9`
+* 10.3: nháp nội dung báo cáo, cập nhật tài liệu nháp. `Phan 10/10.3-bao-cao.md`. Nháp xong
 
 Việc ngoài checklist (không có log riêng):
 

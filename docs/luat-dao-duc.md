@@ -1,6 +1,6 @@
 # Luật, đạo đức và an ninh an toàn — KTX Care
 
-Trạng thái: bản nháp, chờ nhóm duyệt (checklist 10.6, Đề 9 phần 0.6 điểm). Viết theo code nhánh `feature/tandz` ngày 01/11/2026.
+Trạng thái: bản nháp, chờ nhóm duyệt (checklist 10.6, Đề 9 phần 0.6 điểm). Cập nhật theo code nhánh `feature/tandz` ngày 05/11/2026.
 
 ## 1. Luật (0.2 điểm)
 
@@ -48,8 +48,10 @@ Hóa đơn trong hệ thống là thông báo khoản thu nội bộ ký túc x�
 * JWT ký bằng `JWT_SECRET` bắt buộc dài ít nhất 32 ký tự, hết hạn sau 1 giờ.
 * `JwtAuthGuard` + `RolesGuard` trên mọi controller nghiệp vụ; sinh viên được xác định qua token, không qua tham số URL.
 * Đăng nhập sai trả cùng một thông báo, không lộ username có tồn tại hay không.
-* `ValidationPipe` toàn cục (`whitelist`, `forbidNonWhitelisted`), DTO cho phần lớn API.
-* CORS chỉ cho `localhost:3000` và các origin trong `FRONTEND_URL`.
+* `ValidationPipe` toàn cục (`whitelist`, `forbidNonWhitelisted`), DTO cho các API đang có.
+* Exception filter chung không trả stack trace hay câu SQL cho client.
+* CORS chỉ cho `localhost:3000` và các origin trong `FRONTEND_URL`; đã thử trên bản triển khai, địa chỉ lạ bị từ chối.
+* Bản triển khai chạy HTTPS trên Vercel, Render.
 * Thao tác ghi nhiều bảng chạy trong transaction, có khóa dòng để tránh duyệt trùng.
 * Tải ảnh: chỉ nhận JPG/PNG/WEBP, tối đa 5 MB; ảnh chỉ tải được qua API có xác thực.
 * Cấu hình bí mật nằm trong `.env`, không commit; kết nối DB có SSL.
@@ -59,7 +61,7 @@ Chưa có hoặc còn rủi ro (kèm mục checklist):
 
 * Token lưu ở `localStorage`, có thể bị đọc nếu trang dính XSS; cân nhắc cookie `httpOnly` (4.11).
 * Chưa giới hạn số lần đăng nhập sai, chưa có header bảo mật `helmet` (4.9).
-* `POST/PUT` của Contract, Student, UtilityBill chưa có DTO, body không được kiểm tra (4.2).
 * Ảnh thật của người dùng đang được commit trong `backend/storage/` (1.11).
-* Mật khẩu Aiven cũ còn trong lịch sử git; chỉ an toàn khi đã đổi (phần 11).
-* Chưa có nhật ký thao tác (ai sửa, xóa gì) và chưa có HTTPS (chờ triển khai 9.4).
+* Mật khẩu Aiven cũ còn trong lịch sử git của repo công khai và chưa được đổi; bản nộp đã chuyển sang DB khác, service cũ cần đổi mật khẩu hoặc tắt (1.1).
+* Chưa có nhật ký thao tác (ai sửa, xóa gì).
+* Đổi vai trò chỉ có hiệu lực đầy đủ khi token cũ hết hạn, tối đa 1 giờ.

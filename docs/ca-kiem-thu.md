@@ -1,11 +1,11 @@
 # Ca kiểm thử — KTX Care
 
-Trạng thái: bản nháp (checklist 9.7, Đề 7d). Chạy ngày 01/11/2026 trên nhánh `feature/tandz` (sau `9ff17dc`).
+Trạng thái: bản nháp (checklist 9.7, Đề 7d). Cập nhật ngày 05/11/2026 trên nhánh `feature/tandz`.
 
-* Kết quả: backend 27/27 pass (`npm test`), frontend 25/25 pass (`CI=true npx react-scripts test --watchAll=false`).
-* Đây là unit test, backend giả lập repository, frontend giả lập API. Chưa có E2E với DB thật (checklist 9.3).
+* Kết quả: backend 122/122 pass (`npm test`), frontend 41/41 pass (`CI=true npx react-scripts test --watchAll=false`).
+* Unit test giả lập repository, API. Ngoài ra có các ca chạy trên API và trình duyệt thật với DB thật (mục cuối). E2E đủ luồng hợp đồng chờ checklist 9.3.
 * Định dạng mỗi ca: mã, loại (TC thành công / TL lỗi), đầu vào → mong đợi. Kết quả thực tế: đạt (trừ khi ghi khác).
-* BE = file `*.spec.ts` trong `quan-ly-ktx/backend/src`, FE = `quan-ly-ktx/frontend/src/App.test.js`, TT = kiểm thử tay trên app với backend giả (log 6.3, 9.1).
+* BE = file `*.spec.ts` trong `quan-ly-ktx/backend/test/unit`, FE = `quan-ly-ktx/frontend/src/App.test.js`, TT = kiểm thử tay trên app với backend giả (log 6.3, 9.1).
 
 ## US-01 Trang giới thiệu
 
@@ -89,9 +89,32 @@ Trạng thái: bản nháp (checklist 9.7, Đề 7d). Chạy ngày 01/11/2026 tr
 * TC-31 TC: dữ liệu chứa HTML/JS hiện dạng chữ ở mọi trang. TT
 * TC-32 TC: bản build không có source map. TT
 
+## Kiểm thử trên API và trình duyệt thật (DB thật, 04/11/2026)
+
+* TC-33 TC: sinh viên đăng ký, lưu hồ sơ, gửi đơn; cán bộ duyệt; sĩ số tăng, sinh viên thấy phòng, nhận thông báo. API
+* TC-34 TC: sinh viên gửi chỉ số kèm ảnh, cán bộ duyệt, tạo hóa đơn, đánh dấu đã đóng thì hóa đơn thành đã thu. API
+* TC-35 TC: thêm phòng, tạo và thanh lý hợp đồng qua giao diện, dữ liệu lưu đúng. Edge
+* TC-36 TC: tạo cán bộ, đổi vai trò, MANAGER không thấy trang Cài đặt. Edge
+* TC-37 TC: lọc hóa đơn theo tòa, kỳ, trạng thái; đánh dấu đã thu rồi hoàn tác. Edge
+* TC-38 TC: phân trang, tìm kiếm; `limit` quá lớn, tham số lạ trả 400. API
+* TL-15 TL: gửi đơn trùng, duyệt lại đơn đã xử lý → 409. API
+* TL-16 TL: sinh viên gọi API duyệt đơn, xem hợp đồng, xem danh sách tài khoản → 403. API
+* TL-17 TL: file không phải ảnh → 400. API
+* TL-18 TL: sinh viên khác xem ảnh đồng hồ, biên lai → bị chặn. API
+* TL-19 TL: mã sinh viên trùng, phòng đã có hóa đơn cùng kỳ, sửa chỉ số hóa đơn đã thu → 409. API
+* TL-20 TL: xóa phòng còn hợp đồng → 409, toast báo lỗi, dữ liệu còn nguyên. Edge
+* TL-21 TL: JSON sai cú pháp → 400, không trả lại nội dung đã gửi. API
+* TL-22 TL: chuỗi `' OR 1=1 --` trong tìm kiếm → không lỗi, không lộ dữ liệu. API
+* TL-23 TL: tên sinh viên chứa thẻ `img onerror` → hiện dạng chữ, script không chạy. Edge
+
+Lỗi tìm được khi kiểm thử và đã sửa:
+
+* Ảnh đồng hồ, biên lai luôn trả 404 trên Windows do so đường dẫn bằng dấu `/` cố định.
+* `POST /student` trùng mã ghi đè sinh viên cũ.
+* Xóa phòng thất bại không hiện thông báo.
+
 ## Chưa có ca kiểm thử
 
-* US-05 đổi mật khẩu, US-21 thanh toán, US-23 tài khoản cán bộ: chưa có chức năng.
-* US-14 phòng, US-16 hợp đồng (backend), US-19 `updateSharePayment`, `remindStudent`, US-24 xóa: chưa có unit test backend (checklist 5.10).
-* Lỗi khi duyệt đơn: phòng đầy, đơn đã xử lý; lỗi khi gửi chỉ số: quá hạn, chỉ số nhỏ hơn kỳ trước: chưa có test.
-* E2E với DB thật: chưa (checklist 9.3).
+* US-05 đổi mật khẩu, US-21 thanh toán: chưa có chức năng.
+* US-16 đủ nghiệp vụ hợp đồng: chờ checklist 5.1, 5.2.
+* E2E đủ luồng và kiểm thử trên bản triển khai với 3 vai trò: chờ checklist 9.3, 9.5.

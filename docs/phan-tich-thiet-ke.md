@@ -37,7 +37,7 @@ Cán bộ quản lý:
 Quản trị viên:
 
 * Cấu hình đơn giá điện nước (US-22).
-* Quản lý tài khoản cán bộ (US-23, chưa làm).
+* Quản lý tài khoản cán bộ (US-23).
 * Là người duy nhất được xóa hồ sơ, hợp đồng, hóa đơn (US-24).
 
 ## 2. Yêu cầu phi chức năng
