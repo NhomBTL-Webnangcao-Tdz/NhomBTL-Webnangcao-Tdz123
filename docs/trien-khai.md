@@ -2,6 +2,10 @@
 
 Frontend trên Vercel, backend trên Render, database trên Aiven của Tân. Không ghi mật khẩu vào file này.
 
+* Frontend: `https://ktx-care.vercel.app`
+* Backend: `https://ktx-care-api.onrender.com`
+* Tài liệu API: `https://ktx-care-api.onrender.com/api-docs`
+
 ## 1. Backend trên Render
 
 * Đăng nhập Render bằng GitHub, cấp quyền repo của nhóm.
@@ -13,11 +17,12 @@ Frontend trên Vercel, backend trên Render, database trên Aiven của Tân. Kh
 
 ## 2. Frontend trên Vercel
 
-* Đăng nhập Vercel bằng GitHub, Add New Project, chọn repo.
-* Root Directory: `quan-ly-ktx/frontend`. Framework: Create React App.
-* Thêm biến `REACT_APP_API_URL` là link Render, không có dấu `/` ở cuối.
+Repo thuộc acc phụ của nhóm nên Vercel không import được, deploy bằng CLI từ máy Tân. Mỗi lần cập nhật frontend phải chạy lại lệnh deploy, push không tự deploy.
+
+* Trong `quan-ly-ktx/frontend` chạy `npx vercel login`, rồi `npx vercel link`, project `ktx-care`.
+* Thêm link backend: `npx vercel env add REACT_APP_API_URL production`, giá trị không có dấu `/` ở cuối.
 * Thêm `REACT_APP_MANAGER_EMAIL`, `REACT_APP_MANAGER_PHONE` nếu cần trang Liên hệ.
-* Settings, Git: đặt Production Branch là `feature/tandz` cho tới khi merge.
+* Deploy: `npx vercel --prod`.
 
 ## 3. Nối hai bên
 
