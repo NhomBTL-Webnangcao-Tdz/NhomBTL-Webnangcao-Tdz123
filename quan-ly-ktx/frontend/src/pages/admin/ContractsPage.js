@@ -33,6 +33,12 @@ function getLocalDateTime() {
   return date.toISOString().slice(0, 16);
 }
 
+function getNextDate(value) {
+  const date = new Date(`${String(value).slice(0, 10)}T00:00:00.000Z`);
+  date.setUTCDate(date.getUTCDate() + 1);
+  return date.toISOString().slice(0, 10);
+}
+
 function PaymentDialog({ contract, onClose }) {
   const [payments, setPayments] = useState([]);
   const [paymentType, setPaymentType] = useState('Tiền phòng');
@@ -120,7 +126,6 @@ function PaymentDialog({ contract, onClose }) {
 }
 
 function ContractForm({ initialValue, students, rooms, onSave, onCancel, saving, error }) {
-  const [step, setStep] = useState(1);
   const [contract, setContract] = useState({
     studentSid: initialValue?.student?.sid || '',
     roomId: initialValue?.room?.id || '',
@@ -148,31 +153,24 @@ function ContractForm({ initialValue, students, rooms, onSave, onCancel, saving,
 
   return (
     <Form className="wizard-form" onSubmit={submit}>
-      <div className="wizard-steps"><span className={step === 1 ? 'current' : 'complete'}>1 <small>Sinh viên & phòng</small></span><i /><span className={step === 2 ? 'current' : ''}>2 <small>Thời hạn</small></span><i /><span className="preview-step">3 <small>Xác nhận</small></span></div>
-      {step === 1 ? (
-        <div className="form-grid">
-          <label className="form-wide">Sinh viên<Form.Select name="studentSid" value={contract.studentSid} onChange={handleChange} required><option value="">Chọn sinh viên</option>{students.map((student) => <option key={student.sid} value={student.sid}>{student.sname} · {student.sid}</option>)}</Form.Select></label>
-          <RoomPicker
-            rooms={rooms}
-            selectedRoomId={contract.roomId}
-            availableOnly
-            allowUnassigned
-            onSelect={(room) => setContract((current) => ({ ...current, roomId: room?.id || '' }))}
-          />
-          <div className="api-limit-notice form-wide">Sinh viên sẽ thấy phòng, tòa nhà và bạn cùng phòng sau khi hợp đồng còn hiệu lực được gắn phòng.</div>
-          <div className="form-actions form-wide"><Button variant="outline-secondary" type="button" className="button button-secondary" onClick={onCancel}>Hủy</Button><Button variant="primary" type="button" className="button button-primary" disabled={!contract.studentSid} onClick={() => setStep(2)}>Tiếp tục</Button></div>
-        </div>
-      ) : (
-        <div className="form-grid">
-          <label>Ngày bắt đầu<Form.Control name="start_date" type="date" value={contract.start_date} onChange={handleChange} required /></label>
-          <label>Ngày kết thúc<Form.Control name="end_date" type="date" value={contract.end_date} onChange={handleChange} required min={contract.start_date || undefined} /></label>
-          <label className="form-wide">Tiền đặt cọc (₫)<Form.Control name="deposit_amount" type="number" min="0" value={contract.deposit_amount} onChange={handleChange} required /></label>
-          <label className="checkbox-field form-wide"><Form.Check.Input name="is_active" type="checkbox" checked={contract.is_active} onChange={handleChange} /> Hợp đồng còn hiệu lực</label>
-          <div className="form-wide contract-preview"><strong>Xem trước</strong><span>Sinh viên: {students.find((student) => student.sid === contract.studentSid)?.sname || '—'}</span><span>Thời hạn: {contract.start_date || '—'} đến {contract.end_date || '—'}</span><span>Tiền đặt cọc: {Number(contract.deposit_amount).toLocaleString('vi-VN')} ₫</span></div>
-          {error && <p className="form-error form-wide" role="alert">{error}</p>}
-          <div className="form-actions form-wide"><Button variant="outline-secondary" type="button" className="button button-secondary" onClick={() => setStep(1)}>Quay lại</Button><Button variant="primary" type="submit" className="button button-primary" disabled={saving}>{saving ? 'Đang lưu...' : 'Lưu hợp đồng'}</Button></div>
-        </div>
-      )}
+      <div className="form-grid">
+        <label className="form-wide">Sinh viên<Form.Select name="studentSid" value={contract.studentSid} onChange={handleChange} required><option value="">Chọn sinh viên</option>{students.map((student) => <option key={student.sid} value={student.sid}>{student.sname} · {student.sid}</option>)}</Form.Select></label>
+        <RoomPicker
+          rooms={rooms}
+          selectedRoomId={contract.roomId}
+          availableOnly
+          allowUnassigned
+          onSelect={(room) => setContract((current) => ({ ...current, roomId: room?.id || '' }))}
+        />
+        <label>Ngày bắt đầu<Form.Control name="start_date" type="date" value={contract.start_date} onChange={handleChange} required /></label>
+        <label>Ngày kết thúc<Form.Control name="end_date" type="date" value={contract.end_date} onChange={handleChange} required min={contract.start_date || undefined} /></label>
+        <label className="form-wide">Tiền đặt cọc (₫)<Form.Control name="deposit_amount" type="number" min="0" value={contract.deposit_amount} onChange={handleChange} required /></label>
+        <label className="checkbox-field form-wide"><Form.Check.Input name="is_active" type="checkbox" checked={contract.is_active} onChange={handleChange} /> Hợp đồng còn hiệu lực</label>
+        <div className="form-wide contract-preview"><strong>Xem trước</strong><span>Sinh viên: {students.find((student) => student.sid === contract.studentSid)?.sname || '—'}</span><span>Thời hạn: {contract.start_date || '—'} đến {contract.end_date || '—'}</span><span>Tiền đặt cọc: {Number(contract.deposit_amount).toLocaleString('vi-VN')} ₫</span></div>
+        {error && <p className="form-error form-wide" role="alert">{error}</p>}
+        <div className="api-limit-notice form-wide">Sinh viên sẽ thấy thông tin phòng sau khi hợp đồng còn hiệu lực được gắn phòng.</div>
+        <div className="form-actions form-wide"><Button variant="outline-secondary" type="button" className="button button-secondary" onClick={onCancel}>Hủy</Button><Button variant="primary" type="submit" className="button button-primary" disabled={saving || !contract.studentSid}>{saving ? 'Đang lưu...' : 'Lưu hợp đồng'}</Button></div>
+      </div>
     </Form>
   );
 }
@@ -190,6 +188,10 @@ export default function ContractsPage() {
   const [saveError, setSaveError] = useState('');
   const [actionError, setActionError] = useState('');
   const [paymentContract, setPaymentContract] = useState(null);
+  const [renewingContract, setRenewingContract] = useState(null);
+  const [renewEndDate, setRenewEndDate] = useState('');
+  const [renewError, setRenewError] = useState('');
+  const [renewing, setRenewing] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const filtered = useMemo(() => contracts.filter((contract) => {
@@ -229,15 +231,25 @@ export default function ContractsPage() {
     }
   };
   const renew = async (contract) => {
-    const endDate = window.prompt('Nhập ngày kết thúc mới (YYYY-MM-DD):', String(contract.end_date).slice(0, 10));
-    if (!endDate) return;
+    setRenewingContract(contract);
+    setRenewEndDate(getNextDate(contract.end_date));
+    setRenewError('');
+  };
+  const saveRenewal = async (event) => {
+    event.preventDefault();
+    if (!renewingContract) return;
+    setRenewing(true);
+    setRenewError('');
     try {
-      await contractApi.renew(contract.contract_id, endDate);
+      await contractApi.renew(renewingContract.contract_id, renewEndDate);
       setActionError('');
       notify('Đã gia hạn hợp đồng.');
+      setRenewingContract(null);
       refresh();
     } catch (requestError) {
-      setActionError(requestError.message);
+      setRenewError(requestError.message);
+    } finally {
+      setRenewing(false);
     }
   };
   const liquidate = async (contract) => {
@@ -288,6 +300,16 @@ export default function ContractsPage() {
         <DataTable columns={columns} rows={filtered} rowKey={(contract) => contract.contract_id} isLoading={isLoading} error={error} onRetry={refresh} emptyMessage="Không tìm thấy hợp đồng phù hợp." />
       </section>
       {formOpen && <Modal title={activeContract ? 'Cập nhật / gia hạn hợp đồng' : 'Tạo hợp đồng thuê'} onClose={closeForm} wide><ContractForm initialValue={activeContract} students={students} rooms={rooms} onSave={saveContract} onCancel={closeForm} saving={saving} error={saveError} /></Modal>}
+      {renewingContract && <Modal title={`Gia hạn hợp đồng · HD-${String(renewingContract.contract_id).padStart(4, '0')}`} onClose={() => setRenewingContract(null)}>
+        <Form className="form-grid renewal-form" onSubmit={saveRenewal}>
+          <label className="form-wide">Ngày kết thúc mới<Form.Control type="date" value={renewEndDate} onChange={(event) => setRenewEndDate(event.target.value)} min={getNextDate(renewingContract.end_date)} required /></label>
+          {renewError && <p className="form-error form-wide" role="alert">{renewError}</p>}
+          <div className="form-actions form-wide">
+            <Button variant="outline-secondary" type="button" className="button button-secondary" onClick={() => setRenewingContract(null)}>Hủy</Button>
+            <Button variant="primary" type="submit" className="button button-primary" disabled={renewing}>{renewing ? 'Đang gia hạn...' : 'Xác nhận gia hạn'}</Button>
+          </div>
+        </Form>
+      </Modal>}
       {paymentContract && <PaymentDialog contract={paymentContract} onClose={() => setPaymentContract(null)} />}
       {!isLoading && !error && contracts.some((contract) => !contract.student) && <p className="form-hint page-footnote">API hợp đồng hiện chưa trả quan hệ sinh viên đầy đủ; một số hồ sơ được đánh dấu “Chưa liên kết”.</p>}
     </>
