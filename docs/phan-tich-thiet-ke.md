@@ -128,6 +128,7 @@ classDiagram
     +string sname
     +string email
     +string phone
+    +Role role
   }
   class Room {
     +uuid id

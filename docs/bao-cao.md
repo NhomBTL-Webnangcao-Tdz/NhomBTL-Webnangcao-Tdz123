@@ -2,7 +2,7 @@
 
 Trạng thái: bản nháp nội dung (checklist 10.3). Chưa áp mẫu trình bày của Phenikaa. Dòng `CẦN BỔ SUNG` là phần còn thiếu, không được để sót khi nộp.
 
-Cách ghép: dòng `Chèn:` nghĩa là lấy nguyên phần đó từ tài liệu đã có, tránh viết hai nơi.
+Cách ghép: dòng `Chèn:` nghĩa là lấy nguyên phần đó từ tài liệu đã có, tránh viết hai nơi. Sơ đồ Mermaid dùng ảnh trong `docs/anh-bao-cao/`.
 
 ## Thông tin nộp bài
 
