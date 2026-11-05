@@ -1,6 +1,6 @@
 # Phân tích ORM và truy vấn (Đề 6b)
 
-Dự án dùng TypeORM với MySQL. Câu SQL dưới đây do TypeORM sinh thật từ code, lấy ngày 04/11/2026.
+Dự án dùng TypeORM với MySQL. Câu SQL dưới đây do TypeORM sinh thật từ entity trong code, cập nhật ngày 06/11/2026.
 
 ## Cấu hình DataSource
 
@@ -53,19 +53,51 @@ ORDER BY `room`.`room_number` ASC
 Thêm phòng:
 
 ```sql
-INSERT INTO `rooms`(`id`, `created_at`, `updated_at`, `room_number`, `building`, `max_capacity`, `current_occupancy`, `price`)
-VALUES (?, DEFAULT, DEFAULT, ?, ?, ?, DEFAULT, ?)
+INSERT INTO `rooms`(`id`, `created_at`, `updated_at`, `room_number`, `building`, `max_capacity`, `current_occupancy`, `price`, `is_maintenance`)
+VALUES (?, DEFAULT, DEFAULT, ?, ?, ?, DEFAULT, ?, DEFAULT)
 ```
 
-Thanh lý hợp đồng:
+Kiểm sức chứa khi lập hợp đồng: đếm hợp đồng còn hiệu lực của phòng trùng thời gian. Code:
+
+```ts
+repository.createQueryBuilder('contract')
+  .innerJoin('contract.room', 'room')
+  .where('room.id = :roomId', { roomId: room.id })
+  .andWhere('contract.is_active = :isActive', { isActive: true })
+  .andWhere('contract.start_date <= :endDate', { endDate })
+  .andWhere('contract.end_date >= :startDate', { startDate })
+  .getCount();
+```
+
+SQL:
 
 ```sql
-UPDATE `contract` SET `is_active` = ? WHERE `contract_id` = ?
+SELECT COUNT(DISTINCT(`contract`.`contract_id`)) AS `cnt`
+FROM `contract` `contract`
+INNER JOIN `rooms` `room` ON `room`.`id`=`contract`.`room_id`
+WHERE `room`.`id` = ? AND `contract`.`is_active` = ?
+  AND `contract`.`start_date` <= ? AND `contract`.`end_date` >= ?
+```
+
+Thanh lý hợp đồng, đổi ngày kết thúc và tắt hiệu lực:
+
+```sql
+UPDATE `contract` SET `end_date` = ?, `is_active` = ? WHERE `contract_id` = ?
+```
+
+Lịch sử thanh toán của một hợp đồng (rút gọn danh sách cột):
+
+```sql
+SELECT `payment`.`payment_id` AS `payment_payment_id`, `payment`.`amount` AS `payment_amount`, ...
+FROM `payment` `payment`
+LEFT JOIN `contract` `contract` ON `contract`.`contract_id`=`payment`.`contract_id`
+WHERE `contract`.`contract_id` = ?
+ORDER BY `payment`.`payment_date` DESC
 ```
 
 ## Nhận xét
 
 * Giá trị luôn đi qua tham số `?`, không ghép chuỗi, nên chống được SQL injection. Đã thử chuỗi `' OR 1=1 --` ở `GET /rooms?q=`.
 * TypeORM tự đặt bí danh cột và đổi tên thuộc tính sang tên cột, code không phụ thuộc tên cột.
-* Thao tác ghi nhiều bảng dùng transaction, VD duyệt đơn tạo hợp đồng và tăng sĩ số trong một `queryRunner`, có khóa `pessimistic_write` để hai người không xếp cùng chỗ cuối.
+* Thao tác ghi nhiều bảng dùng transaction, có khóa `pessimistic_write` để hai người không xếp cùng chỗ cuối. VD duyệt đơn dùng `queryRunner`, lập và thanh lý hợp đồng dùng `dataSource.transaction`.
 * `leftJoinAndSelect` lấy quan hệ trong một câu truy vấn, tránh truy vấn lặp theo từng dòng.

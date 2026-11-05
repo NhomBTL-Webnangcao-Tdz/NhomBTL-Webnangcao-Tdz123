@@ -73,6 +73,9 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 10.1: viết lại readme. `Phan 10/10.1-readme.md`. Còn link video
 * 10.4: kịch bản video, ảnh sơ đồ. `Phan 10/10.4-kich-ban-anh-so-do.md`. Còn quay video, slide
 * 9.3: gộp code Nam trên `feature/gop-main`, chạy E2E. `Phan 9/9.3-gop-main-e2e.md`. Đạt trên DB thử, chờ đưa lên bản online
+* 9.3 (đối chiếu): cập nhật trạng thái checklist theo code sau khi gộp. `Phan 9/9.3-doi-chieu-checklist.md`. Xong
+* 10.3 (cập nhật): tài liệu thiết kế, báo cáo, ảnh sơ đồ theo code Nam. `Phan 10/10.3-cap-nhat-theo-code-nam.md`. Xong
+* 9.5: kiểm bản online không đăng nhập. `Phan 9/9.5-kiem-thu-ban-online.md`. Còn 3 vai trò
 
 Việc ngoài checklist (không có log riêng):
 

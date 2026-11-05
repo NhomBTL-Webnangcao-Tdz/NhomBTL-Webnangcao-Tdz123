@@ -33,9 +33,7 @@ Chèn: `docs/user-stories.md`, từ "Khách và người dùng chung" tới hế
 
 ## Câu 2. Phân tích và thiết kế
 
-Chèn: `docs/phan-tich-thiet-ke.md`, mục 1 đến 7 (yêu cầu, đối tượng, quan hệ, phương thức, sơ đồ lớp UML, 6 sơ đồ thuật toán).
-
-CẦN BỔ SUNG: đối chiếu lại UML với entity sau khi Nam xong Payment, hợp đồng.
+Chèn: `docs/phan-tich-thiet-ke.md`, mục 1 đến 7 (yêu cầu, đối tượng, quan hệ, phương thức, sơ đồ lớp UML, 9 sơ đồ thuật toán).
 
 ## Câu 3. Giao diện, luồng xử lý, khung dự án
 
@@ -49,7 +47,7 @@ Chèn: `docs/wireframe-luong-xu-ly.md`, mục 2.
 
 ### 3c. Khung dự án
 
-* Backend NestJS chia theo module, mỗi module có controller nhận request, service xử lý nghiệp vụ, entity ánh xạ bảng, DTO kiểm tra dữ liệu. Các module: `auth`, `room`, `student`, `contract`, `utility-bill`, `meter-reading`, `notification`, `payment`.
+* Backend NestJS chia theo module, mỗi module có controller nhận request, service xử lý nghiệp vụ, entity ánh xạ bảng, DTO kiểm tra dữ liệu. Các module: `auth`, `room`, `student`, `contract`, `utility-bill`, `meter-reading`, `notification`, `payment`, `report`.
 * Frontend React chia `api/` gọi REST, `components/` dùng chung, `context/` giữ phiên, `pages/` theo vai trò.
 * Repo có file `LICENSE` giấy phép MIT kèm thông báo bản quyền.
 
@@ -80,12 +78,15 @@ API không chỉ CRUD mà xử lý nghiệp vụ, ví dụ:
 * Duyệt chỉ số điện nước: lấy chỉ số kỳ trước, kiểm tra không nhỏ hơn, tính tiền theo đơn giá, cộng tiền phòng, chia đều cho sinh viên đang ở, tạo hóa đơn và thông báo.
 * Đánh dấu từng sinh viên đã đóng: hóa đơn tự chuyển đã thu khi mọi phần đã đóng.
 * Quản lý tài khoản: không cho tự đổi vai trò của mình, không cho hạ ADMIN cuối cùng.
-
-CẦN BỔ SUNG: nghiệp vụ hợp đồng và thanh toán sau khi Nam xong 4.3, 5.1, 5.2.
+* Lập hợp đồng: khóa sinh viên và phòng trong một transaction, chặn hợp đồng trùng thời gian, phòng bảo trì, phòng đủ sức chứa, rồi tính lại sĩ số.
+* Gia hạn, kết thúc, thanh lý hợp đồng: kiểm tra hợp đồng còn hiệu lực, kiểm tra ngày, tính lại sĩ số phòng.
+* Thanh toán: ghi giao dịch theo hợp đồng, xem lịch sử; không cho xóa hợp đồng đã có thanh toán.
+* Chặn xóa: không xóa phòng, sinh viên còn hợp đồng, còn nợ hoặc còn lịch sử.
+* Báo cáo `GET /reports/summary`: số sinh viên, phòng, hợp đồng hiệu lực, công nợ, tiền thu trong tháng.
 
 ### 4b. Tài liệu API
 
-* Postman collection: `docs/postman/ktx-care.postman_collection.json`, 46 request chia theo nhóm, có biến và ví dụ, tự lưu token sau khi đăng nhập.
+* Postman collection: `docs/postman/ktx-care.postman_collection.json`, 57 request chia thành 12 nhóm, có biến và ví dụ, tự lưu token sau khi đăng nhập.
 * Swagger: `https://ktx-care-api.onrender.com/api-docs`, ghi quyền, ví dụ, mã lỗi từng endpoint.
 
 CẦN BỔ SUNG: ảnh chụp chạy API bằng Postman.
@@ -95,7 +96,7 @@ CẦN BỔ SUNG: ảnh chụp chạy API bằng Postman.
 * Token: JWT ký bằng `JWT_SECRET` dài ít nhất 32 ký tự, hết hạn sau 1 giờ (`auth/auth.module.ts`). Frontend gửi qua header `Authorization` (`api/client.js`).
 * Mã băm mật khẩu: bcrypt 12 vòng, giới hạn 72 byte (`auth/auth.service.ts`).
 * Xử lý phiên: token hết hạn hoặc sai thì API trả 401, frontend tự đăng xuất và báo cho người dùng; 403 báo không có quyền (`api/client.js`, `context/AuthContext.js`).
-* Transaction: thao tác ghi nhiều bảng dùng transaction, có khóa dòng `pessimistic_write` để tránh xếp trùng chỗ (`student.service.ts`, `meter-reading.service.ts`, `utility-bill.service.ts`).
+* Transaction: thao tác ghi nhiều bảng dùng transaction, có khóa dòng `pessimistic_write` để tránh xếp trùng chỗ (`student.service.ts`, `contract.service.ts`, `meter-reading.service.ts`, `utility-bill.service.ts`).
 * Cookies: dự án không dùng cookie cho xác thực, token nằm ở `localStorage` và gửi qua header. Cách này không bị CSRF kiểu tự gửi cookie, đổi lại token đọc được nếu trang dính XSS. Nhóm giảm rủi ro bằng cách không render HTML từ dữ liệu người dùng và cho token hết hạn nhanh.
 * CORS: chỉ cho các địa chỉ khai báo trong `FRONTEND_URL` (`main.ts`). Đã thử trên bản triển khai: địa chỉ lạ không được phép.
 * Xác thực, định danh: `JwtAuthGuard` xác thực, `RolesGuard` phân quyền theo 3 vai trò.
@@ -135,16 +136,18 @@ Chèn: `docs/phan-tich-orm.md`.
 
 ### 7b. Unit test
 
-* Thư mục `quan-ly-ktx/backend/test/unit`: 122 test. Thư mục frontend: 41 test.
+* Thư mục `quan-ly-ktx/backend/test/unit`: 126 test. Thư mục frontend: 41 test. Đạt hết, chạy lại ngày 06/11.
 * Đối chiếu user story, quy tắc: chèn `docs/Phan 5/5.9-5.10-unit-test.md`, phần "Đối chiếu".
 
-CẦN BỔ SUNG: cập nhật số test và US-05, 16, 21 khi xong.
+CẦN BỔ SUNG: cập nhật số test khi xong 5.9, 5.10, 9.2.
 
 ### 7c, 7d. Kiểm thử toàn bộ, ca lỗi và thành công
 
 Chèn: `docs/ca-kiem-thu.md`.
 
-CẦN BỔ SUNG: kết quả E2E (9.3), kiểm thử bản triển khai (9.5), ảnh chụp.
+E2E trên DB thử (9.3): lập hợp đồng → gửi và duyệt chỉ số → sinh viên xem hóa đơn → ghi thanh toán → gia hạn → kết thúc. Đạt 32/33 ca, gồm R1–R5, 404, 403. Ca chưa đạt: `GET /reports/summary?month=13` vẫn trả 200 vì API chưa lọc theo tháng (5.8).
+
+CẦN BỔ SUNG: kết quả khi Nam xong 5.8, kiểm thử bản triển khai với 3 vai trò (9.5), ảnh chụp.
 
 ### 7e. Kiểm thử giao diện
 
@@ -167,8 +170,8 @@ Chu Thanh Tân:
 
 Đặng Hải Nam:
 
-* Đã làm: khung NestJS, CRUD phòng, phân quyền, đăng nhập, trang chủ, hóa đơn, chỉ số điện nước, đơn đăng ký ở, thông báo.
-* Đang làm, CẦN BỔ SUNG khi xong: `PaymentModule` (4.3), nghiệp vụ hợp đồng (5.1, 5.2), chặn xóa (5.3), báo cáo (5.8), trang hợp đồng (6.7).
+* Đã làm: khung NestJS, CRUD phòng, phân quyền, đăng nhập, trang chủ, hóa đơn, chỉ số điện nước, đơn đăng ký ở, thông báo, `PaymentModule` (4.3), nghiệp vụ hợp đồng (5.1, 5.2), chặn xóa (5.3), bản đầu API báo cáo (5.8), trang hợp đồng (6.7).
+* Đang làm, CẦN BỔ SUNG khi xong: báo cáo theo tháng (5.8) và các việc nhận thêm ngày 05/11 (4.8, 5.4, 5.6, 5.9, 5.10, 7.1, 7.3, 7.4, 8.3).
 
 Lê Hải Sơn:
 

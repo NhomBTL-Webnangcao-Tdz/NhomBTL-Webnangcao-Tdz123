@@ -2,7 +2,7 @@
 
 Trạng thái: bản nháp, chờ nhóm duyệt (checklist 2.13, phục vụ Đề 2a, 2b).
 
-* Viết theo code trên `main` ngày 01/11/2026 (sau commit `8514e3d`). Khi backend đổi entity (checklist 2.4–2.7, 3.x), phải cập nhật lại file này và UML.
+* Viết theo code trên `main` ngày 06/11/2026 (sau commit `f54e9c4`, đã gộp code hợp đồng, thanh toán, báo cáo). Khi backend đổi entity, phải cập nhật lại file này và UML.
 * Mã US-xx lấy từ `docs/user-stories.md`.
 * Sơ đồ viết bằng Mermaid (khối ` ```mermaid `). GitHub tự vẽ; muốn đưa vào báo cáo thì dán vào https://mermaid.live rồi xuất PNG/SVG.
 
@@ -29,10 +29,10 @@ Cán bộ quản lý:
 
 * Quản lý phòng theo tòa, tầng (US-14).
 * Duyệt hoặc từ chối đơn đăng ký ở, xếp phòng (US-15).
-* Lập, theo dõi hợp đồng (US-16).
+* Lập, gia hạn, kết thúc, thanh lý hợp đồng (US-16).
 * Duyệt chỉ số điện nước, hệ thống tự tạo hóa đơn và chia tiền (US-17, US-18).
 * Lập khoản thu chung, đánh dấu đã đóng, nhắc nợ quá hạn (US-18, US-19).
-* Xem tổng quan (US-20), ghi nhận thanh toán (US-21, chưa làm).
+* Xem tổng quan (US-20), ghi nhận thanh toán theo hợp đồng (US-21).
 
 Quản trị viên:
 
@@ -49,11 +49,11 @@ Quản trị viên:
 
 ## 3. Đối tượng và thuộc tính (Đề 2a)
 
-Thuộc tính ghi theo tên trong code. Kiểu khóa chính chưa thống nhất giữa các bảng (checklist 2.4).
+Thuộc tính ghi theo tên trong code. Kiểu khóa chính khác nhau giữa các bảng, nhóm giữ nguyên để không đổi schema sát hạn (checklist 2.4).
 
 * User (bảng `users`): `id`, `username` (duy nhất), `password` (hash, không trả ra API), `role`, `studentSid` (duy nhất, có thể trống), `createdAt`, `updatedAt`.
-* Student (bảng `student`): `sid` (mã SV, khóa chính), `sname`, `email`, `phone`, `role` (thừa, checklist 2.5).
-* Room (bảng `rooms`): `id` (UUID), `roomNumber`, `building`, `maxCapacity`, `currentOccupancy`, `price`, `createdAt`, `updatedAt`.
+* Student (bảng `student`): `sid` (mã SV, khóa chính), `sname`, `email`, `phone`, `role` (thừa, giữ nguyên theo checklist 2.5).
+* Room (bảng `rooms`): `id` (UUID), `roomNumber`, `building`, `maxCapacity`, `currentOccupancy`, `price`, `isMaintenance` (phòng đang bảo trì), `createdAt`, `updatedAt`.
 * Contract (bảng `contract`): `contract_id`, `start_date`, `end_date`, `deposit_amount`, `is_active`.
 * ResidenceRequest (bảng `residence_requests`): `id`, `status` (`PENDING | APPROVED | REJECTED`), `note`, `reviewNote`, `reviewedBy`, `requestedAt`, `reviewedAt`.
 * MeterReadingSubmission (bảng `meter_reading_submissions`): `id`, `submittedBy`, `month`, `year`, `electricReading`, `waterReading`, `electricPhotoPath`, `waterPhotoPath`, `status`, `reviewedBy`, `reviewedAt`, `reviewNote`, `createdAt`.
@@ -61,7 +61,7 @@ Thuộc tính ghi theo tên trong code. Kiểu khóa chính chưa thống nhất
 * UtilityBillShare (bảng `utility_bill_share`): `id`, `amount`, `roomRentAmount`, `isPaid`. Phần tiền của từng sinh viên trong một hóa đơn.
 * UtilityTariff (bảng `utility_tariff`): `id` (luôn = 1), `electricPrice`, `waterPrice`, `updatedBy`, `updatedAt`.
 * Notification (bảng `notifications`): `id` (UUID), `userId`, `title`, `message`, `isRead`, `createdAt`.
-* Payment (bảng `payment`): `payment_id`, `amount`, `payment_date`, `payment_type`. Mới có entity, chưa có API.
+* Payment (bảng `payment`): `payment_id`, `amount`, `payment_date`, `payment_type` (tiền phòng, điện nước, sửa chữa, khoản thu khác). Giao dịch ghi theo hợp đồng.
 
 ## 4. Quan hệ giữa các đối tượng (Đề 2a)
 
@@ -86,7 +86,11 @@ Liên kết logic (chỉ lưu số/mã, chưa khai báo khóa ngoại):
 Ràng buộc nghiệp vụ đang có trong code:
 
 * Một sinh viên chỉ có một đơn đăng ký ở `PENDING` và không gửi đơn khi đang có hợp đồng còn hiệu lực.
-* Sĩ số phòng (hợp đồng còn hiệu lực) không vượt `maxCapacity`.
+* Sĩ số phòng (hợp đồng còn hiệu lực trong cùng thời gian) không vượt `maxCapacity`.
+* Một sinh viên không có hai hợp đồng còn hiệu lực trùng thời gian.
+* Không lập hợp đồng mới vào phòng đang bảo trì.
+* Không gia hạn, kết thúc, thanh lý hợp đồng đã kết thúc. Ngày gia hạn phải sau ngày kết thúc hiện tại. Ngày thanh lý nằm từ ngày bắt đầu đến hôm nay.
+* Không xóa phòng, sinh viên còn hợp đồng, còn nợ hoặc còn lịch sử. Không xóa hợp đồng đã có thanh toán.
 * Mỗi phòng chỉ có một bản gửi chỉ số `PENDING/APPROVED` và một hóa đơn `UTILITY` cho mỗi (tháng, năm).
 * Chỉ số mới không nhỏ hơn chỉ số của hóa đơn kỳ trước.
 * Mỗi (hóa đơn, sinh viên) chỉ có một phần tiền.
@@ -97,8 +101,10 @@ Mỗi module có Controller (nhận request, guard, DTO) → Service (nghiệp v
 
 * AuthService: `register`, `login`, `getProfile`.
 * StudentService: `saveMyProfile`, `requestResidence`, `listResidenceRequests`, `reviewResidenceRequest`, `getPortalData`, CRUD `findAll/findOne/create/update/remove`.
-* RoomService: `create`, `findAll`, `findOne`, `update`, `remove`.
-* ContractService: `findAll`, `findOne`, `create`, `update`, `remove`.
+* RoomService: `create`, `findAll`, `findOne`, `findResidents`, `update`, `updatePrices`, `remove`.
+* ContractService: `findAll`, `findOne`, `create`, `update`, `terminate`, `renew`, `liquidate`, `remove`.
+* PaymentService: `findAll` (lọc theo hợp đồng), `findOne`, `create`, `update`, `remove`.
+* ReportService: `getSummary`.
 * MeterReadingService: `getCurrentForStudent`, `submit`, `listForManagers`, `getPhoto`, `review`.
 * UtilityBillService: `findAll`, `findOne`, `create`, `createGeneralCharge`, `getReceiptImage`, `update`, `updateSharePayment`, `remindStudent`, `remove`.
 * UtilityTariffService: `getCurrent`, `update`.
@@ -137,6 +143,7 @@ classDiagram
     +int maxCapacity
     +int currentOccupancy
     +decimal price
+    +bool isMaintenance
   }
   class Contract {
     +int contract_id
@@ -388,12 +395,76 @@ flowchart TD
   H --> I["Commit, trả hóa đơn mới"] --> Z
 ```
 
+### 7.7 Lập hợp đồng (US-16)
+
+Hợp đồng tạo với `is_active = false` bỏ qua kiểm tra trùng thời gian, bảo trì và sức chứa.
+
+```mermaid
+flowchart TD
+  A([Bắt đầu]) --> B{"DTO hợp lệ?"}
+  B -- Không --> E1["400"] --> Z([Kết thúc])
+  B -- Có --> C["Mở transaction, khóa dòng sinh viên"]
+  C --> D{"Có sinh viên?"}
+  D -- Không --> E2["404"] --> R["Rollback"] --> Z
+  D -- Có --> F{"Ngày bắt đầu ≤ ngày kết thúc?"}
+  F -- Không --> E3["400"] --> R
+  F -- Có --> G{"SV đã có hợp đồng hiệu lực trùng thời gian?"}
+  G -- Có --> E4["409"] --> R
+  G -- Không --> H{"Có chọn phòng?"}
+  H -- Không --> L
+  H -- Có --> I["Khóa dòng phòng"]
+  I --> J{"Có phòng?"}
+  J -- Không --> E2
+  J -- Có --> K{"Phòng đang bảo trì?"}
+  K -- Có --> E5["409"] --> R
+  K -- Không --> M{"Số hợp đồng trùng thời gian < sức chứa?"}
+  M -- Không --> E6["409: Phòng đã đủ"] --> R
+  M -- Có --> L["Lưu hợp đồng"]
+  L --> N["Tính lại currentOccupancy của phòng"]
+  N --> O["Commit, trả hợp đồng"] --> Z
+```
+
+### 7.8 Gia hạn, kết thúc, thanh lý hợp đồng (US-16)
+
+```mermaid
+flowchart TD
+  A([Bắt đầu]) --> B["Mở transaction, khóa dòng hợp đồng"]
+  B --> C{"Có hợp đồng?"}
+  C -- Không --> E1["404"] --> R["Rollback"] --> Z([Kết thúc])
+  C -- Có --> D{"is_active = true?"}
+  D -- Không --> E2["409: Hợp đồng đã kết thúc"] --> R
+  D -- Có --> P{"Thao tác?"}
+  P -- Kết thúc --> Q["is_active = false"] --> N
+  P -- Thanh lý --> F{"Ngày thanh lý từ ngày bắt đầu đến hôm nay?"}
+  F -- Không --> E3["400"] --> R
+  F -- Có --> G["end_date = ngày thanh lý, is_active = false"] --> N
+  P -- Gia hạn --> H{"Ngày mới sau ngày kết thúc hiện tại?"}
+  H -- Không --> E3
+  H -- Có --> I{"Trùng hợp đồng khác của SV hoặc phòng hết chỗ?"}
+  I -- Có --> E4["409"] --> R
+  I -- Không --> J["end_date = ngày mới"] --> N
+  N["Lưu hợp đồng, tính lại currentOccupancy"] --> O["Commit, trả hợp đồng"] --> Z
+```
+
+### 7.9 Ghi nhận thanh toán (US-21)
+
+```mermaid
+flowchart TD
+  A([Bắt đầu]) --> B{"DTO hợp lệ?<br/>số tiền ≥ 0.01, ngày đúng định dạng, có loại khoản thu"}
+  B -- Không --> E1["400"] --> Z([Kết thúc])
+  B -- Có --> C{"Có hợp đồng?"}
+  C -- Không --> E2["404"] --> Z
+  C -- Có --> D["Lưu Payment gắn với hợp đồng"]
+  D --> E["Trả giao dịch, frontend tải lại lịch sử thanh toán"] --> Z
+```
+
 ---
 
 ## 8. Điểm cần nhóm xem lại
 
-* Tên cột và khóa chính chưa thống nhất (UUID, số tự tăng, mã chuỗi; camelCase lẫn snake_case), checklist 2.4.
-* User–Student mới là liên kết logic qua `studentSid`, chưa có khóa ngoại; `Student.role` thừa (checklist 2.5).
-* Hợp đồng chỉ có `is_active`, chưa có trạng thái và gia hạn / kết thúc (checklist 2.6, 5.2).
-* Payment chưa có API nên quan hệ Contract–Payment chưa dùng (checklist 4.3).
-* `Room.currentOccupancy` chỉ được cập nhật khi duyệt đơn; tạo hợp đồng trực tiếp qua `POST /contract` không cập nhật (checklist 5.1).
+* Tên cột và khóa chính khác nhau (UUID, số tự tăng, mã chuỗi; camelCase lẫn snake_case). Nhóm giữ nguyên (checklist 2.4).
+* User–Student là liên kết logic qua `studentSid`, không có khóa ngoại; `Student.role` thừa. Nhóm giữ nguyên (checklist 2.5).
+* Hợp đồng chỉ có `is_active`, không có trạng thái `EXPIRED` (checklist 2.6). Quá hạn tính theo ngày ở frontend, không có tác vụ tự chuyển; `currentOccupancy` chỉ tính lại khi có thao tác ghi nên có thể cũ sau ngày hết hạn (checklist 5.2).
+* Chưa có xóa mềm: còn lịch sử thì chặn xóa (checklist 5.3).
+* Duyệt đơn đăng ký ở chưa kiểm `isMaintenance` ở backend, chỉ frontend loại phòng bảo trì khi chọn.
+* `POST /payments` chỉ kiểm hợp đồng tồn tại, không đối chiếu với hóa đơn và không đổi `UtilityBillShare.isPaid`. Hai cách theo dõi tiền đang độc lập.

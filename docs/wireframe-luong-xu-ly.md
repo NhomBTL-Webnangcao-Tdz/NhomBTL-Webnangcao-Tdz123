@@ -2,8 +2,8 @@
 
 Trạng thái: bản nháp, chờ nhóm duyệt (checklist 2.14, phục vụ Đề 3a, 3b; Đề 5a yêu cầu code giao diện khớp wireframe này).
 
-* Wireframe vẽ theo bố cục giao diện đang có trên `main` ngày 01/11/2026 (sau commit `8514e3d`).
-* Trang chủ sẽ đổi theo mẫu React Native và chuyển sang `react-bootstrap` (checklist 2.10, 2.16, 6.12). Khi đổi xong phải vẽ lại phần 1.1.
+* Wireframe vẽ theo bố cục giao diện đang có trên `main` ngày 06/11/2026 (sau commit `f54e9c4`, đã gộp code hợp đồng, thanh toán).
+* Trang chủ giữ bố cục đã chốt, dùng `react-bootstrap` (checklist 2.10, 2.16, 6.12).
 * Mã US-xx lấy từ `docs/user-stories.md`. Sơ đồ luồng viết bằng Mermaid, xuất hình qua https://mermaid.live.
 
 ---
@@ -129,16 +129,34 @@ Menu theo vai trò (checklist 6.4):
 ```text
 | SƠ ĐỒ TÒA NHÀ                                     [ + Thêm phòng ]  |
 | Tòa nhà & Phòng                                                     |
-| [Tòa: tất cả v]  [Tìm phòng...........]                             |
+| [Tìm theo tên tòa nhà......]                          [ Làm mới ]   |
 | +-------------+ +-------------+                                     |
 | | Tòa A    >  | | Tòa B    >  |   (chọn tòa để xem theo tầng)       |
-| | 12/20 chỗ   | |  8/16 chỗ   |                                     |
+| | 5 còn chỗ   | | 3 còn chỗ   |                                     |
+| | 12 sinh viên| |  8 sinh viên|                                     |
 | +-------------+ +-------------+                                     |
+```
+
+Trang một tòa:
+
+```text
+| <- Tất cả tòa nhà  [Trạng thái v] [Chỉnh giá nhiều phòng] [Làm mới] |
+| 10 phòng     5 còn chỗ     12 sinh viên đang ở                      |
 | Tầng 1                                                              |
 | +--------+ +--------+ +--------+                                    |
-| | A101   | | A102   | | A103   |  thẻ phòng: số người/sức chứa,     |
-| | 2/4    | | 4/4    | | 0/4    |  giá; bấm để sửa / xóa             |
+| | A101   | | A102   | | A103   |  thẻ phòng: nhãn Còn chỗ, Đang ở,  |
+| | 2/4    | | 4/4    | | 0/4    |  Đã đầy, Bảo trì; bấm để xem       |
 | +--------+ +--------+ +--------+                                    |
+
+Hộp "Chi tiết phòng":
++---------------------------------------------+
+| [Đang ở]                                    |
+| Tòa nhà, Sức chứa 2/4, Đơn giá, Tầng        |
+| Sinh viên đang ở (2)                        |
+|   Nguyễn A   SV001 · 09xx                   |
+|   Trần B     SV002 · 09xx                   |
+|          [ Chỉnh sửa ]  [ Xóa phòng ]       |
++---------------------------------------------+
 ```
 
 ### 1.6 Yêu cầu lưu trú (cán bộ, US-15)
@@ -229,6 +247,40 @@ Hóa đơn của tôi:
 ```
 
 Liên hệ quản lý: 2 thẻ Email ban quản lý [Soạn email], Điện thoại [Gọi].
+
+### 1.10 Hợp đồng (cán bộ, US-16, US-21)
+
+```text
+| THỜI HẠN LƯU TRÚ                                  [ + Tạo hợp đồng ]|
+| Danh sách hợp đồng                                                  |
+| [Tìm mã hợp đồng, sinh viên...] [Trạng thái v] [Từ ngày] [Đến ngày] |
+| +-----------------------------------------------------------------+ |
+| | Mã HĐ | Sinh viên | Phòng | Thời hạn | Tiền cọc | Trạng thái      | |
+| | [Thanh toán] [Sửa] [Gia hạn] [Kết thúc] [Thanh lý]                | |
+| +-----------------------------------------------------------------+ |
+| Trạng thái: Hiệu lực, Sắp hết hạn (30 ngày), Quá hạn, Đã thanh lý   |
+
+Hộp "Tạo hợp đồng thuê", 2 bước:
++---------------------------------------------+
+| (1) Sinh viên & phòng --- (2) Thời hạn      |
+| Bước 1: Sinh viên [ chọn v ]                |
+|         Chọn phòng còn chỗ, có thể bỏ trống |
+|                   [ Hủy ]  [ Tiếp tục ]     |
+| Bước 2: Ngày bắt đầu, Ngày kết thúc         |
+|         Tiền đặt cọc, [x] Còn hiệu lực      |
+|         Xem trước: sinh viên, thời hạn      |
+|              [ Quay lại ]  [ Lưu hợp đồng ] |
++---------------------------------------------+
+
+Hộp "Ghi nhận thanh toán":
++---------------------------------------------+
+| Khoản thu [ Tiền phòng v ]  Số tiền [_____] |
+| Thời điểm thanh toán [dd/mm/yyyy hh:mm]     |
+|       [ Đóng ]  [ Ghi nhận thanh toán ]     |
+| Lịch sử thanh toán                          |
+|   Tiền phòng   01/11/2026     1.200.000 ₫   |
++---------------------------------------------+
+```
 
 ---
 
@@ -380,4 +432,43 @@ sequenceDiagram
   API->>AC: unauthorizedHandler(thông báo)
   AC->>AC: Xóa token, xóa user, lưu thông báo
   AC->>FE: Chuyển #login, hiện "Phiên đăng nhập đã hết hạn..."
+```
+
+### 2.6 Lập hợp đồng, ghi thanh toán, thanh lý (US-16, US-21)
+
+```mermaid
+sequenceDiagram
+  actor CB as Cán bộ quản lý
+  participant FE as React (ContractsPage)
+  participant CC as ContractController
+  participant CS as ContractService
+  participant PC as PaymentController
+  participant PS as PaymentService
+  participant DB as MySQL
+
+  CB->>FE: Tạo hợp đồng, chọn SV, phòng, thời hạn, tiền cọc
+  FE->>CC: POST /contract (Bearer, role ADMIN/MANAGER)
+  CC->>CC: ValidationPipe kiểm CreateContractDto
+  CC->>CS: create(dto)
+  CS->>DB: BEGIN, khóa SV, kiểm hợp đồng trùng thời gian
+  CS->>DB: Khóa phòng, kiểm bảo trì, sức chứa
+  CS->>DB: INSERT contract, UPDATE rooms.current_occupancy, COMMIT
+  CS-->>FE: hợp đồng mới
+  FE->>CB: Toast "Đã tạo hợp đồng", cập nhật danh sách
+
+  CB->>FE: Thanh toán, chọn khoản thu, số tiền, thời điểm
+  FE->>PC: POST /payments (Bearer, role ADMIN/MANAGER)
+  PC->>PS: create(dto)
+  PS->>DB: SELECT contract, INSERT payment
+  PS-->>FE: giao dịch mới
+  FE->>PC: GET /payments?contractId=
+  FE->>CB: Hiện lịch sử thanh toán
+
+  CB->>FE: Thanh lý, xác nhận
+  FE->>CC: PATCH /contract/:id/liquidate
+  CC->>CS: liquidate(id, dto)
+  CS->>DB: BEGIN, khóa hợp đồng, UPDATE contract
+  CS->>DB: UPDATE rooms.current_occupancy, COMMIT
+  CS-->>FE: hợp đồng đã thanh lý
+  FE->>CB: Toast "Đã thanh lý hợp đồng"
 ```
