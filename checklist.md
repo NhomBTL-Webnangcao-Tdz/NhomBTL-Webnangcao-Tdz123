@@ -59,12 +59,12 @@ Chi tiết từng câu: `docs/de-bai.md`.
 Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, chừa khối hợp đồng – thanh toán – báo cáo cho Nam và vài việc cho Sơn để mỗi người có đóng góp thật. Người phụ trách ghi trong ngoặc ở từng mục.
 
 * Tân kiểm: mục code đã có (thường do Nam làm ở `fde890e`), chỉ cần kiểm trên app thật rồi đánh dấu.
-* Tân, đợt A (1–2/11), backend bảo mật, API: 4.2, 4.4, 4.12, 4.9, 4.10, 4.5 + 6.11, 5.7 + 7.2
-* Tân, đợt B (3/11), CSDL và test: 3.5, 3.6, 3.7, 3.8, 5.9, 5.10, 9.2
+* Tân, đợt A (1–2/11), backend bảo mật, API: 4.2, 4.4, 4.12, 4.10, 4.5 + 6.11, 7.2
+* Tân, đợt B (3/11), CSDL và test: 3.5, 3.6, 3.7, 3.8, 5.9, 5.10
 * Tân, đợt C (4–5/11), frontend: 6.1, 6.2, 4.8 + 6.9, 6.10, 6.12 phần 2, 6.13
 * Tân, đợt D (6–8/11), tích hợp, triển khai, tài liệu: 9.3, 9.4, 9.5, 9.6 (tùy chọn), 10.1, 10.3, 10.4, 10.5, phần 11
 * Nam (xong trước 5/11 để chạy E2E): 4.3, 5.1, 5.2, 5.3, 5.8, 6.7; dọn 1.8, 1.11, lock file backend, license backend, xác nhận mật khẩu Aiven
-* Sơn: 8.4, 10.2; 8.2 nếu còn thời gian
+* Sơn: 4.9, 5.7, 9.2, 8.4, 10.2; 8.2 nếu còn thời gian.
 * Cả nhóm: 1.10, 2.1, 2.3, 2.9–2.15, 9.7, 10.6–10.8
 * Bỏ (lý do ghi ở từng mục): 2.4–2.7, 3.3, 3.4, 4.11, 5.5, 6.6
 
@@ -146,7 +146,7 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 * [x] 4.6 (BE, Tân kiểm) API đơn giá: `utility-bill/tariff`, `GET` và `PUT` cho ADMIN, MANAGER (Tân chốt 04/11). Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [~] 4.7 (BE, Tân kiểm) API phòng còn chỗ và danh sách SV đang ở trong phòng. Có `GET /rooms?status=available`. Còn: API sinh viên trong phòng. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [~] 4.8 (BE, Tân) Phân trang + tìm kiếm + lọc (`?page=&limit=&q=&building=&status=`) cho danh sách. Xong phòng, sinh viên, hóa đơn, log `docs/Phan 4/4.8-phan-trang-tim-kiem.md`. Còn: hợp đồng, sau khi Nam xong 5.1, 5.2
-* [ ] 4.9 (BE, Tân) Bảo mật: giới hạn số lần đăng nhập sai, header bảo mật (`helmet`) [Đề 3d, 4c]
+* [ ] 4.9 (BE, Sơn) Bảo mật: giới hạn số lần đăng nhập sai, header bảo mật (`helmet`) [Đề 3d, 4c]
 * [x] 4.10 (BE, Tân) Tài liệu hóa API theo hướng dẫn trên lớp (Postman): endpoint, quyền, ví dụ request/response, mã lỗi [Đề 4b]. Postman collection ở `docs/postman/`, Swagger ở `/api-docs`. Log `docs/Phan 4/4.10-swagger.md`, `docs/Phan 4/4.10-postman.md`
 * [ ] 4.11 (BE + FE, bỏ: giữ localStorage, rủi ro ghi trong luat-dao-duc.md) Phiên đăng nhập và cookie: giữ token ở `localStorage` hay chuyển sang cookie `httpOnly; Secure; SameSite` (khi đó cần chống CSRF); đăng xuất, hết hạn phiên; transaction DB cho thao tác ghi nhiều bảng [Đề 4c]
 * [x] 4.12 (BE, Tân) Exception filter chung: trả lỗi cùng một dạng, không lộ stack trace hay câu SQL ra client [Đề 7a]. Log `docs/Phan 4/4.4-4.12-xu-ly-loi.md`
@@ -161,7 +161,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [~] 5.4 (BE, Tân kiểm) Hóa đơn điện nước: chỉ số cũ lấy từ tháng trước, mới ≥ cũ, server tự tính tiền, không trùng (phòng, tháng, năm), hóa đơn đã thu thì không sửa (R6–R9). Đã đủ ở luồng duyệt chỉ số; `POST /utility-bill` có R6, R9. Còn: API nhập tay vẫn nhận `total_amount` từ client (R8)
 * [ ] 5.5 (BE, bỏ: thay bằng SV tự gửi chỉ số) Nhập chỉ số hàng loạt cả tòa: `GET /utility-bill/draft`, `POST /utility-bill/batch`
 * [~] 5.6 (BE, Tân kiểm) API cho sinh viên: `GET/PATCH /me/student`, `GET /me/contract`, `/me/bills`, `/me/payments` (R10). Đã có `GET /student/me/portal`, `PUT /student/me/profile`, kiểm trên API thật. Còn: `/me/payments`, chờ 4.3. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
-* [ ] 5.7 (BE, Tân) Đổi mật khẩu cho người dùng đang đăng nhập
+* [ ] 5.7 (BE, Sơn) Đổi mật khẩu cho người dùng đang đăng nhập
 * [ ] 5.8 (BE, Nam) Báo cáo `GET /reports/summary?month=&year=` (lấp đầy theo tòa, đã thu, công nợ, HĐ sắp hết hạn)
 * [~] 5.9 (BE, Tân) Unit test cho các quy tắc R1–R10. Có R3, R6–R10, log `docs/Phan 5/5.9-5.10-unit-test.md`. Còn: R1, R2, R4, R5 sau khi Nam xong 5.1–5.3
 * [~] 5.10 (BE, Tân) Unit test cho mọi user story của 2.12, đặt trong thư mục `test/` [Đề 7b]. Toàn bộ spec đã ở `test/unit/`, log `docs/Phan 5/5.9-5.10-unit-test.md`. Còn: US-05, 16, 21, 24
@@ -199,7 +199,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 ## 9. Kiểm thử & triển khai
 
 * [x] 9.1 (FE) Rà soát toàn bộ giao diện: 375px, không lỗi console, không render HTML từ dữ liệu người dùng, không `console.log` dữ liệu người dùng [Đề 3d, 7e]. Thử với backend giả; sửa tải ảnh bỏ qua 401, thông báo tiếng Nga, tắt source map. Log `docs/Phan 9/9.1-ra-soat-frontend.md`
-* [ ] 9.2 (FE, Tân) Test component chính ở frontend (form, guard, xử lý phiên) [Đề 7e]
+* [ ] 9.2 (FE, Sơn) Test component chính ở frontend (form, guard, xử lý phiên) [Đề 7e]
 * [ ] 9.3 (Nhóm, Tân) E2E luồng chính: lập HĐ → nhập điện nước → SV xem hóa đơn → ghi thanh toán → kết thúc HĐ [Đề 7c]
 * [x] 9.4 (Nhóm, Tân) Triển khai backend, frontend, DB lên cloud; cấu hình CORS + biến môi trường. Đã có `render.yaml`, hướng dẫn `docs/trien-khai.md`, log `docs/Phan 9/9.4-chuan-bi-trien-khai.md`. Link: `https://ktx-care.vercel.app`, `https://ktx-care-api.onrender.com`
 * [ ] 9.5 (Nhóm, Tân) Kiểm thử trên bản đã triển khai với 3 tài khoản demo
