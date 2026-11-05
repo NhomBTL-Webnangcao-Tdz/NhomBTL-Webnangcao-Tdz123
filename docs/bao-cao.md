@@ -156,13 +156,25 @@ CẦN BỔ SUNG: kết quả E2E (9.3), kiểm thử bản triển khai (9.5), �
 
 Link ở phần "Thông tin nộp bài".
 
-Đóng góp thành viên, bản nháp theo lịch sử git, cả nhóm phải đối chiếu lại:
+Đóng góp thành viên, theo phân công của nhóm. Trước khi nộp phải đối chiếu lại: mục chưa xong thì bỏ hoặc sửa.
 
-* Chu Thanh Tân: CẦN BỔ SUNG, nhóm tự xác nhận. Theo git: tài liệu, bảo mật API, DTO, Swagger, Postman, seed, trang Cài đặt, hóa đơn, tổng quan, chuyển `react-bootstrap`, unit test, triển khai.
-* Đặng Hải Nam: CẦN BỔ SUNG, nhóm tự xác nhận. Theo git: khung NestJS, CRUD phòng, phân quyền, đăng nhập, trang chủ, hóa đơn, chỉ số điện nước, đơn đăng ký ở, thông báo.
-* Lê Hải Sơn: CẦN BỔ SUNG, nhóm tự xác nhận. Theo git: entity Payment.
+Chu Thanh Tân:
 
-Sử dụng công cụ AI: CẦN BỔ SUNG, nhóm quyết định cách ghi. Một phần code, tài liệu và kiểm thử được làm với Claude Code; nên ghi rõ phần nào, ai kiểm tra lại.
+* Tài liệu: đề bài, user stories, phân tích thiết kế, wireframe, ca kiểm thử, luật và đạo đức, báo cáo.
+* Backend: DTO, mã lỗi, exception filter, API tài khoản, phân trang, tài liệu API, script tạo bảng, seed.
+* Frontend: xử lý phiên, trang Cài đặt, hóa đơn, tổng quan, toast, chuyển `react-bootstrap`.
+* Kiểm thử, triển khai: unit test, kiểm thử trên app thật, Vercel, Render.
+
+Đặng Hải Nam:
+
+* Đã làm: khung NestJS, CRUD phòng, phân quyền, đăng nhập, trang chủ, hóa đơn, chỉ số điện nước, đơn đăng ký ở, thông báo.
+* Đang làm, CẦN BỔ SUNG khi xong: `PaymentModule` (4.3), nghiệp vụ hợp đồng (5.1, 5.2), chặn xóa (5.3), báo cáo (5.8), trang hợp đồng (6.7).
+
+Lê Hải Sơn:
+
+* Đã làm: entity Payment.
+* Theo phân công, CẦN BỔ SUNG khi xong: xuất Excel, PDF (8.4), hướng dẫn sử dụng (10.2).
+* Tân soạn bản đầu, Sơn tích hợp, kiểm thử: bảo mật đăng nhập (4.9), đổi mật khẩu (5.7), test frontend (9.2). CẦN BỔ SUNG khi xong.
 
 ## Câu 9. Luật, đạo đức, an ninh
 
