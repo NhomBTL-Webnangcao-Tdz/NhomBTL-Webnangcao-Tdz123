@@ -157,8 +157,8 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 
 * [x] 5.1 (BE, Nam) Tạo hợp đồng: kiểm tra phòng còn chỗ, 1 SV chỉ 1 HĐ `ACTIVE`, cập nhật sĩ số trong transaction (R1–R4)
-* [~] 5.2 (BE, Nam) Kết thúc / gia hạn hợp đồng, tự chuyển `EXPIRED` khi quá hạn. Đã có kết thúc, gia hạn, thanh lý. Còn: không có tác vụ tự chuyển khi quá hạn, `is_active` giữ nguyên, sĩ số phòng chỉ tính lại khi có thao tác ghi
-* [~] 5.3 (BE, Nam) Chặn xóa cứng phòng/SV còn HĐ hoặc còn nợ, dùng xóa mềm (R5). Đã chặn xóa khi còn HĐ, còn nợ, còn lịch sử. Còn: chưa có xóa mềm, chờ Tân chốt có bỏ phần này không
+* [x] 5.2 (BE, Nam) Kết thúc / gia hạn hợp đồng, tự chuyển `EXPIRED` khi quá hạn. Đã có kết thúc, gia hạn, thanh lý. Chốt 06/11: không làm tác vụ tự chuyển khi quá hạn, ghi là hạn chế (`is_active` giữ nguyên, sĩ số phòng chỉ tính lại khi có thao tác ghi)
+* [x] 5.3 (BE, Nam) Chặn xóa cứng phòng/SV còn HĐ hoặc còn nợ, dùng xóa mềm (R5). Đã chặn xóa khi còn HĐ, còn nợ, còn lịch sử. Chốt 06/11: không làm xóa mềm, còn lịch sử thì chặn xóa
 * [~] 5.4 (BE, Nam) Hóa đơn điện nước: chỉ số cũ lấy từ tháng trước, mới ≥ cũ, server tự tính tiền, không trùng (phòng, tháng, năm), hóa đơn đã thu thì không sửa (R6–R9). Đã đủ ở luồng duyệt chỉ số; `POST /utility-bill` có R6, R9. Còn: API nhập tay vẫn nhận `total_amount` từ client (R8)
 * [ ] 5.5 (BE, bỏ: thay bằng SV tự gửi chỉ số) Nhập chỉ số hàng loạt cả tòa: `GET /utility-bill/draft`, `POST /utility-bill/batch`
 * [~] 5.6 (BE, Nam) API cho sinh viên: `GET/PATCH /me/student`, `GET /me/contract`, `/me/bills`, `/me/payments` (R10). Đã có `GET /student/me/portal`, `PUT /student/me/profile`, kiểm trên API thật. Còn: `/me/payments`. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
