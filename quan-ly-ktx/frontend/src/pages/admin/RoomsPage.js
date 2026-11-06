@@ -305,7 +305,7 @@ export default function RoomsPage({ segments, params }) {
       {selectedRoom && (
         <Modal title={`Chi tiết phòng ${selectedRoom.roomNumber}`} onClose={() => setHashQuery('viewRoom', null)}>
           <div className="room-detail">
-            <StatusBadge value={getRoomStatus(selectedRoom)} />
+            <StatusBadge value={getRoomStatus(selectedRoom)} label={roomStatusLabels[getRoomStatus(selectedRoom)]} />
             {saveError && <p className="form-error" role="alert">{saveError}</p>}
             <dl className="detail-list">
               <div><dt>Tòa nhà</dt><dd>{selectedRoom.building}</dd></div>

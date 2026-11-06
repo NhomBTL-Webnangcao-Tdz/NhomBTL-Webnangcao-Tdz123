@@ -19,7 +19,7 @@ describe('LoginPage', () => {
   };
 
   test.each([
-    ['STUDENT', '#my-profile'],
+    ['STUDENT', '#my-overview'],
     ['MANAGER', '#overview'],
     ['ADMIN', '#overview'],
   ])('đăng nhập %s thì chuyển tới %s', async (role, hash) => {
@@ -54,7 +54,7 @@ describe('LoginPage', () => {
 
     expect(screen.getByRole('button', { name: 'Đang xác thực...' })).toBeDisabled();
     finish({ role: 'STUDENT' });
-    await waitFor(() => expect(window.location.hash).toBe('#my-profile'));
+    await waitFor(() => expect(window.location.hash).toBe('#my-overview'));
   });
 
   test('hiện thông báo hết phiên, lỗi mới của form được ưu tiên', async () => {

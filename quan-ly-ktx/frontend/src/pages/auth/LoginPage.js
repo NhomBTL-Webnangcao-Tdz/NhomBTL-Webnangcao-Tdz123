@@ -16,7 +16,7 @@ export default function LoginPage() {
     setIsSubmitting(true);
     try {
       const user = await login(form);
-      window.location.hash = user.role === 'STUDENT' ? '#my-profile' : '#overview';
+      window.location.hash = user.role === 'STUDENT' ? '#my-overview' : '#overview';
     } catch (requestError) {
       setError(requestError.message || 'Không thể kết nối đến máy chủ.');
     } finally {

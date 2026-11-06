@@ -167,7 +167,49 @@ test('shows the unread notification dot for managers and clears it when a notifi
   expect(screen.getByRole('button', { name: 'Thông báo' }).querySelector('.notification-unread-dot')).not.toBeInTheDocument();
 });
 
-test('student accounts only see the student portal, room registration, personal bills, and management contact', async () => {
+test('room details show the occupied badge in Vietnamese', async () => {
+  localStorage.setItem('ktx_access_token', 'test-token');
+  global.fetch.mockImplementation(async (url) => {
+    if (url.endsWith('/auth/profile')) return jsonResponse({ id: 2, username: 'manager', role: 'MANAGER' });
+    if (url.endsWith('/notifications/me')) return jsonResponse([]);
+    if (url.endsWith('/rooms')) return jsonResponse([{
+      id: 'room-1',
+      roomNumber: '101',
+      building: 'Tòa A',
+      currentOccupancy: 1,
+      maxCapacity: 4,
+      price: 1000000,
+    }]);
+    if (url.endsWith('/rooms/room-1/residents')) return jsonResponse([]);
+    return jsonResponse([]);
+  });
+  window.history.replaceState({}, '', '/#rooms?viewRoom=room-1');
+
+  render(<App />);
+
+  const dialog = await screen.findByRole('dialog', { name: 'Chi tiết phòng 101' });
+  expect(within(dialog).getByText('Đang ở')).toBeInTheDocument();
+  expect(within(dialog).queryByText('occupied')).not.toBeInTheDocument();
+});
+
+test('clicking the Header logout button clears the session and opens login', async () => {
+  localStorage.setItem('ktx_access_token', 'test-token');
+  global.fetch.mockImplementation(async (url) => {
+    if (url.endsWith('/auth/profile')) return jsonResponse({ id: 2, username: 'manager', role: 'MANAGER' });
+    if (url.endsWith('/notifications/me')) return jsonResponse([]);
+    return jsonResponse([]);
+  });
+  window.history.replaceState({}, '', '/#overview');
+
+  render(<App />);
+
+  fireEvent.click(await screen.findByRole('button', { name: 'Đăng xuất' }));
+
+  expect(await screen.findByRole('heading', { name: 'Đăng nhập hệ thống' })).toBeInTheDocument();
+  expect(localStorage.getItem('ktx_access_token')).toBeNull();
+});
+
+test('student accounts open their summary and can navigate the student portal only', async () => {
   localStorage.setItem('ktx_access_token', 'test-token');
   global.fetch.mockImplementation(async (url) => {
     if (url.endsWith('/auth/profile')) return jsonResponse({ id: 7, username: 'student07', role: 'STUDENT' });
@@ -184,18 +226,21 @@ test('student accounts only see the student portal, room registration, personal 
 
   render(<App />);
 
-  expect(await screen.findByRole('heading', { name: 'Hồ sơ cá nhân', level: 2 })).toBeInTheDocument();
-  expect(screen.getByRole('heading', { name: 'Hồ sơ cá nhân', level: 1 })).toBeInTheDocument();
+  expect(await screen.findByRole('heading', { name: 'Tổng quan sinh viên', level: 2 })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Chào mừng bạn', level: 1 })).toBeInTheDocument();
+  expect(window.location.hash).toBe('#my-overview');
   expect(document.querySelector('.welcome-banner')).toBeInTheDocument();
   const navigation = screen.getByRole('navigation', { name: 'Điều hướng chính' });
+  expect(navigation).toHaveTextContent('Tổng quan');
   expect(navigation).toHaveTextContent('Hồ sơ cá nhân');
   expect(navigation).toHaveTextContent('Phòng của tôi');
   expect(navigation).toHaveTextContent('Hóa đơn của tôi');
   expect(navigation).toHaveTextContent('Liên hệ quản lý');
-  expect(screen.queryByRole('link', { name: 'Tổng quan' })).not.toBeInTheDocument();
   expect(screen.queryByRole('link', { name: 'Tòa nhà & Phòng' })).not.toBeInTheDocument();
   expect(screen.queryByRole('link', { name: 'Sinh viên' })).not.toBeInTheDocument();
 
+  fireEvent.click(screen.getByRole('link', { name: 'Hồ sơ cá nhân' }));
+  expect(await screen.findByRole('heading', { name: 'Hồ sơ cá nhân', level: 2 })).toBeInTheDocument();
   fireEvent.click(screen.getByRole('link', { name: 'Hóa đơn của tôi' }));
   expect(await screen.findByRole('link', { name: 'Đến hồ sơ cá nhân' })).toBeInTheDocument();
 
@@ -247,6 +292,13 @@ test('shows a student their room and a newly confirmed invoice before it is near
   expect(screen.getByText('30/06/2027')).toBeInTheDocument();
   expect(screen.getByText('Sinh viên mười')).toBeInTheDocument();
   expect(screen.getByRole('link', { name: '0900000010' })).toHaveAttribute('href', 'tel:0900000010');
+
+  fireEvent.click(screen.getByRole('link', { name: 'KTX Care' }));
+  expect(await screen.findByRole('heading', { name: 'Tổng quan sinh viên', level: 2 })).toBeInTheDocument();
+  expect(screen.getByText('30/06/2027')).toBeInTheDocument();
+  expect(screen.getByText('Tổng cần thanh toán: 135.000 ₫')).toBeInTheDocument();
+  expect(screen.getByText('Hóa đơn tháng 10/2026')).toBeInTheDocument();
+  expect(screen.getByText(/Hạn thanh toán:/)).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole('link', { name: 'Hóa đơn của tôi' }));
   expect(await screen.findByText('HD-0022')).toBeInTheDocument();

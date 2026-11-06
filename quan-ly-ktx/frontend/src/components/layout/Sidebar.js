@@ -14,6 +14,7 @@ const managementLinks = [
 const managerLinks = managementLinks.filter(({ id }) => id !== 'settings');
 
 const studentLinks = [
+  { id: 'my-overview', label: 'Tổng quan', icon: '◫' },
   { id: 'my-profile', label: 'Hồ sơ cá nhân', icon: '♙' },
   { id: 'my-room', label: 'Phòng của tôi', icon: '▦' },
   { id: 'my-bills', label: 'Hóa đơn của tôi', icon: '▧' },
@@ -24,7 +25,7 @@ export default function Sidebar({ currentPage }) {
   const { user } = useAuth();
   const isStudent = user?.role === 'STUDENT';
   const links = isStudent ? studentLinks : user?.role === 'MANAGER' ? managerLinks : managementLinks;
-  const homePage = isStudent ? 'my-profile' : 'overview';
+  const homePage = isStudent ? 'my-overview' : 'overview';
 
   return (
     <aside className="sidebar">

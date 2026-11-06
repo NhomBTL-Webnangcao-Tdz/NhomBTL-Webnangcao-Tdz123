@@ -78,6 +78,8 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 9.5: kiểm bản online không đăng nhập. `Phan 9/9.5-kiem-thu-ban-online.md`. Còn 3 vai trò, `26a7099`
 * 5.6 + 7.4: API `/me/payments` chỉ trả giao dịch của sinh viên đăng nhập; thêm lịch sử thanh toán vào Hóa đơn của tôi. `Phan 7/7.4-lich-su-thanh-toan.md`. Xong
 * 7.3: bổ sung mã hợp đồng và ngày bắt đầu/hết hạn vào dữ liệu phòng của sinh viên, hiển thị tại Phòng của tôi. `Phan 7/7.3-hop-dong-phong-cua-toi.md`. Xong
+* 7.1: thêm trang tổng quan sinh viên sau đăng nhập, gom phòng, ngày hết hạn hợp đồng và hóa đơn chưa đóng; giữ các trang hồ sơ, phòng, hóa đơn riêng. `Phan 7/7.1-tong-quan-sinh-vien.md`. Xong
+* Sửa nhãn trạng thái phòng trong modal chi tiết thành tiếng Việt; thêm test tương tác nút đăng xuất Header theo US-04. Xong
 * 8.3: thêm tác vụ khởi động và hằng ngày tạo thông báo cho sinh viên có hợp đồng còn hiệu lực, hết hạn trong 30 ngày; chống tạo thông báo lặp cùng hợp đồng/ngày hết hạn. `Phan 8/8.3-thong-bao-hop-dong-sap-het-han.md`. Xong
 
 Việc ngoài checklist (không có log riêng):

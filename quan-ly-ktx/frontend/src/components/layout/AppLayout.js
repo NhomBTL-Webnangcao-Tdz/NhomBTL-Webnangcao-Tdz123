@@ -7,7 +7,7 @@ import { useAuth } from '../../context/AuthContext';
 export default function AppLayout({ currentPage, children }) {
   const { user } = useAuth();
   const isHomePage = currentPage === 'overview'
-    || (user?.role === 'STUDENT' && currentPage === 'my-profile');
+    || (user?.role === 'STUDENT' && currentPage === 'my-overview');
   return (
     <div className={`app-shell${user?.role === 'STUDENT' ? ' student-shell' : ''}`}>
       <Sidebar currentPage={currentPage} />

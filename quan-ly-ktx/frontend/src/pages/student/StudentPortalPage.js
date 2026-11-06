@@ -5,6 +5,7 @@ import BillsPage from './BillsPage';
 import ContactPage from './ContactPage';
 import ProfilePage from './ProfilePage';
 import RoomPage from './RoomPage';
+import StudentDashboardPage from './StudentDashboardPage';
 import './StudentShared.css';
 
 export default function StudentPortalPage({ page, params }) {
@@ -55,6 +56,9 @@ export default function StudentPortalPage({ page, params }) {
 
   if (page === 'my-profile') {
     return <ProfilePage user={user} portal={portal} loading={loading} error={error} retry={retry} onSaved={saveProfile} />;
+  }
+  if (page === 'my-overview') {
+    return <StudentDashboardPage portal={portal} loading={loading} error={error} retry={retry} />;
   }
   if (page === 'my-room') {
     return <RoomPage portal={portal} loading={loading} error={error} retry={retry} onRequest={sendResidenceRequest} />;

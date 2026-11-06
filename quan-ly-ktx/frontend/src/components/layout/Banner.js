@@ -1,5 +1,6 @@
 const bannerCopy = {
   overview: ['', 'Chào mừng trở lại', 'Quản lý vận hành ký túc xá hiệu quả, rõ ràng và thuận tiện.'],
+  'my-overview': ['CỔNG SINH VIÊN', 'Chào mừng bạn', 'Theo dõi nhanh thông tin lưu trú và các khoản cần thanh toán.'],
   'my-profile': ['CỔNG SINH VIÊN', 'Hồ sơ cá nhân', 'Xem thông tin tài khoản của bạn.'],
 };
 

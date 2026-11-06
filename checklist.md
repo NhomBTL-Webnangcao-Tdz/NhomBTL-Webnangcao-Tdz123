@@ -165,7 +165,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [x] 5.7 (BE, Sơn) Đổi mật khẩu cho người dùng đang đăng nhập
 * [~] 5.8 (BE, Nam) Báo cáo `GET /reports/summary?month=&year=` (lấp đầy theo tòa, đã thu, công nợ, HĐ sắp hết hạn). Có API nhưng bỏ qua `month`, `year`. Còn: lọc tháng, lấp đầy theo tòa, HĐ sắp hết hạn
 * [x] 5.9 (BE, Nam) Unit test cho các quy tắc R1–R10. R1–R5, R6–R10 đã có test service/DTO, log `docs/Phan 5/5.9-5.10-unit-test.md`
-* [~] 5.10 (BE, Nam) Unit test cho mọi user story của 2.12, đặt trong thư mục `test/` [Đề 7b]. Toàn bộ spec đã ở `test/unit/`; đã bổ sung US-16, US-21. Còn: US-05, US-24; US-04 và US-13 mới một phần. Log `docs/Phan 5/5.9-5.10-unit-test.md`
+* [~] 5.10 (BE, Nam) Unit test cho mọi user story của 2.12, đặt trong thư mục `test/` [Đề 7b]. US-04 đã có test tương tác nút đăng xuất; US-16, US-21 đã bổ sung. Còn: US-05, US-24; US-13 mới một phần. Log `docs/Phan 5/5.9-5.10-unit-test.md`
 
 ## 6. Frontend khu quản lý (ADMIN / MANAGER)
 
@@ -185,7 +185,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 
 ## 7. Frontend cổng sinh viên (STUDENT)
 
-* [~] 7.1 (FE, Nam) Trang chủ sinh viên: đăng nhập xong đã chuyển tới `#my-profile` (commit `1c56b71`); còn trang tóm tắt phòng, hạn HĐ, hóa đơn chưa đóng
+* [x] 7.1 (FE, Nam) Trang tổng quan sinh viên là trang mặc định sau đăng nhập; tóm tắt phòng, ngày hết hạn hợp đồng, hóa đơn chưa đóng và tổng tiền. Log `docs/Phan 7/7.1-tong-quan-sinh-vien.md`
 * [~] 7.2 (FE, Tân) Hồ sơ cá nhân: hiển thị hồ sơ Student, sửa SĐT/email, đổi mật khẩu. Đã có `ProfilePage` + `PUT student/me/profile` (commit `fde890e`), chưa kiểm thử, cần đối chiếu đủ ý
 * [x] 7.3 (FE, Nam) Phòng của tôi: phòng, tòa, bạn cùng phòng, mã hợp đồng, ngày bắt đầu và ngày hết hạn. Hợp đồng lấy từ `GET /student/me/portal`; log `docs/Phan 7/7.3-hop-dong-phong-cua-toi.md`
 * [x] 7.4 (FE, Nam) Hóa đơn của tôi: tiền phòng + điện nước, khoản chưa thanh toán và lịch sử giao dịch theo hợp đồng. Log `docs/Phan 7/7.4-lich-su-thanh-toan.md`

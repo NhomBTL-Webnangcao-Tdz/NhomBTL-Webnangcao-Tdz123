@@ -14,6 +14,7 @@ const pageNames = {
   utilities: 'Nhập chỉ số điện nước',
   settings: 'Cài đặt hệ thống',
   'my-profile': 'Hồ sơ cá nhân',
+  'my-overview': 'Tổng quan sinh viên',
   'my-room': 'Phòng của tôi',
   'my-bills': 'Hóa đơn của tôi',
   login: 'Đăng nhập',
@@ -29,7 +30,7 @@ export default function Header({ currentPage }) {
   const unreadCount = notifications.filter((notification) => !notification.isRead).length;
   const userId = user?.id;
   const userRole = user?.role;
-  const homePage = user?.role === 'STUDENT' ? 'my-profile' : 'overview';
+  const homePage = user?.role === 'STUDENT' ? 'my-overview' : 'overview';
 
   useEffect(() => {
     if (userId === undefined) return undefined;

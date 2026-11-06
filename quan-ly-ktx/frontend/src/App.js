@@ -26,7 +26,7 @@ const aliases = {
   'utility-bills': 'invoices',
   'residence-requests': 'requests',
 };
-const STUDENT_PAGES = ['my-profile', 'my-room', 'my-bills', 'my-contact'];
+const STUDENT_PAGES = ['my-overview', 'my-profile', 'my-room', 'my-bills', 'my-contact'];
 
 function RoutedContent() {
   const [route, setRoute] = useState(getHashRoute);
@@ -50,13 +50,13 @@ function RoutedContent() {
 
   useEffect(() => {
     if (isReady && user && isAuthPage) {
-      window.location.hash = user.role === 'STUDENT' ? '#my-profile' : '#overview';
+      window.location.hash = user.role === 'STUDENT' ? '#my-overview' : '#overview';
     }
   }, [isReady, user, isAuthPage]);
 
   useEffect(() => {
     if (isReady && user?.role === 'STUDENT' && !STUDENT_PAGES.includes(currentPage)) {
-      window.location.hash = '#my-profile';
+      window.location.hash = '#my-overview';
     }
   }, [isReady, user, currentPage]);
 
@@ -118,8 +118,8 @@ function RoutedContent() {
         <span className="access-icon">404</span>
         <h2>Không tìm thấy trang</h2>
         <p>Đường dẫn này không tồn tại trong hệ thống quản lý.</p>
-        <a className="button button-primary" href={user.role === 'STUDENT' ? '#my-profile' : '#overview'}>
-          {user.role === 'STUDENT' ? 'Về hồ sơ cá nhân' : 'Về tổng quan'}
+        <a className="button button-primary" href={user.role === 'STUDENT' ? '#my-overview' : '#overview'}>
+          {user.role === 'STUDENT' ? 'Về tổng quan sinh viên' : 'Về tổng quan'}
         </a>
       </section>
     );
