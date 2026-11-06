@@ -1,0 +1,59 @@
+.export-buttons {
+  display: flex;
+  flex: none;
+  gap: 8px;
+}
+
+.export-buttons .button {
+  white-space: nowrap;
+}
+
+.print-sheet {
+  display: none;
+}
+
+@media print {
+  body.printing-sheet #root {
+    display: none;
+  }
+
+  body.printing-sheet .print-sheet,
+  body.printing-sheet .print-sheet * {
+    visibility: visible;
+  }
+
+  body.printing-sheet .print-sheet {
+    color: #000;
+    display: block;
+    font-size: 12px;
+  }
+
+  .print-sheet h1 {
+    font-size: 18px;
+    margin: 0 0 4px;
+  }
+
+  .print-sheet p {
+    margin: 0 0 12px;
+  }
+
+  .print-sheet table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .print-sheet th,
+  .print-sheet td {
+    border: 1px solid #666;
+    padding: 4px 6px;
+    text-align: left;
+  }
+
+  .print-sheet thead {
+    display: table-header-group;
+  }
+
+  .print-sheet tr {
+    break-inside: avoid;
+  }
+}

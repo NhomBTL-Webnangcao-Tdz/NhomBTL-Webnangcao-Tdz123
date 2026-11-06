@@ -195,7 +195,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [x] 8.1 (BE + FE, Tân kiểm) Đơn đăng ký ở trực tuyến: SV chọn phòng còn chỗ → gửi đơn → cán bộ duyệt. Đã có API `residence-requests` + `ResidenceRequestsPage` (commit `fde890e`). Đã kiểm cả luồng trên API thật. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [ ] 8.2 (BE + FE, Sơn, nếu còn thời gian) Yêu cầu sửa chữa: SV gửi, cán bộ cập nhật trạng thái
 * [~] 8.3 (BE + FE, Nam) Thông báo trong hệ thống (HĐ sắp hết hạn, có hóa đơn mới). Đã có API `notifications/me` (commit `fde890e`). Đã kiểm thông báo duyệt đơn, hóa đơn, nhắc đóng tiền. Còn: thông báo HĐ sắp hết hạn. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
-* [ ] 8.4 (FE, Sơn) Xuất Excel/PDF danh sách, hóa đơn
+* [x] 8.4 (FE, Sơn) Xuất Excel/PDF danh sách, hóa đơn
 
 ## 9. Kiểm thử & triển khai
 

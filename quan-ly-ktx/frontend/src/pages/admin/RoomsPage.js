@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { roomApi } from '../../api/room.api';
+import ExportButtons from '../../components/common/ExportButtons';
 import Modal from '../../components/common/Modal';
 import PageHeading from '../../components/common/PageHeading';
 import StatusBadge from '../../components/common/StatusBadge';
@@ -18,6 +19,17 @@ function getRoomStatus(room) {
   if (Number(room.currentOccupancy) > 0) return 'occupied';
   return 'available';
 }
+
+const roomStatusLabels = { available: 'Còn chỗ', occupied: 'Đang ở', full: 'Đã đầy', maintenance: 'Bảo trì' };
+
+const exportColumns = [
+  { label: 'Tòa nhà', value: (room) => room.building, width: 18 },
+  { label: 'Phòng', value: (room) => room.roomNumber, width: 10 },
+  { label: 'Đang ở', value: (room) => Number(room.currentOccupancy) || 0, width: 10 },
+  { label: 'Sức chứa', value: (room) => Number(room.maxCapacity) || 0, width: 10 },
+  { label: 'Giá thuê / tháng', value: (room) => Number(room.price) || 0, width: 18, money: true },
+  { label: 'Trạng thái', value: (room) => roomStatusLabels[getRoomStatus(room)], width: 12 },
+];
 
 function getFloor(roomNumber) {
   const digits = String(roomNumber || '').match(/\d+/)?.[0];
@@ -114,7 +126,7 @@ function RoomCard({ room, onOpen }) {
   const occupancy = Number(room.currentOccupancy) || 0;
   return (
     <button className={`room-card room-${status}`} onClick={() => onOpen(room)}>
-      <div className="room-card-top"><span className="room-door">⌂</span><StatusBadge value={status} label={{ available: 'Còn chỗ', occupied: 'Đang ở', full: 'Đã đầy', maintenance: 'Bảo trì' }[status]} /></div>
+      <div className="room-card-top"><span className="room-door">⌂</span><StatusBadge value={status} label={roomStatusLabels[status]} /></div>
       <strong className="room-number">P.{room.roomNumber}</strong>
       <span className="room-occupancy">{occupancy} / {room.maxCapacity} người</span>
       <span className="room-price">{Number(room.price).toLocaleString('vi-VN')} ₫ <small>/ tháng</small></span>
@@ -177,6 +189,7 @@ export default function RoomsPage({ segments, params }) {
     const matchesSearch = `${room.roomNumber} ${room.building}`.toLowerCase().includes(searchTerm.trim().toLowerCase());
     return matchesStatus && matchesSearch;
   });
+  const exportRows = buildingFromRoute ? filteredRooms : rooms.filter((room) => buildings.includes(room.building));
   const floorGroups = [...new Set(filteredRooms.map((room) => getFloor(room.roomNumber)))].sort((a, b) => a - b);
 
   const closeForm = () => {
@@ -240,7 +253,10 @@ export default function RoomsPage({ segments, params }) {
           ) : (
             <label className="search-field"><span aria-hidden="true">⌕</span><Form.Control value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} placeholder="Tìm theo tên tòa nhà" aria-label="Tìm tòa nhà" /></label>
           )}
-          <Button variant="outline-secondary" className="button button-secondary" onClick={refresh}>Làm mới</Button>
+          <div className="export-buttons">
+            <ExportButtons title={buildingFromRoute ? `Danh sách phòng ${buildingFromRoute}` : 'Danh sách phòng'} fileName="danh-sach-phong" columns={exportColumns} rows={exportRows} />
+            <Button variant="outline-secondary" className="button button-secondary" onClick={refresh}>Làm mới</Button>
+          </div>
         </div>
         {isLoading ? <p className="async-state" role="status">Đang tải danh sách phòng...</p>
           : error ? <div className="async-state async-error" role="alert"><p>{error}</p><p>API phòng yêu cầu đăng nhập với quyền ADMIN hoặc MANAGER.</p><Button variant="outline-secondary" className="button button-secondary" onClick={refresh}>Thử lại</Button></div>

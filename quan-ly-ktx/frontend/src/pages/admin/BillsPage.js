@@ -5,6 +5,7 @@ import { billApi } from '../../api/bill.api';
 import { roomApi } from '../../api/room.api';
 import BillForm from '../../components/common/BillForm';
 import DataTable from '../../components/common/DataTable';
+import ExportButtons from '../../components/common/ExportButtons';
 import GeneralChargeForm from '../../components/common/GeneralChargeForm';
 import InvoiceReceiptLink from '../../components/common/InvoiceReceiptLink';
 import Modal from '../../components/common/Modal';
@@ -29,6 +30,18 @@ function isPastDue(dueDate) {
   today.setHours(0, 0, 0, 0);
   return due < today;
 }
+
+const billDate = (value) => (value ? String(value).slice(0, 10).split('-').reverse().join('/') : '');
+
+const exportColumns = [
+  { label: 'Mã hóa đơn', value: (bill) => `HD-${String(bill.bill_id).padStart(4, '0')}`, width: 14 },
+  { label: 'Phòng', value: (bill) => (bill.room ? `${bill.room.building} · ${bill.room.roomNumber}` : 'Chưa gắn phòng'), width: 20 },
+  { label: 'Khoản thu', value: (bill) => (bill.billType === 'GENERAL' ? bill.title : 'Tiền phòng + điện nước'), width: 26 },
+  { label: 'Kỳ', value: (bill) => `${String(bill.month).padStart(2, '0')}/${bill.year}`, width: 10 },
+  { label: 'Hạn thanh toán', value: (bill) => billDate(bill.dueDate), width: 15 },
+  { label: 'Tổng tiền', value: (bill) => Number(bill.total_amount) || 0, width: 16, money: true },
+  { label: 'Trạng thái', value: (bill) => (bill.is_paid ? 'Đã thanh toán' : 'Chưa thanh toán'), width: 17 },
+];
 
 export default function BillsPage() {
   const { user } = useAuth();
@@ -213,6 +226,7 @@ export default function BillsPage() {
           <label className="compact-select">Thanh toán<Form.Select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}><option value="all">Tất cả</option><option value="unpaid">Chưa thanh toán</option><option value="paid">Đã thanh toán</option></Form.Select></label>
           <label className="compact-select">Kỳ<Form.Control type="month" value={periodFilter} onChange={(event) => setPeriodFilter(event.target.value)} /></label>
           <label className="compact-select">Tòa<Form.Select value={buildingFilter} onChange={(event) => setBuildingFilter(event.target.value)}><option value="">Tất cả</option>{buildings.map((building) => <option key={building} value={building}>{building}</option>)}</Form.Select></label>
+          <ExportButtons title="Danh sách hóa đơn" fileName="danh-sach-hoa-don" columns={exportColumns} rows={filtered} />
         </div>
         <DataTable columns={columns} rows={filtered} rowKey={(bill) => bill.bill_id} isLoading={isLoading} error={error} onRetry={refresh} emptyMessage="Không tìm thấy hóa đơn." />
       </section>

@@ -2,7 +2,7 @@
 
 Trạng thái: bản nháp (checklist 9.7, Đề 7d). Cập nhật ngày 05/11/2026 trên nhánh `feature/tandz`.
 
-* Kết quả: backend 122/122 pass (`npm test`), frontend 41/41 pass (`CI=true npx react-scripts test --watchAll=false`).
+* Kết quả: backend 136/136 pass (`npm test`), frontend 85/85 pass (`CI=true npx react-scripts test --watchAll=false`).
 * Unit test giả lập repository, API. Ngoài ra có các ca chạy trên API và trình duyệt thật với DB thật (mục cuối). E2E đủ luồng hợp đồng chờ checklist 9.3.
 * Định dạng mỗi ca: mã, loại (TC thành công / TL lỗi), đầu vào → mong đợi. Kết quả thực tế: đạt (trừ khi ghi khác).
 * BE = file `*.spec.ts` trong `quan-ly-ktx/backend/test/unit`, FE = `quan-ly-ktx/frontend/src/App.test.js`, TT = kiểm thử tay trên app với backend giả (log 6.3, 9.1).
@@ -90,6 +90,13 @@ Trạng thái: bản nháp (checklist 9.7, Đề 7d). Cập nhật ngày 05/11/2
 ## US-20 Tổng quan
 
 * TL-14 TL: API lỗi 503 → bảng điều khiển hiện thông báo không tải được số liệu. FE
+
+## Xuất Excel, PDF (8.4)
+
+* TC-40 TC: bấm Xuất Excel ở trang phòng, hóa đơn → tải file đúng số dòng đang lọc, tiếng Việt đúng. FE, Edge
+* TC-41 TC: bấm Xuất PDF → hiện bảng in đủ dòng, in xong bảng biến mất. FE, Edge
+* TL-28 TL: không có dòng nào → khóa 2 nút. FE
+* TL-29 TL: dữ liệu chứa HTML hoặc bắt đầu bằng `=` → hiện dạng chữ, không chạy. FE
 
 ## Giao diện chung (Đề 7e)
 
