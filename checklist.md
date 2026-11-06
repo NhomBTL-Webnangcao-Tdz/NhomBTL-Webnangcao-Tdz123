@@ -210,7 +210,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 ## 10. Tài liệu & bảo vệ
 
 * [~] 10.1 (Nhóm, Tân) Viết lại `readme.md` bản cuối: giới thiệu, công nghệ, cài đặt & chạy, tài khoản demo, link triển khai. Log `docs/Phan 10/10.1-readme.md`. Còn: link video
-* [ ] 10.2 (Nhóm, Sơn) Hướng dẫn sử dụng cho cán bộ và sinh viên (có ảnh chụp màn hình)
+* [x] 10.2 (Nhóm, Sơn) Hướng dẫn sử dụng cho cán bộ và sinh viên (có ảnh chụp màn hình)
 * [~] 10.3 (Nhóm, Tân) Báo cáo cuối kỳ theo mẫu Phenikaa, trả lời đủ 10 câu của đề; có trang link demo, link GitHub, đóng góp từng thành viên [Đề 8]. Nháp `docs/bao-cao.md`, log `docs/Phan 10/10.3-bao-cao.md`. Còn: mẫu trình bày, các dòng CẦN BỔ SUNG
 * [~] 10.4 (Nhóm, Tân) Video demo dưới 8 phút (đưa link vào báo cáo) + slide, kịch bản demo [Đề 8]. Có `docs/kich-ban-demo.md`, log `docs/Phan 10/10.4-kich-ban-anh-so-do.md`. Còn: quay video, slide
 * [ ] 10.5 (Nhóm, Tân) Dọn dữ liệu thử còn sót (theo log), kiểm tra lần cuối

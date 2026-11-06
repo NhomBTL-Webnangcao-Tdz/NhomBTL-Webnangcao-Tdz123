@@ -83,3 +83,4 @@ Việc ngoài checklist (không có log riêng):
 * 4.9: giới hạn đăng nhập sai, `helmet`. `Phan 4/4.9-bao-mat-dang-nhap.md`. Xong
 * 5.7: đổi mật khẩu, sửa lỗi không có nút đăng xuất ở điện thoại. `Phan 5/5.7-doi-mat-khau.md`. Xong
 * 9.2: test client, guard, form đăng nhập, đăng ký, AuthContext. `Phan 9/9.2-test-frontend.md`. Xong
+* 10.2: hướng dẫn sử dụng có ảnh chụp. `Phan 10/10.2-huong-dan-su-dung.md`. Xong
