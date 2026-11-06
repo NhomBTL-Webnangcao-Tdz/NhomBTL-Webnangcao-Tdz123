@@ -15,7 +15,6 @@ const validBody = {
   new_electric_index: 150,
   old_water_index: 10,
   new_water_index: 12,
-  total_amount: 250000,
   is_paid: false,
 };
 
@@ -34,7 +33,7 @@ describe('UtilityBill DTO', () => {
     ['chỉ số âm', { ...validBody, old_water_index: -1 }],
     ['chỉ số điện mới nhỏ hơn cũ', { ...validBody, new_electric_index: 99 }],
     ['chỉ số nước mới nhỏ hơn cũ', { ...validBody, new_water_index: 9 }],
-    ['số tiền âm', { ...validBody, total_amount: -1 }],
+    ['total_amount do client gửi', { ...validBody, total_amount: 1 }],
     ['ngày sai', { ...validBody, dueDate: '10/12/2026' }],
     ['trường lạ receiptImagePath', { ...validBody, receiptImagePath: '../../.env' }],
     ['trường lạ bill_id', { ...validBody, bill_id: 1 }],

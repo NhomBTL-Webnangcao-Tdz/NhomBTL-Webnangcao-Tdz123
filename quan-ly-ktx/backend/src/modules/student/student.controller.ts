@@ -80,3 +80,15 @@ export class StudentController {
     return this.studentService.remove(id);
   }
 }
+
+@Controller('me')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.STUDENT)
+export class StudentMeController {
+  constructor(private readonly studentService: StudentService) {}
+
+  @Get('payments')
+  async getMyPayments(@Request() req: AuthenticatedStudentRequest) {
+    return this.studentService.getMyPayments(req.user.sub);
+  }
+}

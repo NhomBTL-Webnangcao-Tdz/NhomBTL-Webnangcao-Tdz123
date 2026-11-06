@@ -7,8 +7,16 @@
   padding: 17px 0 0;
 }
 
+.payment-history-panel {
+  margin-bottom: 16px;
+}
+
 .student-bills-table {
   min-width: 620px;
+}
+
+.student-payments-table {
+  min-width: 680px;
 }
 
 .student-table-empty {

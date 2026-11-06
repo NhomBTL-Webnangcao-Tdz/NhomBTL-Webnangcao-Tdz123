@@ -13,6 +13,7 @@ import { NotificationModule } from './modules/notification/notification.module';
 import { MeterReadingModule } from './modules/meter-reading/meter-reading.module';
 import { PaymentModule } from './modules/payment/payment.module';
 import { ReportModule } from './modules/report/report.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ReportModule } from './modules/report/report.module';
         resolve(process.cwd(), '../backend/.env'),
       ],
     }),
+    ScheduleModule.forRoot(),
 
     // Database connection (DataSource pattern)
     DatabaseModule,

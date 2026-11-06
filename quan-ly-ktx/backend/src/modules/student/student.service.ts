@@ -9,6 +9,7 @@ import { DataSource, In, Repository } from 'typeorm';
 import { User } from '../../auth/entities/user.entity';
 import { Role } from '../../common/role.enum';
 import { Contract } from '../contract/contract.entity';
+import { Payment } from '../payment/payment.entity';
 import { Notification } from '../notification/notification.entity';
 import { Room } from '../room/room.entity';
 import { UtilityBill } from '../utility-bill/utility-bill.entity';
@@ -330,12 +331,28 @@ export class StudentService {
       select: { id: true, studentSid: true },
     });
     if (!user?.studentSid) {
-      return { linked: false, student: null, room: null, roommates: [], bills: [], residenceRequest: null };
+      return {
+        linked: false,
+        student: null,
+        room: null,
+        contract: null,
+        roommates: [],
+        bills: [],
+        residenceRequest: null,
+      };
     }
 
     const student = await this.studentRepository.findOneBy({ sid: user.studentSid });
     if (!student) {
-      return { linked: false, student: null, room: null, roommates: [], bills: [], residenceRequest: null };
+      return {
+        linked: false,
+        student: null,
+        room: null,
+        contract: null,
+        roommates: [],
+        bills: [],
+        residenceRequest: null,
+      };
     }
 
     const contractRepository = this.dataSource.getRepository(Contract);
@@ -391,6 +408,11 @@ export class StudentService {
       linked: true,
       student: { sid: student.sid, name: student.sname, email: student.email, phone: student.phone },
       room: room ? { id: room.id, roomNumber: room.roomNumber, building: room.building } : null,
+      contract: activeContract ? {
+        contract_id: activeContract.contract_id,
+        start_date: this.asDay(activeContract.start_date),
+        end_date: this.asDay(activeContract.end_date),
+      } : null,
       roommates,
       bills: bills.map((bill) => {
         const share = bill.shares?.find((item) => item.student.sid === student.sid);
@@ -427,5 +449,34 @@ export class StudentService {
         reviewedAt: residenceRequest.reviewedAt,
       } : null,
     };
+  }
+
+  async getMyPayments(userId: number) {
+    const user = await this.dataSource.getRepository(User).findOne({
+      where: { id: userId },
+      select: { id: true, studentSid: true },
+    });
+    if (!user?.studentSid) return [];
+
+    const payments = await this.dataSource.getRepository(Payment).find({
+      where: { contract: { student: { sid: user.studentSid } } },
+      relations: { contract: { room: true } },
+      order: { payment_date: 'DESC', payment_id: 'DESC' },
+    });
+
+    return payments.map((payment) => ({
+      payment_id: payment.payment_id,
+      amount: Number(payment.amount),
+      payment_date: payment.payment_date,
+      payment_type: payment.payment_type,
+      contract: {
+        contract_id: payment.contract.contract_id,
+        room: payment.contract.room ? {
+          id: payment.contract.room.id,
+          roomNumber: payment.contract.room.roomNumber,
+          building: payment.contract.room.building,
+        } : null,
+      },
+    }));
   }
 }

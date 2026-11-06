@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { ErrorState, LoadingState } from '../../components/common/AsyncState';
 import PageHeading from '../../components/common/PageHeading';
+import { formatDate } from './studentPageUtils';
 import './RoomPage.css';
 
 export default function RoomPage({ portal, loading, error, retry, onRequest }) {
@@ -42,6 +43,13 @@ export default function RoomPage({ portal, loading, error, retry, onRequest }) {
                 <p className="eyebrow">PHÒNG ĐANG Ở</p>
                 <strong className="student-room-number">{portal.room.roomNumber}</strong>
                 <span className="student-room-building">{portal.room.building}</span>
+                {portal.contract && (
+                  <dl className="student-room-contract">
+                    <div><dt>Hợp đồng</dt><dd>HĐ-{String(portal.contract.contract_id).padStart(4, '0')}</dd></div>
+                    <div><dt>Ngày bắt đầu</dt><dd>{formatDate(portal.contract.start_date)}</dd></div>
+                    <div><dt>Ngày hết hạn</dt><dd>{formatDate(portal.contract.end_date)}</dd></div>
+                  </dl>
+                )}
               </article>
               <section className="panel student-roommates">
                 <div className="student-panel-heading"><h3>Các bạn cùng phòng</h3><p>Thông tin liên hệ để tiện sinh hoạt chung</p></div>

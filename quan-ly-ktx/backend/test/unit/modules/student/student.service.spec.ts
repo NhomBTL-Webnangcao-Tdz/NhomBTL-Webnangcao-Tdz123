@@ -163,6 +163,7 @@ describe('StudentService student portal', () => {
       linked: false,
       student: null,
       room: null,
+      contract: null,
       roommates: [],
       bills: [],
       residenceRequest: null,
@@ -176,6 +177,9 @@ describe('StudentService student portal', () => {
     };
     const currentContractQuery = makeQueryBuilder();
     currentContractQuery.getOne.mockResolvedValue({
+      contract_id: 12,
+      start_date: new Date('2026-09-01T00:00:00.000Z'),
+      end_date: new Date('2027-06-30T00:00:00.000Z'),
       room: { id: 'room-1', roomNumber: '302', building: 'Tòa B' },
     });
     const roommatesQuery = makeQueryBuilder();
@@ -226,6 +230,11 @@ describe('StudentService student portal', () => {
       linked: true,
       student: { sid: 'SV008', name: 'Sinh viên tám', email: 'sv8@example.com', phone: '0900000008' },
       room: { id: 'room-1', roomNumber: '302', building: 'Tòa B' },
+      contract: {
+        contract_id: 12,
+        start_date: '2026-09-01',
+        end_date: '2027-06-30',
+      },
       roommates: [{ sid: 'SV009', name: 'Sinh viên chín', phone: '0900000009' }],
       bills: [{
         bill_id: 5,
@@ -297,5 +306,62 @@ describe('StudentService.remove (R5)', () => {
       where: { student: { sid: 'SV008' }, isPaid: false },
     }));
     expect(studentRepository.delete).not.toHaveBeenCalled();
+  });
+});
+
+describe('StudentService.getMyPayments', () => {
+  it('returns only the authenticated student’s payments, newest first', async () => {
+    const userRepository = {
+      findOne: jest.fn().mockResolvedValue({ id: 8, studentSid: 'SV008' }),
+    };
+    const payments = [{
+      payment_id: 24,
+      amount: '125000.00',
+      payment_date: new Date('2026-11-06T09:30:00.000Z'),
+      payment_type: 'Tiền phòng',
+      contract: {
+        contract_id: 12,
+        room: { id: 'room-1', roomNumber: '302', building: 'Tòa B' },
+      },
+    }];
+    const paymentRepository = { find: jest.fn().mockResolvedValue(payments) };
+    const dataSource = {
+      getRepository: jest.fn((entity) => (
+        entity === User ? userRepository : paymentRepository
+      )),
+    } as unknown as DataSource;
+    const service = new StudentService({} as Repository<Student>, dataSource);
+
+    await expect(service.getMyPayments(8)).resolves.toEqual([{
+      payment_id: 24,
+      amount: 125000,
+      payment_date: new Date('2026-11-06T09:30:00.000Z'),
+      payment_type: 'Tiền phòng',
+      contract: {
+        contract_id: 12,
+        room: { id: 'room-1', roomNumber: '302', building: 'Tòa B' },
+      },
+    }]);
+    expect(paymentRepository.find).toHaveBeenCalledWith({
+      where: { contract: { student: { sid: 'SV008' } } },
+      relations: { contract: { room: true } },
+      order: { payment_date: 'DESC', payment_id: 'DESC' },
+    });
+  });
+
+  it('returns no payments and skips the query when the account has no linked student', async () => {
+    const userRepository = {
+      findOne: jest.fn().mockResolvedValue({ id: 8, studentSid: null }),
+    };
+    const paymentRepository = { find: jest.fn() };
+    const dataSource = {
+      getRepository: jest.fn((entity) => (
+        entity === User ? userRepository : paymentRepository
+      )),
+    } as unknown as DataSource;
+    const service = new StudentService({} as Repository<Student>, dataSource);
+
+    await expect(service.getMyPayments(8)).resolves.toEqual([]);
+    expect(paymentRepository.find).not.toHaveBeenCalled();
   });
 });

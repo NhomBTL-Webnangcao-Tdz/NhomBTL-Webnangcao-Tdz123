@@ -73,6 +73,58 @@ describe('ContractService.create', () => {
     expect(roomRepository.update).toHaveBeenCalledWith('R01', { currentOccupancy: 1 });
   });
 
+  describe('ContractService.findAll', () => {
+    function setup() {
+      const contracts = [{ contract_id: 12 }, { contract_id: 11 }];
+      const builder = {
+        leftJoinAndSelect: jest.fn().mockReturnThis(),
+        orderBy: jest.fn().mockReturnThis(),
+        addOrderBy: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        take: jest.fn().mockReturnThis(),
+        getMany: jest.fn().mockResolvedValue(contracts),
+        getManyAndCount: jest.fn().mockResolvedValue([[contracts[1]], 2]),
+      };
+      const repository = {
+        createQueryBuilder: jest.fn().mockReturnValue(builder),
+      };
+      const service = new ContractService(
+        repository as unknown as Repository<Contract>,
+        {} as DataSource,
+      );
+      return { service, builder, contracts };
+    }
+
+    it('searches by contract, student, room or building and preserves the unpaged array response', async () => {
+      const { service, builder, contracts } = setup();
+
+      await expect(service.findAll({ q: '  SV%01  ' })).resolves.toBe(contracts);
+
+      expect(builder.andWhere).toHaveBeenCalledWith(
+        '(CAST(contract.contract_id AS CHAR) LIKE :q OR student.sid LIKE :q OR student.sname LIKE :q OR room.roomNumber LIKE :q OR room.building LIKE :q)',
+        { q: '%SV\\%01%' },
+      );
+      expect(builder.getMany).toHaveBeenCalled();
+      expect(builder.getManyAndCount).not.toHaveBeenCalled();
+    });
+
+    it('returns paged contracts with total metadata when page is specified', async () => {
+      const { service, builder, contracts } = setup();
+
+      await expect(service.findAll({ page: 2, limit: 1 })).resolves.toEqual({
+        items: [contracts[1]],
+        total: 2,
+        page: 2,
+        limit: 1,
+      });
+
+      expect(builder.skip).toHaveBeenCalledWith(1);
+      expect(builder.take).toHaveBeenCalledWith(1);
+      expect(builder.getManyAndCount).toHaveBeenCalled();
+    });
+  });
+
   it('rejects a contract when the room has no remaining capacity', async () => {
     const { service, contractRepository } = createService([0, 2]);
 

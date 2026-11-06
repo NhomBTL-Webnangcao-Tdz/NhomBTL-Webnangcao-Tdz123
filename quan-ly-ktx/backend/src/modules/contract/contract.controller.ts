@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   Put,
   UseGuards,
 } from '@nestjs/common';
@@ -20,6 +21,7 @@ import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
 import { RenewContractDto } from './dto/renew-contract.dto';
 import { LiquidateContractDto } from './dto/liquidate-contract.dto';
+import { ListQueryDto } from '../../common/list-query.dto';
 
 @Controller('contract')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -28,8 +30,8 @@ export class ContractController {
   constructor(private readonly contractService: ContractService) {}
 
   @Get()
-  async findAll(): Promise<Contract[]> {
-    return this.contractService.findAll();
+  async findAll(@Query() query: ListQueryDto) {
+    return this.contractService.findAll(query);
   }
 
   @Get(':id')

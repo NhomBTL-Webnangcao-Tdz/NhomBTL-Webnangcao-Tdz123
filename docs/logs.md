@@ -57,7 +57,7 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 6.11: trang Cài đặt, quản lý tài khoản cán bộ. `Phan 6/6.11-cai-dat.md`. Xong, `4cae30c`
 * 6.1: kiểm các trang trên app thật, ghi lỗi. `Phan 6/6.1-kiem-thu-trang-admin.md`. Xong, `ba3f229`
 * 6.2: toast, hộp xác nhận, lỗi tiếng Việt. `Phan 6/6.2-toast-xac-nhan.md`. Xong, `1e2f14b`, `2842f89`
-* 4.8: phân trang, tìm kiếm, lọc cho phòng, sinh viên, hóa đơn. `Phan 4/4.8-phan-trang-tim-kiem.md`. Còn hợp đồng, `18c2f35`
+* 4.8: hoàn tất phân trang và tìm kiếm `GET /contract`, dùng tiện ích chung; giữ response mảng nếu không có `page`. `Phan 4/4.8-phan-trang-tim-kiem.md`. Xong
 * 6.9: trang hóa đơn, lọc, chi tiết, in. `Phan 6/6.9-trang-hoa-don.md`. Xong, `3fb9d00`
 * 6.10: trang tổng quan. `Phan 6/6.10-tong-quan.md`. Xong, `4691d12`
 * 5.9 + 5.10: unit test trong `test/unit/`, bổ sung R6, R9. `Phan 5/5.9-5.10-unit-test.md`. Còn phần chờ Nam, Sơn, `db1115f`
@@ -76,6 +76,9 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 * 9.3 (đối chiếu): cập nhật trạng thái checklist theo code sau khi gộp. `Phan 9/9.3-doi-chieu-checklist.md`. Xong, `26a7099`
 * 10.3 (cập nhật): tài liệu thiết kế, báo cáo, ảnh sơ đồ theo code Nam. `Phan 10/10.3-cap-nhat-theo-code-nam.md`. Xong, `26a7099`
 * 9.5: kiểm bản online không đăng nhập. `Phan 9/9.5-kiem-thu-ban-online.md`. Còn 3 vai trò, `26a7099`
+* 5.6 + 7.4: API `/me/payments` chỉ trả giao dịch của sinh viên đăng nhập; thêm lịch sử thanh toán vào Hóa đơn của tôi. `Phan 7/7.4-lich-su-thanh-toan.md`. Xong
+* 7.3: bổ sung mã hợp đồng và ngày bắt đầu/hết hạn vào dữ liệu phòng của sinh viên, hiển thị tại Phòng của tôi. `Phan 7/7.3-hop-dong-phong-cua-toi.md`. Xong
+* 8.3: thêm tác vụ khởi động và hằng ngày tạo thông báo cho sinh viên có hợp đồng còn hiệu lực, hết hạn trong 30 ngày; chống tạo thông báo lặp cùng hợp đồng/ngày hết hạn. `Phan 8/8.3-thong-bao-hop-dong-sap-het-han.md`. Xong
 
 Việc ngoài checklist (không có log riêng):
 

@@ -24,7 +24,11 @@ import { CreateUtilityBillDto } from './dto/create-utility-bill.dto';
 import { UpdateUtilityBillDto } from './dto/update-utility-bill.dto';
 import { UtilityBill } from './utility-bill.entity';
 import { UtilityBillShare } from './utility-bill-share.entity';
-import { splitUtilityAmount } from '../meter-reading/meter-reading-calculations';
+import { UtilityTariff } from './utility-tariff.entity';
+import {
+  calculateUtilityAmount,
+  splitUtilityAmount,
+} from '../meter-reading/meter-reading-calculations';
 
 interface UploadedReceiptImage {
   buffer: Buffer;
@@ -91,7 +95,25 @@ export class UtilityBillService {
       });
       if (duplicate) throw new ConflictException('Phòng này đã có hóa đơn cho kỳ đó.');
     }
-    const newBill = this.utilityBillRepository.create(utilityBillData as unknown as DeepPartial<UtilityBill>);
+
+    const tariff = await this.dataSource.getRepository(UtilityTariff).findOneBy({ id: 1 });
+    if (!tariff) throw new ConflictException('Chưa cấu hình giá điện và nước.');
+    const electricUnitPrice = Number(tariff.electricPrice);
+    const waterUnitPrice = Number(tariff.waterPrice);
+    const totalAmount = calculateUtilityAmount(
+      utilityBillData.old_electric_index,
+      utilityBillData.new_electric_index,
+      utilityBillData.old_water_index,
+      utilityBillData.new_water_index,
+      electricUnitPrice,
+      waterUnitPrice,
+    );
+    const newBill = this.utilityBillRepository.create({
+      ...utilityBillData,
+      total_amount: totalAmount,
+      electricUnitPrice,
+      waterUnitPrice,
+    } as DeepPartial<UtilityBill>);
     return this.utilityBillRepository.save(newBill);
   }
 

@@ -1,6 +1,7 @@
 import { BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { UtilityBill } from '../../src/modules/utility-bill/utility-bill.entity';
+import { UtilityTariff } from '../../src/modules/utility-bill/utility-tariff.entity';
 import { UtilityBillService } from '../../src/modules/utility-bill/utility-bill.service';
 
 // US-18: lập hóa đơn. US-19: đánh dấu từng sinh viên đã đóng. Quy tắc R6, R9.
@@ -27,7 +28,6 @@ const dto = {
   new_electric_index: 150,
   old_water_index: 10,
   new_water_index: 12,
-  total_amount: 1000,
 };
 
 function setup(found: object | null = baseBill, options: { duplicate?: boolean; unpaid?: number } = {}) {
@@ -46,24 +46,50 @@ function setup(found: object | null = baseBill, options: { duplicate?: boolean; 
     count: jest.fn().mockResolvedValue(options.unpaid ?? 0),
     find: jest.fn().mockResolvedValue([{ id: 1, isPaid: false }]),
   };
+  const tariff = { id: 1, electricPrice: '3500.00', waterPrice: '20000.00' };
+  const tariffRepository = { findOneBy: jest.fn().mockResolvedValue(tariff) };
   const bills = { save: jest.fn().mockResolvedValue({}) };
   const manager = { getRepository: jest.fn((entity) => (entity === UtilityBill ? bills : shares)) };
   const dataSource = {
     transaction: jest.fn((run) => run(manager)),
-    getRepository: jest.fn(() => shares),
+    getRepository: jest.fn((entity) => (
+      entity === UtilityTariff ? tariffRepository : shares
+    )),
   };
   const service = new UtilityBillService(
     repository as unknown as Repository<UtilityBill>,
     dataSource as unknown as DataSource,
   );
-  return { service, repository, shares, bills, share };
+  return { service, repository, shares, bills, share, tariffRepository };
 }
 
 describe('US-18 UtilityBillService', () => {
-  it('tạo hóa đơn', async () => {
-    const { service, repository } = setup();
+  it('R8: tính tổng tiền trên server và lưu đơn giá tại thời điểm tạo', async () => {
+    const { service, repository, tariffRepository } = setup();
     await service.create(dto);
-    expect(repository.save).toHaveBeenCalled();
+    expect(tariffRepository.findOneBy).toHaveBeenCalledWith({ id: 1 });
+    expect(repository.create).toHaveBeenCalledWith(expect.objectContaining({
+      total_amount: 215000,
+      electricUnitPrice: 3500,
+      waterUnitPrice: 20000,
+    }));
+    expect(repository.save).toHaveBeenCalledWith(expect.objectContaining({
+      total_amount: 215000,
+    }));
+  });
+
+  it('không dùng total_amount giả mạo từ client', async () => {
+    const { service, repository } = setup();
+    await service.create({ ...dto, total_amount: 1 } as typeof dto);
+    expect(repository.create).toHaveBeenCalledWith(expect.objectContaining({ total_amount: 215000 }));
+  });
+
+  it('từ chối tạo hóa đơn nếu chưa cấu hình đơn giá', async () => {
+    const { service, repository, tariffRepository } = setup();
+    tariffRepository.findOneBy.mockResolvedValue(null);
+
+    await expect(service.create(dto)).rejects.toBeInstanceOf(ConflictException);
+    expect(repository.save).not.toHaveBeenCalled();
   });
 
   it('R6: phòng đã có hóa đơn kỳ đó trả 409', async () => {

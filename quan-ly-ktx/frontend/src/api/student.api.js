@@ -2,6 +2,7 @@ import { apiRequest } from './client';
 
 export const studentApi = {
   portal: () => apiRequest('/student/me/portal'),
+  payments: () => apiRequest('/me/payments'),
   saveMyProfile: (profile) => apiRequest('/student/me/profile', {
     method: 'PUT',
     body: JSON.stringify(profile),

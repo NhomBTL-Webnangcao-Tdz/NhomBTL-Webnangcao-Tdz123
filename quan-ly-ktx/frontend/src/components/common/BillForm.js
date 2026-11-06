@@ -12,7 +12,6 @@ const initialBill = {
   new_electric_index: 0,
   old_water_index: 0,
   new_water_index: 0,
-  total_amount: 0,
   is_paid: false,
 };
 
@@ -47,7 +46,6 @@ export default function BillForm({ value, rooms = [], onSave, onCancel, saving, 
         new_electric_index: Number(bill.new_electric_index),
         old_water_index: Number(bill.old_water_index),
         new_water_index: Number(bill.new_water_index),
-        total_amount: Number(bill.total_amount),
         is_paid: Boolean(bill.is_paid),
       });
     }}>
@@ -66,7 +64,7 @@ export default function BillForm({ value, rooms = [], onSave, onCancel, saving, 
         <span>Nước tiêu thụ <strong>{waterUsage} m³</strong></span>
       </div>
       {invalidReading && <p className="form-error form-wide" role="alert">Chỉ số mới không được nhỏ hơn chỉ số cũ.</p>}
-      <label className="form-wide">Tổng tiền (₫)<Form.Control name="total_amount" type="number" min="0" value={bill.total_amount} onChange={handleChange} required /></label>
+      <p className="form-hint form-wide">Tổng tiền điện nước được hệ thống tự tính theo chỉ số và đơn giá tại thời điểm lập hóa đơn.</p>
       <label className="checkbox-field form-wide"><Form.Check.Input name="is_paid" type="checkbox" checked={bill.is_paid} onChange={handleChange} /> Đã thanh toán</label>
       <p className="form-hint form-wide">Hóa đơn được gắn với phòng để sinh viên lưu trú có thể xem khoản cần thanh toán.</p>
       {error && <p className="form-error form-wide" role="alert">{error}</p>}

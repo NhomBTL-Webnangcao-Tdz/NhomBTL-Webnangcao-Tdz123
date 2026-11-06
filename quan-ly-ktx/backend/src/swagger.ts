@@ -33,7 +33,6 @@ const billExample = {
   new_electric_index: 150,
   old_water_index: 10,
   new_water_index: 12,
-  total_amount: 1400000,
   is_paid: false,
 };
 const studentExample = { sid: 'DEMO07', sname: 'Sinh viên Demo 7', email: 'demo07@example.test', phone: '0900000007' };
@@ -92,6 +91,7 @@ const endpoints: Record<string, EndpointDoc> = {
   'PUT /student/{id}': { summary: 'Sửa sinh viên, không đổi được mã', roles: STAFF, request: { phone: '0911111111' } },
   'DELETE /student/{id}': { summary: 'Xóa sinh viên', roles: ADMIN, conflict: 'Sinh viên còn hợp đồng hoặc hóa đơn' },
   'GET /student/me/portal': { summary: 'Dữ liệu cổng sinh viên: phòng, bạn cùng phòng, hóa đơn, đơn đăng ký', roles: STUDENT },
+  'GET /me/payments': { summary: 'Lịch sử thanh toán của sinh viên đang đăng nhập', roles: STUDENT },
   'PUT /student/me/profile': { summary: 'Lưu hồ sơ của mình, liên kết với tài khoản', roles: STUDENT, conflict: 'Mã sinh viên đã liên kết tài khoản khác', request: studentExample },
   'POST /student/me/residence-request': { summary: 'Gửi đơn đăng ký ở', roles: STUDENT, conflict: 'Đã có đơn đang chờ duyệt hoặc đang có hợp đồng' },
 
@@ -109,7 +109,7 @@ const endpoints: Record<string, EndpointDoc> = {
     request: { reviewNote: 'Hết chỗ ở tòa đã chọn' },
   },
 
-  'GET /contract': { summary: 'Danh sách hợp đồng', roles: STAFF },
+  'GET /contract': { summary: 'Danh sách hợp đồng; hỗ trợ page, limit và q theo mã HĐ, mã/tên sinh viên, phòng, tòa; có page trả { items, total, page, limit }', roles: STAFF },
   'POST /contract': { summary: 'Tạo hợp đồng', roles: STAFF, request: contractExample },
   'GET /contract/{id}': { summary: 'Chi tiết hợp đồng', roles: STAFF },
   'PUT /contract/{id}': { summary: 'Sửa, gia hạn hoặc thanh lý hợp đồng', roles: STAFF, request: { is_active: false } },
@@ -137,7 +137,7 @@ const endpoints: Record<string, EndpointDoc> = {
   'GET /reports/summary': { summary: 'Báo cáo tổng hợp theo tháng: lấp đầy, đã thu, công nợ, hợp đồng sắp hết hạn', roles: STAFF },
 
   'GET /utility-bill': { summary: 'Danh sách hóa đơn. Có page thì trả { items, total, page, limit }, không có thì trả mảng', roles: STAFF },
-  'POST /utility-bill': { summary: 'Tạo hóa đơn điện nước', roles: STAFF, request: billExample },
+  'POST /utility-bill': { summary: 'Tạo hóa đơn điện nước; tổng tiền và đơn giá được hệ thống tính từ chỉ số cùng đơn giá hiện hành', roles: STAFF, request: billExample },
   'POST /utility-bill/general': { summary: 'Tạo khoản thu chung, gửi multipart/form-data, ảnh ở trường receiptImage', roles: STAFF, conflict: 'Phòng chưa có sinh viên đang ở' },
   'GET /utility-bill/{id}': { summary: 'Chi tiết hóa đơn', roles: STAFF },
   'GET /utility-bill/{id}/receipt': { summary: 'Tải ảnh biên lai; sinh viên chỉ xem được hóa đơn của mình', roles: ALL },

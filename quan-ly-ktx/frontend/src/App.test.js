@@ -215,10 +215,21 @@ test('shows a student their room and a newly confirmed invoice before it is near
   ].join('-');
   global.fetch.mockImplementation(async (url) => {
     if (url.endsWith('/auth/profile')) return jsonResponse({ id: 9, username: 'student09', role: 'STUDENT' });
+    if (url.endsWith('/me/payments')) return jsonResponse([{
+      payment_id: 3,
+      amount: '25000.00',
+      payment_date: '2026-11-06T09:30:00.000Z',
+      payment_type: 'Tiền phòng',
+      contract: {
+        contract_id: 12,
+        room: { id: 'room-9', roomNumber: '302', building: 'Tòa B' },
+      },
+    }]);
     if (url.endsWith('/student/me/portal')) return jsonResponse({
       linked: true,
       student: { sid: 'SV009', name: 'Sinh viên chín', email: 'sv9@example.com', phone: '0900000009' },
       room: { id: 'room-9', roomNumber: '302', building: 'Tòa B' },
+      contract: { contract_id: 12, start_date: '2026-09-01', end_date: '2027-06-30' },
       roommates: [{ sid: 'SV010', name: 'Sinh viên mười', phone: '0900000010' }],
       bills: [{ bill_id: 22, billType: 'UTILITY', month: 10, year: 2026, roomRentAmount: 50000, total_amount: 135000, dueDate: formattedDueDate, is_paid: false }],
     });
@@ -231,6 +242,9 @@ test('shows a student their room and a newly confirmed invoice before it is near
 
   expect(await screen.findByText('302')).toBeInTheDocument();
   expect(screen.getByText('Tòa B')).toBeInTheDocument();
+  expect(screen.getByText('HĐ-0012')).toBeInTheDocument();
+  expect(screen.getByText('01/09/2026')).toBeInTheDocument();
+  expect(screen.getByText('30/06/2027')).toBeInTheDocument();
   expect(screen.getByText('Sinh viên mười')).toBeInTheDocument();
   expect(screen.getByRole('link', { name: '0900000010' })).toHaveAttribute('href', 'tel:0900000010');
 
@@ -240,6 +254,15 @@ test('shows a student their room and a newly confirmed invoice before it is near
   expect(screen.getByText('85.000 ₫')).toBeInTheDocument();
   expect(screen.getByText('135.000 ₫')).toBeInTheDocument();
   expect(screen.getByText('Sắp đến hạn')).toBeInTheDocument();
+  expect(await screen.findByRole('heading', { name: 'Lịch sử thanh toán' })).toBeInTheDocument();
+  expect(screen.getByText('TT-0003')).toBeInTheDocument();
+  expect(screen.getByText('HĐ-0012')).toBeInTheDocument();
+  expect(screen.getAllByText('Tiền phòng')).toHaveLength(2);
+  expect(screen.getByText('25.000 ₫')).toBeInTheDocument();
+  expect(global.fetch).toHaveBeenCalledWith(
+    'http://localhost:5001/me/payments',
+    expect.anything(),
+  );
 });
 
 test('students can view a general charge and its optional receipt image', async () => {

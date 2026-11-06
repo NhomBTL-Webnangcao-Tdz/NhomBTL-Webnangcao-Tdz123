@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { meterReadingApi } from '../../api/meterReading.api';
+import { studentApi } from '../../api/student.api';
 import { ErrorState, LoadingState } from '../../components/common/AsyncState';
 import InvoiceReceiptLink from '../../components/common/InvoiceReceiptLink';
 import PageHeading from '../../components/common/PageHeading';
@@ -11,6 +12,10 @@ export default function BillsPage({ portal, loading, error, retry }) {
   const [reading, setReading] = useState(null);
   const [readingLoading, setReadingLoading] = useState(true);
   const [readingError, setReadingError] = useState('');
+  const [payments, setPayments] = useState([]);
+  const [paymentsLoading, setPaymentsLoading] = useState(true);
+  const [paymentsError, setPaymentsError] = useState('');
+  const [paymentsReloadKey, setPaymentsReloadKey] = useState(0);
 
   const refreshReading = () => {
     setReadingLoading(true);
@@ -21,9 +26,38 @@ export default function BillsPage({ portal, loading, error, retry }) {
       .finally(() => setReadingLoading(false));
   };
 
+  const retryPayments = () => setPaymentsReloadKey((key) => key + 1);
+
   useEffect(() => {
     refreshReading();
   }, []);
+
+  useEffect(() => {
+    let active = true;
+    let requestInFlight = false;
+    const loadPayments = async () => {
+      if (requestInFlight) return;
+      requestInFlight = true;
+      setPaymentsError('');
+      try {
+        const result = await studentApi.payments();
+        if (!Array.isArray(result)) throw new Error('API không trả về lịch sử thanh toán hợp lệ.');
+        if (active) setPayments(result);
+      } catch (requestError) {
+        if (active) setPaymentsError(requestError.message || 'Không thể tải lịch sử thanh toán.');
+      } finally {
+        requestInFlight = false;
+        if (active) setPaymentsLoading(false);
+      }
+    };
+
+    loadPayments();
+    const refreshInterval = window.setInterval(loadPayments, 15000);
+    return () => {
+      active = false;
+      window.clearInterval(refreshInterval);
+    };
+  }, [paymentsReloadKey]);
 
   return (
     <>
@@ -58,6 +92,28 @@ export default function BillsPage({ portal, loading, error, retry }) {
                     )) : <tr><td colSpan="9" className="student-table-empty">Chưa có hóa đơn sắp đến hạn.</td></tr>}</tbody>
                   </table>
                 </div>
+              </section>
+              <section className="panel student-bills-panel payment-history-panel">
+                <div className="student-panel-heading"><div><h3>Lịch sử thanh toán</h3><p>Các khoản đã ghi nhận theo hợp đồng của bạn.</p></div></div>
+                {paymentsLoading ? <LoadingState message="Đang tải lịch sử thanh toán..." />
+                  : paymentsError ? <ErrorState message={paymentsError} onRetry={retryPayments} />
+                    : (
+                      <div className="table-scroll">
+                        <table className="records-table student-payments-table">
+                          <thead><tr><th>Mã giao dịch</th><th>Ngày thanh toán</th><th>Khoản thu</th><th>Hợp đồng</th><th>Phòng</th><th>Số tiền</th></tr></thead>
+                          <tbody>{payments.length ? payments.map((payment) => (
+                            <tr key={payment.payment_id}>
+                              <td>TT-{String(payment.payment_id).padStart(4, '0')}</td>
+                              <td>{payment.payment_date ? new Date(payment.payment_date).toLocaleString('vi-VN') : '—'}</td>
+                              <td>{payment.payment_type}</td>
+                              <td>HĐ-{String(payment.contract.contract_id).padStart(4, '0')}</td>
+                              <td>{payment.contract.room ? `${payment.contract.room.building} · ${payment.contract.room.roomNumber}` : '—'}</td>
+                              <td><strong>{Number(payment.amount).toLocaleString('vi-VN')} ₫</strong></td>
+                            </tr>
+                          )) : <tr><td colSpan="6" className="student-table-empty">Chưa có giao dịch thanh toán.</td></tr>}</tbody>
+                        </table>
+                      </div>
+                    )}
               </section>
               <section className="panel meter-reading-panel">
                 <div className="student-panel-heading">

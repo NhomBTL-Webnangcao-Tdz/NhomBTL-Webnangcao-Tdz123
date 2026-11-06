@@ -146,7 +146,7 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 * [x] 4.5 (BE, Tân) API tài khoản cho ADMIN: `GET /users`, `POST /users` (tạo MANAGER), `PATCH /users/:id/role`. Log `docs/Phan 4/4.5-api-tai-khoan.md`
 * [x] 4.6 (BE, Tân kiểm) API đơn giá: `utility-bill/tariff`, `GET` và `PUT` cho ADMIN, MANAGER (Tân chốt 04/11). Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [x] 4.7 (BE, Tân kiểm) API phòng còn chỗ và danh sách SV đang ở trong phòng. Có `GET /rooms?status=available`. Có `GET /rooms/:id/residents`. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
-* [~] 4.8 (BE, Nam) Phân trang + tìm kiếm + lọc (`?page=&limit=&q=&building=&status=`) cho danh sách. Xong phòng, sinh viên, hóa đơn, log `docs/Phan 4/4.8-phan-trang-tim-kiem.md`. Còn: hợp đồng
+* [x] 4.8 (BE, Nam) Phân trang + tìm kiếm + lọc cho danh sách. `GET /contract` đã hỗ trợ `page`, `limit`, `q` theo mã hợp đồng, mã/tên sinh viên, phòng và tòa; log `docs/Phan 4/4.8-phan-trang-tim-kiem.md`
 * [x] 4.9 (BE, Sơn) Bảo mật: giới hạn số lần đăng nhập sai, header bảo mật (`helmet`) [Đề 3d, 4c]
 * [x] 4.10 (BE, Tân) Tài liệu hóa API theo hướng dẫn trên lớp (Postman): endpoint, quyền, ví dụ request/response, mã lỗi [Đề 4b]. Postman collection ở `docs/postman/`, Swagger ở `/api-docs`. Log `docs/Phan 4/4.10-swagger.md`, `docs/Phan 4/4.10-postman.md`
 * [ ] 4.11 (BE + FE, bỏ: giữ localStorage, rủi ro ghi trong luat-dao-duc.md) Phiên đăng nhập và cookie: giữ token ở `localStorage` hay chuyển sang cookie `httpOnly; Secure; SameSite` (khi đó cần chống CSRF); đăng xuất, hết hạn phiên; transaction DB cho thao tác ghi nhiều bảng [Đề 4c]
@@ -159,9 +159,9 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [x] 5.1 (BE, Nam) Tạo hợp đồng: kiểm tra phòng còn chỗ, 1 SV chỉ 1 HĐ `ACTIVE`, cập nhật sĩ số trong transaction (R1–R4)
 * [x] 5.2 (BE, Nam) Kết thúc / gia hạn hợp đồng, tự chuyển `EXPIRED` khi quá hạn. Đã có kết thúc, gia hạn, thanh lý. Chốt 06/11: không làm tác vụ tự chuyển khi quá hạn, ghi là hạn chế (`is_active` giữ nguyên, sĩ số phòng chỉ tính lại khi có thao tác ghi)
 * [x] 5.3 (BE, Nam) Chặn xóa cứng phòng/SV còn HĐ hoặc còn nợ, dùng xóa mềm (R5). Đã chặn xóa khi còn HĐ, còn nợ, còn lịch sử. Chốt 06/11: không làm xóa mềm, còn lịch sử thì chặn xóa
-* [~] 5.4 (BE, Nam) Hóa đơn điện nước: chỉ số cũ lấy từ tháng trước, mới ≥ cũ, server tự tính tiền, không trùng (phòng, tháng, năm), hóa đơn đã thu thì không sửa (R6–R9). Đã đủ ở luồng duyệt chỉ số; `POST /utility-bill` có R6, R9. Còn: API nhập tay vẫn nhận `total_amount` từ client (R8)
+* [x] 5.4 (BE, Nam) Hóa đơn điện nước: chỉ số mới ≥ cũ, server tự tính tiền theo đơn giá hiện hành và lưu snapshot đơn giá, không trùng kỳ, hóa đơn đã thu thì không sửa chỉ số (R6–R9). `POST /utility-bill` không nhận `total_amount` từ client; log `docs/Phan 5/5.9-5.10-unit-test.md`
 * [ ] 5.5 (BE, bỏ: thay bằng SV tự gửi chỉ số) Nhập chỉ số hàng loạt cả tòa: `GET /utility-bill/draft`, `POST /utility-bill/batch`
-* [~] 5.6 (BE, Nam) API cho sinh viên: `GET/PATCH /me/student`, `GET /me/contract`, `/me/bills`, `/me/payments` (R10). Đã có `GET /student/me/portal`, `PUT /student/me/profile`, kiểm trên API thật. Còn: `/me/payments`. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
+* [~] 5.6 (BE, Nam) API cho sinh viên (R10). Đã có `GET /student/me/portal` (gồm phòng, hợp đồng hiện hành, hóa đơn), `PUT /student/me/profile`, `GET /me/payments`; phần hợp đồng hiển thị tại 7.3. Log `docs/Phan 7/7.4-lich-su-thanh-toan.md`
 * [x] 5.7 (BE, Sơn) Đổi mật khẩu cho người dùng đang đăng nhập
 * [~] 5.8 (BE, Nam) Báo cáo `GET /reports/summary?month=&year=` (lấp đầy theo tòa, đã thu, công nợ, HĐ sắp hết hạn). Có API nhưng bỏ qua `month`, `year`. Còn: lọc tháng, lấp đầy theo tòa, HĐ sắp hết hạn
 * [x] 5.9 (BE, Nam) Unit test cho các quy tắc R1–R10. R1–R5, R6–R10 đã có test service/DTO, log `docs/Phan 5/5.9-5.10-unit-test.md`
@@ -187,14 +187,14 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 
 * [~] 7.1 (FE, Nam) Trang chủ sinh viên: đăng nhập xong đã chuyển tới `#my-profile` (commit `1c56b71`); còn trang tóm tắt phòng, hạn HĐ, hóa đơn chưa đóng
 * [~] 7.2 (FE, Tân) Hồ sơ cá nhân: hiển thị hồ sơ Student, sửa SĐT/email, đổi mật khẩu. Đã có `ProfilePage` + `PUT student/me/profile` (commit `fde890e`), chưa kiểm thử, cần đối chiếu đủ ý
-* [~] 7.3 (FE, Nam) Phòng của tôi: phòng, tòa, bạn cùng phòng, hợp đồng, ngày hết hạn. Đã có `RoomPage` (commit `fde890e`), chưa kiểm thử, cần đối chiếu đủ ý
-* [~] 7.4 (FE, Nam) Hóa đơn của tôi: tiền phòng + điện nước, đã/chưa đóng, lịch sử thanh toán. Đã có `student/BillsPage` (commit `fde890e`), chưa kiểm thử, cần đối chiếu đủ ý
+* [x] 7.3 (FE, Nam) Phòng của tôi: phòng, tòa, bạn cùng phòng, mã hợp đồng, ngày bắt đầu và ngày hết hạn. Hợp đồng lấy từ `GET /student/me/portal`; log `docs/Phan 7/7.3-hop-dong-phong-cua-toi.md`
+* [x] 7.4 (FE, Nam) Hóa đơn của tôi: tiền phòng + điện nước, khoản chưa thanh toán và lịch sử giao dịch theo hợp đồng. Log `docs/Phan 7/7.4-lich-su-thanh-toan.md`
 
 ## 8. Mở rộng (theo phạm vi chốt ở 2.9)
 
 * [x] 8.1 (BE + FE, Tân kiểm) Đơn đăng ký ở trực tuyến: SV chọn phòng còn chỗ → gửi đơn → cán bộ duyệt. Đã có API `residence-requests` + `ResidenceRequestsPage` (commit `fde890e`). Đã kiểm cả luồng trên API thật. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [ ] 8.2 (BE + FE, Sơn, nếu còn thời gian) Yêu cầu sửa chữa: SV gửi, cán bộ cập nhật trạng thái
-* [~] 8.3 (BE + FE, Nam) Thông báo trong hệ thống (HĐ sắp hết hạn, có hóa đơn mới). Đã có API `notifications/me` (commit `fde890e`). Đã kiểm thông báo duyệt đơn, hóa đơn, nhắc đóng tiền. Còn: thông báo HĐ sắp hết hạn. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
+* [x] 8.3 (BE + FE, Nam) Thông báo trong hệ thống (HĐ sắp hết hạn). Tác vụ khi khởi động và hằng ngày tạo nhắc cho hợp đồng còn hiệu lực, hết hạn trong 30 ngày; sinh viên nhận qua API/thanh thông báo sẵn có. Log `docs/Phan 8/8.3-thong-bao-hop-dong-sap-het-han.md`
 * [x] 8.4 (FE, Sơn) Xuất Excel/PDF danh sách, hóa đơn
 
 ## 9. Kiểm thử & triển khai

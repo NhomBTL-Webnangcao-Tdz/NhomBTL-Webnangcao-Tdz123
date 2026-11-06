@@ -3,7 +3,6 @@ import {
   IsBoolean,
   IsDateString,
   IsInt,
-  IsNumber,
   IsOptional,
   IsString,
   Length,
@@ -72,11 +71,6 @@ export class CreateUtilityBillDto {
   @Min(0)
   @Validate(NewIndexNotBelowOld, ['old_water_index'])
   new_water_index: number;
-
-  @IsNumber({ maxDecimalPlaces: 2 })
-  @Min(0)
-  @Max(99999999.99)
-  total_amount: number;
 
   @IsOptional()
   @IsBoolean()

@@ -6,6 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { DataSource, EntityManager, Repository } from 'typeorm';
+import { isPaged, likePattern, ListQueryDto, pageWindow, PagedResult } from '../../common/list-query.dto';
 import { Payment } from '../payment/payment.entity';
 import { Room } from '../room/room.entity';
 import { Student } from '../student/student.entity';
@@ -24,8 +25,23 @@ export class ContractService {
     private readonly dataSource: DataSource,
   ) {}
 
-  async findAll(): Promise<Contract[]> {
-    return this.contractRepository.find({ relations: { student: true, room: true } });
+  async findAll(query: ListQueryDto = {}): Promise<Contract[] | PagedResult<Contract>> {
+    const builder = this.contractRepository.createQueryBuilder('contract')
+      .leftJoinAndSelect('contract.student', 'student')
+      .leftJoinAndSelect('contract.room', 'room')
+      .orderBy('contract.start_date', 'DESC')
+      .addOrderBy('contract.contract_id', 'DESC');
+    if (query.q?.trim()) {
+      builder.andWhere(
+        '(CAST(contract.contract_id AS CHAR) LIKE :q OR student.sid LIKE :q OR student.sname LIKE :q OR room.roomNumber LIKE :q OR room.building LIKE :q)',
+        { q: likePattern(query.q) },
+      );
+    }
+
+    if (!isPaged(query)) return builder.getMany();
+    const { page, limit, skip } = pageWindow(query);
+    const [items, total] = await builder.skip(skip).take(limit).getManyAndCount();
+    return { items, total, page, limit };
   }
 
   async findOne(id: number): Promise<Contract> {

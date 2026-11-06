@@ -65,6 +65,35 @@
   font-weight: 650;
 }
 
+.student-room-contract {
+  border-top: 1px solid #edf0f2;
+  display: grid;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding-top: 14px;
+  width: 100%;
+}
+
+.student-room-contract div {
+  align-items: baseline;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.student-room-contract dt {
+  color: #849198;
+  font-size: 10px;
+}
+
+.student-room-contract dd {
+  color: #34434c;
+  font-size: 11px;
+  font-weight: 700;
+  margin: 0;
+  text-align: right;
+}
+
 .student-roommates {
   margin: 0;
   padding: 16px 0 0;
