@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { Role } from '../../../src/common/role.enum';
 import { AuthService } from '../../../src/auth/auth.service';
 import { UsersService } from '../../../src/auth/entities/users.service';
+import { LoginAttemptService } from '../../../src/auth/login-attempt.service';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -25,6 +26,7 @@ describe('AuthService', () => {
         AuthService,
         { provide: UsersService, useValue: usersService },
         { provide: JwtService, useValue: jwtService },
+        LoginAttemptService,
       ],
     }).compile();
     service = module.get(AuthService);
@@ -109,5 +111,60 @@ describe('AuthService', () => {
     });
     await expect(service.login({ username: 'student.one', password: 'wrong-password' }))
       .rejects.toBeInstanceOf(UnauthorizedException);
+  });
+
+  it('blocks login with 429 after 5 wrong passwords, even when the sixth is correct', async () => {
+    usersService.findByUsername.mockResolvedValue({
+      id: 1,
+      username: 'student.one',
+      password: await bcrypt.hash('right-password', 4),
+      role: Role.STUDENT,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    jwtService.signAsync.mockResolvedValue('token');
+
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      await expect(service.login({ username: 'student.one', password: 'wrong' }, '1.1.1.1'))
+        .rejects.toBeInstanceOf(UnauthorizedException);
+    }
+
+    await expect(service.login({ username: 'student.one', password: 'right-password' }, '1.1.1.1'))
+      .rejects.toMatchObject({ status: 429 });
+    await expect(service.login({ username: 'student.one', password: 'right-password' }, '2.2.2.2'))
+      .resolves.toMatchObject({ access_token: 'token' });
+  });
+
+  it('counts unknown usernames too so the lock does not reveal which accounts exist', async () => {
+    usersService.findByUsername.mockResolvedValue(null);
+
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      await expect(service.login({ username: 'ghost', password: 'wrong' }, '1.1.1.1'))
+        .rejects.toBeInstanceOf(UnauthorizedException);
+    }
+
+    await expect(service.login({ username: 'ghost', password: 'wrong' }, '1.1.1.1'))
+      .rejects.toMatchObject({ status: 429 });
+  });
+
+  it('forgets earlier failures after a correct password', async () => {
+    usersService.findByUsername.mockResolvedValue({
+      id: 1,
+      username: 'student.one',
+      password: await bcrypt.hash('right-password', 4),
+      role: Role.STUDENT,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    jwtService.signAsync.mockResolvedValue('token');
+
+    for (let round = 0; round < 2; round += 1) {
+      for (let attempt = 0; attempt < 4; attempt += 1) {
+        await expect(service.login({ username: 'student.one', password: 'wrong' }, '1.1.1.1'))
+          .rejects.toBeInstanceOf(UnauthorizedException);
+      }
+      await expect(service.login({ username: 'student.one', password: 'right-password' }, '1.1.1.1'))
+        .resolves.toMatchObject({ access_token: 'token' });
+    }
   });
 });

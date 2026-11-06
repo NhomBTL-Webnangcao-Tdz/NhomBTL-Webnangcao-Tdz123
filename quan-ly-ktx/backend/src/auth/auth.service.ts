@@ -2,6 +2,7 @@ import { Injectable, BadRequestException, UnauthorizedException, ConflictExcepti
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from './entities/users.service';
+import { LoginAttemptService } from './login-attempt.service';
 import { Role } from '../common/role.enum';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -22,6 +23,7 @@ export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly loginAttempts: LoginAttemptService,
   ) {}
 
   // =========================================================
@@ -84,13 +86,19 @@ export class AuthService {
   /**
    * Đăng nhập và trả về JWT access_token
    * @param loginDto - Chứa username và password từ request body
+   * @param ip - IP người gửi, cùng username tạo khóa đếm số lần sai
    * @returns Object chứa access_token JWT
    * @throws UnauthorizedException nếu credentials không đúng
+   * @throws HttpException 429 nếu sai quá 5 lần
    */
-  async login(loginDto: LoginDto) {
+  async login(loginDto: LoginDto, ip = '') {
     const username = loginDto.username.trim().toLowerCase();
     const { password } = loginDto;
+    const attemptKey = `login:${ip}:${username}`;
+    this.loginAttempts.assertAllowed(attemptKey);
+
     if (Buffer.byteLength(password, 'utf8') > 72) {
+      this.loginAttempts.recordFailure(attemptKey);
       throw new UnauthorizedException('Username hoặc mật khẩu không đúng.');
     }
 
@@ -98,6 +106,7 @@ export class AuthService {
     const user = await this.usersService.findByUsername(username);
     if (!user) {
       // Trả về lỗi chung, không tiết lộ username có tồn tại không (bảo mật)
+      this.loginAttempts.recordFailure(attemptKey);
       throw new UnauthorizedException('Username hoặc mật khẩu không đúng.');
     }
 
@@ -105,8 +114,10 @@ export class AuthService {
     // bcrypt.compare() tự động lấy salt từ hash để so sánh
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
+      this.loginAttempts.recordFailure(attemptKey);
       throw new UnauthorizedException('Username hoặc mật khẩu không đúng.');
     }
+    this.loginAttempts.reset(attemptKey);
 
     // Bước 3: Tạo JWT payload
     // Chỉ lưu thông tin cần thiết, KHÔNG lưu password vào payload

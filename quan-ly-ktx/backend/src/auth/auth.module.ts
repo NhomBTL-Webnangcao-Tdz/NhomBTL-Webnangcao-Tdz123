@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from '../database/database.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { LoginAttemptService } from './login-attempt.service';
 import { UsersController } from './users.controller';
 import { UsersService } from './entities/users.service';
 import { userProviders } from './entities/user.provider';
@@ -58,6 +59,7 @@ import { RolesGuard } from '../common/roles.guard';
     ...userProviders, // USER_REPOSITORY
     UsersService,
     AuthService,
+    LoginAttemptService,
     JwtAuthGuard,
     RolesGuard,
   ],

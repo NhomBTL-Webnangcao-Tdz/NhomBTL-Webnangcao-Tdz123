@@ -215,7 +215,10 @@ export function applyEndpointDocs(document: OpenAPIObject): string[] {
       }
       if (path.includes('{')) operation.responses['404'] = errorResponse('Không tìm thấy');
       if (doc?.conflict) operation.responses['409'] = errorResponse(doc.conflict);
-      if (key === 'POST /auth/login') operation.responses['401'] = errorResponse('Sai tên đăng nhập hoặc mật khẩu');
+      if (key === 'POST /auth/login') {
+        operation.responses['401'] = errorResponse('Sai tên đăng nhập hoặc mật khẩu');
+        operation.responses['429'] = errorResponse('Sai quá 5 lần, tạm khóa 15 phút');
+      }
     }
   }
   return undocumented;

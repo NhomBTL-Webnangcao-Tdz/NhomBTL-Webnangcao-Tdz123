@@ -7,6 +7,7 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
+  Ip,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -74,8 +75,8 @@ export class AuthController {
    */
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto);
+  async login(@Body() loginDto: LoginDto, @Ip() ip: string) {
+    return this.authService.login(loginDto, ip);
   }
 
   // =========================================================

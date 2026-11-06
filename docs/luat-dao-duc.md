@@ -45,6 +45,7 @@ Hóa đơn trong hệ thống là thông báo khoản thu nội bộ ký túc x�
 Đã có:
 
 * Mật khẩu băm bcrypt 12 vòng, giới hạn 72 byte; cột mật khẩu không trả ra API (`select: false`).
+* Sai mật khẩu 5 lần thì khóa 15 phút (429); backend có header bảo mật `helmet` (4.9).
 * JWT ký bằng `JWT_SECRET` bắt buộc dài ít nhất 32 ký tự, hết hạn sau 1 giờ.
 * `JwtAuthGuard` + `RolesGuard` trên mọi controller nghiệp vụ; sinh viên được xác định qua token, không qua tham số URL.
 * Đăng nhập sai trả cùng một thông báo, không lộ username có tồn tại hay không.
@@ -60,7 +61,6 @@ Hóa đơn trong hệ thống là thông báo khoản thu nội bộ ký túc x�
 Chưa có hoặc còn rủi ro (kèm mục checklist):
 
 * Token lưu ở `localStorage`, có thể bị đọc nếu trang dính XSS; cân nhắc cookie `httpOnly` (4.11).
-* Chưa giới hạn số lần đăng nhập sai, chưa có header bảo mật `helmet` (4.9).
 * Ảnh thật của người dùng đang được commit trong `backend/storage/` (1.11).
 * Mật khẩu Aiven cũ còn trong lịch sử git của repo công khai và chưa được đổi; bản nộp đã chuyển sang DB khác, service cũ cần đổi mật khẩu hoặc tắt (1.1).
 * Chưa có nhật ký thao tác (ai sửa, xóa gì).

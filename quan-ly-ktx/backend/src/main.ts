@@ -1,12 +1,27 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/all-exceptions.filter';
 import { validationExceptionFactory } from './common/validation-exception';
 import { setupSwagger } from './swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // Render đứng sau 1 proxy: lấy đúng IP người dùng để giới hạn đăng nhập sai theo IP.
+  app.set('trust proxy', 1);
+
+  // Header bảo mật [Đề 3d, 4c]. Swagger UI cần script, style nội tuyến nên nới CSP đúng 2 mục này.
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+      },
+    },
+  }));
 
   const configuredOrigins = (process.env.FRONTEND_URL || '')
     .split(',')

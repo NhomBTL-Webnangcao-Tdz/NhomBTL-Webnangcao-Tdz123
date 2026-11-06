@@ -147,7 +147,7 @@ Từ 01/11 Tân được nhóm ủy quyền làm cả backend và frontend, ch�
 * [x] 4.6 (BE, Tân kiểm) API đơn giá: `utility-bill/tariff`, `GET` và `PUT` cho ADMIN, MANAGER (Tân chốt 04/11). Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [x] 4.7 (BE, Tân kiểm) API phòng còn chỗ và danh sách SV đang ở trong phòng. Có `GET /rooms?status=available`. Có `GET /rooms/:id/residents`. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
 * [~] 4.8 (BE, Nam) Phân trang + tìm kiếm + lọc (`?page=&limit=&q=&building=&status=`) cho danh sách. Xong phòng, sinh viên, hóa đơn, log `docs/Phan 4/4.8-phan-trang-tim-kiem.md`. Còn: hợp đồng
-* [ ] 4.9 (BE, Sơn) Bảo mật: giới hạn số lần đăng nhập sai, header bảo mật (`helmet`) [Đề 3d, 4c]
+* [x] 4.9 (BE, Sơn) Bảo mật: giới hạn số lần đăng nhập sai, header bảo mật (`helmet`) [Đề 3d, 4c]
 * [x] 4.10 (BE, Tân) Tài liệu hóa API theo hướng dẫn trên lớp (Postman): endpoint, quyền, ví dụ request/response, mã lỗi [Đề 4b]. Postman collection ở `docs/postman/`, Swagger ở `/api-docs`. Log `docs/Phan 4/4.10-swagger.md`, `docs/Phan 4/4.10-postman.md`
 * [ ] 4.11 (BE + FE, bỏ: giữ localStorage, rủi ro ghi trong luat-dao-duc.md) Phiên đăng nhập và cookie: giữ token ở `localStorage` hay chuyển sang cookie `httpOnly; Secure; SameSite` (khi đó cần chống CSRF); đăng xuất, hết hạn phiên; transaction DB cho thao tác ghi nhiều bảng [Đề 4c]
 * [x] 4.12 (BE, Tân) Exception filter chung: trả lỗi cùng một dạng, không lộ stack trace hay câu SQL ra client [Đề 7a]. Log `docs/Phan 4/4.4-4.12-xu-ly-loi.md`

@@ -80,3 +80,4 @@ Danh sách (mục, nội dung, file log, trạng thái, commit):
 Việc ngoài checklist (không có log riêng):
 
 * Đơn giản hóa định dạng các file md (bỏ bảng, bỏ in đậm thừa, bỏ link markdown) để dễ đọc trong text editor và khi xem diff. Xong, `8514e3d`
+* 4.9: giới hạn đăng nhập sai, `helmet`. `Phan 4/4.9-bao-mat-dang-nhap.md`. Xong
