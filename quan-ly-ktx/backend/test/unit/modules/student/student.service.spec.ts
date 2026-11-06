@@ -3,6 +3,7 @@ import { User } from '../../../../src/auth/entities/user.entity';
 import { Contract } from '../../../../src/modules/contract/contract.entity';
 import { Notification } from '../../../../src/modules/notification/notification.entity';
 import { UtilityBill } from '../../../../src/modules/utility-bill/utility-bill.entity';
+import { UtilityBillShare } from '../../../../src/modules/utility-bill/utility-bill-share.entity';
 import { ResidenceRequest } from '../../../../src/modules/student/residence-request.entity';
 import { Student } from '../../../../src/modules/student/student.entity';
 import { StudentService } from '../../../../src/modules/student/student.service';
@@ -15,6 +16,7 @@ function makeQueryBuilder() {
   builder.getOne = jest.fn();
   builder.getRawMany = jest.fn();
   builder.getMany = jest.fn();
+  builder.getCount = jest.fn();
   return builder;
 }
 
@@ -248,5 +250,52 @@ describe('StudentService student portal', () => {
       '(share.id IS NULL OR (share.student_sid = :studentSid AND share.is_paid = :shareIsPaid))',
       { studentSid: 'SV008', shareIsPaid: false },
     );
+  });
+});
+
+describe('StudentService.remove (R5)', () => {
+  function createService(activeContractCount: number, unpaidShare: object | null) {
+    const student = { sid: 'SV008', sname: 'Sinh viên tám' };
+    const studentRepository = {
+      findOneBy: jest.fn().mockResolvedValue(student),
+      delete: jest.fn(),
+    };
+    const contractQuery = makeQueryBuilder();
+    contractQuery.getCount.mockResolvedValue(activeContractCount);
+    const contractRepository = { createQueryBuilder: jest.fn().mockReturnValue(contractQuery) };
+    const shareRepository = { findOne: jest.fn().mockResolvedValue(unpaidShare) };
+    const dataSource = {
+      getRepository: jest.fn((entity) => {
+        if (entity === Contract) return contractRepository;
+        if (entity === UtilityBillShare) return shareRepository;
+        return {} as Repository<UtilityBill>;
+      }),
+    } as unknown as DataSource;
+    const service = new StudentService(studentRepository as unknown as Repository<Student>, dataSource);
+    return { service, studentRepository, contractQuery, shareRepository };
+  }
+
+  it('chặn xóa sinh viên còn hợp đồng lưu trú đang hiệu lực', async () => {
+    const { service, studentRepository, contractQuery, shareRepository } = createService(1, null);
+
+    await expect(service.remove('SV008')).rejects.toThrow('Không thể xóa sinh viên còn hợp đồng lưu trú.');
+
+    expect(contractQuery.andWhere).toHaveBeenCalledWith(
+      'contract.is_active = :isActive',
+      { isActive: true },
+    );
+    expect(shareRepository.findOne).not.toHaveBeenCalled();
+    expect(studentRepository.delete).not.toHaveBeenCalled();
+  });
+
+  it('chặn xóa sinh viên còn hóa đơn chưa thanh toán', async () => {
+    const { service, studentRepository, shareRepository } = createService(0, { id: 21 });
+
+    await expect(service.remove('SV008')).rejects.toThrow('Không thể xóa sinh viên còn hóa đơn chưa thanh toán.');
+
+    expect(shareRepository.findOne).toHaveBeenCalledWith(expect.objectContaining({
+      where: { student: { sid: 'SV008' }, isPaid: false },
+    }));
+    expect(studentRepository.delete).not.toHaveBeenCalled();
   });
 });

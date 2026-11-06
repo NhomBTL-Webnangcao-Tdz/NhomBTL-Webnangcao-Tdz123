@@ -14,7 +14,7 @@ describe('ContractService.create', () => {
     deposit_amount: 1000000,
   };
 
-  function createService(overlapCounts: number[]) {
+  function createService(overlapCounts: number[], overrides: Partial<Contract> = {}) {
     const countQueue = [...overlapCounts];
     const contractQuery = {
       innerJoin: jest.fn().mockReturnThis(),
@@ -22,13 +22,14 @@ describe('ContractService.create', () => {
       andWhere: jest.fn().mockReturnThis(),
       getCount: jest.fn(() => Promise.resolve(countQueue.shift() ?? 0)),
     };
-    const contract = {
+    const contract: Partial<Contract> = {
       contract_id: 12,
       student: { sid: 'S001' },
       room: { id: 'R01' },
       start_date: new Date('2026-09-01T00:00:00.000Z'),
       end_date: new Date('2027-06-30T00:00:00.000Z'),
       is_active: true,
+      ...overrides,
     };
     const contractRepository = {
       createQueryBuilder: jest.fn(() => contractQuery),
@@ -58,7 +59,7 @@ describe('ContractService.create', () => {
       dataSource as unknown as DataSource,
     );
 
-    return { service, contractRepository, roomRepository, contractQuery };
+    return { service, contractRepository, roomRepository, contractQuery, contract, dataSource };
   }
 
   it('creates a contract and refreshes the room occupancy inside the transaction', async () => {
@@ -85,5 +86,63 @@ describe('ContractService.create', () => {
     await expect(service.create(contractInput)).rejects.toThrow('Sinh viên đã có hợp đồng');
     expect(contractQuery.getCount).toHaveBeenCalledTimes(1);
     expect(contractRepository.save).not.toHaveBeenCalled();
+  });
+
+  it('renews an active contract and refreshes occupancy in the transaction', async () => {
+    const { service, contractRepository, roomRepository, dataSource, contract } = createService([0, 1, 1]);
+
+    await service.renew(12, { end_date: '2027-07-30' });
+
+    expect(dataSource.transaction).toHaveBeenCalledTimes(1);
+    expect(contract.end_date).toEqual(new Date('2027-07-30T00:00:00.000Z'));
+    expect(contractRepository.save).toHaveBeenCalledWith(contract);
+    expect(roomRepository.update).toHaveBeenCalledWith('R01', { currentOccupancy: 1 });
+  });
+
+  it('rejects a renewal that does not extend the contract', async () => {
+    const { service, contractRepository, roomRepository } = createService([]);
+
+    await expect(service.renew(12, { end_date: '2027-06-30' }))
+      .rejects.toThrow('Ngày kết thúc mới phải sau ngày kết thúc hiện tại.');
+    expect(contractRepository.save).not.toHaveBeenCalled();
+    expect(roomRepository.update).not.toHaveBeenCalled();
+  });
+
+  it('terminates an active contract and recalculates room occupancy transactionally', async () => {
+    const { service, contractRepository, roomRepository, dataSource, contract } = createService([0]);
+
+    await service.terminate(12);
+
+    expect(dataSource.transaction).toHaveBeenCalledTimes(1);
+    expect(contract.is_active).toBe(false);
+    expect(contractRepository.save).toHaveBeenCalledWith(contract);
+    expect(roomRepository.update).toHaveBeenCalledWith('R01', { currentOccupancy: 0 });
+  });
+
+  it('rejects terminating a contract that has already ended', async () => {
+    const { service, contractRepository, roomRepository } = createService([], { is_active: false });
+
+    await expect(service.terminate(12)).rejects.toThrow('Hợp đồng đã kết thúc.');
+    expect(contractRepository.save).not.toHaveBeenCalled();
+    expect(roomRepository.update).not.toHaveBeenCalled();
+  });
+
+  it('liquidates an active contract, records the end date, and refreshes occupancy', async () => {
+    const today = new Date();
+    const todayString = [
+      today.getFullYear(),
+      String(today.getMonth() + 1).padStart(2, '0'),
+      String(today.getDate()).padStart(2, '0'),
+    ].join('-');
+    const { service, contractRepository, roomRepository, contract } = createService([0], {
+      start_date: new Date('2000-01-01T00:00:00.000Z'),
+    });
+
+    await service.liquidate(12, { end_date: todayString });
+
+    expect(contract.end_date).toEqual(new Date(`${todayString}T00:00:00.000Z`));
+    expect(contract.is_active).toBe(false);
+    expect(contractRepository.save).toHaveBeenCalledWith(contract);
+    expect(roomRepository.update).toHaveBeenCalledWith('R01', { currentOccupancy: 0 });
   });
 });

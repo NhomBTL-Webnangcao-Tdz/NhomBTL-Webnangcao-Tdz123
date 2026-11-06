@@ -86,6 +86,12 @@ export class RoomService {
   // Sửa
   async update(id: string, updateRoomDto: UpdateRoomDto): Promise<Room> {
     const room = await this.findOne(id);
+    if (
+      updateRoomDto.maxCapacity !== undefined
+      && updateRoomDto.maxCapacity < room.currentOccupancy
+    ) {
+      throw new ConflictException('Sức chứa không thể thấp hơn sĩ số hiện tại.');
+    }
     Object.assign(room, updateRoomDto);
     return await this.roomRepository.save(room);
   }

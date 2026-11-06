@@ -1,5 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
+import { Contract } from '../../src/modules/contract/contract.entity';
 import { Room } from '../../src/modules/room/room.entity';
 import { RoomService } from '../../src/modules/room/room.service';
 
@@ -65,5 +66,55 @@ describe('US-14 RoomService', () => {
     const { service, repository } = setup(null);
     await expect(service.update('x', { price: 200 })).rejects.toBeInstanceOf(NotFoundException);
     expect(repository.save).not.toHaveBeenCalled();
+  });
+
+  it('chặn giảm sức chứa xuống dưới sĩ số hiện tại (R1)', async () => {
+    const room = {
+      id: 'r1',
+      roomNumber: 'A101',
+      maxCapacity: 4,
+      currentOccupancy: 3,
+    };
+    const { service, repository } = setup(room);
+
+    await expect(service.update('r1', { maxCapacity: 2 }))
+      .rejects.toThrow('Sức chứa không thể thấp hơn sĩ số hiện tại.');
+    expect(repository.save).not.toHaveBeenCalled();
+  });
+
+  it('chặn xóa phòng còn hợp đồng lưu trú đang hiệu lực (R5)', async () => {
+    const room = { id: 'r1', roomNumber: 'A101', price: 100 } as Room;
+    const roomRepository = {
+      findOne: jest.fn().mockResolvedValue(room),
+      remove: jest.fn(),
+    };
+    const contractQuery = {
+      innerJoin: jest.fn().mockReturnThis(),
+      where: jest.fn().mockReturnThis(),
+      andWhere: jest.fn().mockReturnThis(),
+      getCount: jest.fn().mockResolvedValue(1),
+    };
+    const contractRepository = {
+      createQueryBuilder: jest.fn().mockReturnValue(contractQuery),
+      count: jest.fn().mockResolvedValue(0),
+    };
+    const billRepository = { count: jest.fn().mockResolvedValue(0) };
+    const dataSource = {
+      getRepository: jest.fn((entity) => (
+        entity === Contract ? contractRepository : billRepository
+      )),
+    };
+    const service = new RoomService(
+      roomRepository as unknown as Repository<Room>,
+      dataSource as unknown as DataSource,
+    );
+
+    await expect(service.remove('r1')).rejects.toThrow('Không thể xóa phòng còn hợp đồng lưu trú.');
+
+    expect(contractQuery.andWhere).toHaveBeenCalledWith(
+      'contract.is_active = :isActive',
+      { isActive: true },
+    );
+    expect(roomRepository.remove).not.toHaveBeenCalled();
   });
 });
