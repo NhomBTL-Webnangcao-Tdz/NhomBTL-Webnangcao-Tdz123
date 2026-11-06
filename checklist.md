@@ -162,7 +162,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 * [~] 5.4 (BE, Nam) Hóa đơn điện nước: chỉ số cũ lấy từ tháng trước, mới ≥ cũ, server tự tính tiền, không trùng (phòng, tháng, năm), hóa đơn đã thu thì không sửa (R6–R9). Đã đủ ở luồng duyệt chỉ số; `POST /utility-bill` có R6, R9. Còn: API nhập tay vẫn nhận `total_amount` từ client (R8)
 * [ ] 5.5 (BE, bỏ: thay bằng SV tự gửi chỉ số) Nhập chỉ số hàng loạt cả tòa: `GET /utility-bill/draft`, `POST /utility-bill/batch`
 * [~] 5.6 (BE, Nam) API cho sinh viên: `GET/PATCH /me/student`, `GET /me/contract`, `/me/bills`, `/me/payments` (R10). Đã có `GET /student/me/portal`, `PUT /student/me/profile`, kiểm trên API thật. Còn: `/me/payments`. Log `docs/Phan 8/8.1-kiem-luong-nghiep-vu.md`
-* [ ] 5.7 (BE, Sơn) Đổi mật khẩu cho người dùng đang đăng nhập
+* [x] 5.7 (BE, Sơn) Đổi mật khẩu cho người dùng đang đăng nhập
 * [~] 5.8 (BE, Nam) Báo cáo `GET /reports/summary?month=&year=` (lấp đầy theo tòa, đã thu, công nợ, HĐ sắp hết hạn). Có API nhưng bỏ qua `month`, `year`. Còn: lọc tháng, lấp đầy theo tòa, HĐ sắp hết hạn
 * [~] 5.9 (BE, Nam) Unit test cho các quy tắc R1–R10. Có R3, R6–R10, log `docs/Phan 5/5.9-5.10-unit-test.md`. Còn: R1, R2, R4, R5
 * [~] 5.10 (BE, Nam) Unit test cho mọi user story của 2.12, đặt trong thư mục `test/` [Đề 7b]. Toàn bộ spec đã ở `test/unit/`, log `docs/Phan 5/5.9-5.10-unit-test.md`. Còn: US-05, 16, 21, 24

@@ -6,6 +6,7 @@ import { LoginAttemptService } from './login-attempt.service';
 import { Role } from '../common/role.enum';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 /**
  * AuthService - Service xử lý logic Authentication & Authorization
@@ -14,6 +15,7 @@ import { LoginDto } from './dto/login.dto';
  *  - register() : Đăng ký tài khoản mới, băm mật khẩu, lưu DB
  *  - login()    : Xác thực credentials, tạo và trả về JWT token
  *  - getProfile(): Lấy thông tin user từ JWT payload
+ *  - changePassword(): Đổi mật khẩu của user đang đăng nhập
  */
 @Injectable()
 export class AuthService {
@@ -139,6 +141,43 @@ export class AuthService {
         role: user.role,
       },
     };
+  }
+
+  // =========================================================
+  // PATCH /auth/password (protected by JwtAuthGuard)
+  // =========================================================
+  /**
+   * Đổi mật khẩu của user đang đăng nhập
+   * Sai mật khẩu hiện tại trả 400, không dùng 401 vì 401 làm frontend đăng xuất.
+   * @throws BadRequestException nếu mật khẩu hiện tại sai hoặc mật khẩu mới không hợp lệ
+   * @throws HttpException 429 nếu nhập sai mật khẩu hiện tại quá 5 lần
+   */
+  async changePassword(userPayload: { sub: number; username: string }, details: ChangePasswordDto) {
+    const { currentPassword, newPassword } = details;
+    const attemptKey = `password:${userPayload.sub}`;
+    this.loginAttempts.assertAllowed(attemptKey);
+
+    if (Buffer.byteLength(newPassword, 'utf8') > 72) {
+      throw new BadRequestException('Mật khẩu không được vượt quá 72 byte UTF-8.');
+    }
+    if (newPassword === currentPassword) {
+      throw new BadRequestException('Mật khẩu mới phải khác mật khẩu hiện tại.');
+    }
+
+    const user = await this.usersService.findByUsername(userPayload.username);
+    if (!user || user.id !== userPayload.sub) {
+      throw new UnauthorizedException('Người dùng không tồn tại.');
+    }
+
+    const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+    if (!isPasswordValid) {
+      this.loginAttempts.recordFailure(attemptKey);
+      throw new BadRequestException('Mật khẩu hiện tại không đúng.');
+    }
+
+    this.loginAttempts.reset(attemptKey);
+    await this.usersService.updatePassword(user.id, await bcrypt.hash(newPassword, this.SALT_ROUNDS));
+    return { message: 'Đã đổi mật khẩu.' };
   }
 
   // =========================================================

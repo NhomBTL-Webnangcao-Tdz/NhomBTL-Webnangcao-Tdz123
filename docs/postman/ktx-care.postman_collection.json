@@ -158,6 +158,38 @@
               ]
             }
           }
+        },
+        {
+          "name": "Đổi mật khẩu của tài khoản đang đăng nhập",
+          "request": {
+            "method": "PATCH",
+            "description": "Quyền: Mọi tài khoản đã đăng nhập",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "password"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"<mật khẩu hiện tại>\",\n  \"newPassword\": \"mat-khau-moi\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
         }
       ]
     },

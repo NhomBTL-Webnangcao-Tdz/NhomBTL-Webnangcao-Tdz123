@@ -38,6 +38,14 @@ Trạng thái: bản nháp (checklist 9.7, Đề 7d). Cập nhật ngày 05/11/2
 * TL-11 TL: MANAGER mở `#students` (trang đã bỏ) → "Không tìm thấy trang", không gọi API sinh viên. FE
 * TC-08 TC: ADMIN thấy link Cài đặt. FE
 
+## US-05 Đổi mật khẩu
+
+* TC-39 TC: nhập đúng mật khẩu hiện tại, mật khẩu mới hợp lệ → lưu mã băm mới, mật khẩu cũ không đăng nhập được. BE, Edge
+* TL-24 TL: sai mật khẩu hiện tại → 400, báo trong hộp, không bị đăng xuất. BE, FE, Edge
+* TL-25 TL: mật khẩu mới dưới 6 ký tự, trùng mật khẩu cũ, nhập lại không khớp → báo lỗi, không đổi. BE, FE
+* TL-26 TL: sai mật khẩu hiện tại 5 lần → lần sau trả 429. BE, API
+* TL-27 TL: không có token → 401. API
+
 ## US-06 Thông báo
 
 * TC-09 TC: có thông báo chưa đọc → chấm đỏ; đánh dấu đã đọc → chấm mất. FE
@@ -115,6 +123,6 @@ Lỗi tìm được khi kiểm thử và đã sửa:
 
 ## Chưa có ca kiểm thử
 
-* US-05 đổi mật khẩu, US-21 thanh toán: chưa có chức năng.
+* US-21 thanh toán: chưa có chức năng.
 * US-16 đủ nghiệp vụ hợp đồng: chờ checklist 5.1, 5.2.
 * E2E đủ luồng và kiểm thử trên bản triển khai với 3 vai trò: chờ checklist 9.3, 9.5.

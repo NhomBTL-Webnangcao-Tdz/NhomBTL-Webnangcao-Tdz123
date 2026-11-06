@@ -2,6 +2,7 @@ import {
   Controller,
   Post,
   Get,
+  Patch,
   Body,
   Request,
   UseGuards,
@@ -13,6 +14,7 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { Request as ExpressRequest } from 'express';
 
 interface AuthenticatedProfileRequest extends ExpressRequest {
@@ -26,6 +28,7 @@ interface AuthenticatedProfileRequest extends ExpressRequest {
  *  POST /auth/register  →  Đăng ký người dùng mới
  *  POST /auth/login     →  Đăng nhập, nhận JWT token
  *  GET  /auth/profile   →  Xem profile (yêu cầu Bearer Token)
+ *  PATCH /auth/password →  Đổi mật khẩu (yêu cầu Bearer Token)
  */
 @Controller('auth')
 export class AuthController {
@@ -105,5 +108,29 @@ export class AuthController {
     // req.user được gắn vào bởi JwtAuthGuard sau khi giải mã token thành công
     // req.user = { sub: userId, username: '...', role: '...', iat: ..., exp: ... }
     return this.authService.getProfile(req.user);
+  }
+
+  // =========================================================
+  // PATCH /auth/password  →  PROTECTED ROUTE
+  // =========================================================
+  /**
+   * Đổi mật khẩu của người dùng đang đăng nhập
+   *
+   * Request Body:
+   * {
+   *   "currentPassword": "matkhaucu",
+   *   "newPassword": "matkhaumoi"
+   * }
+   *
+   * Response 200: { "message": "Đã đổi mật khẩu." }
+   */
+  @Patch('password')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async changePassword(
+    @Request() req: AuthenticatedProfileRequest,
+    @Body() details: ChangePasswordDto,
+  ) {
+    return this.authService.changePassword(req.user, details);
   }
 }

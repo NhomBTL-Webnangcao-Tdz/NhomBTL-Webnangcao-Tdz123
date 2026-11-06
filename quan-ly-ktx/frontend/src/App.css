@@ -1413,8 +1413,7 @@ button:disabled {
     padding: 0 17px;
   }
 
-  .account-copy,
-  .button-quiet {
+  .account-copy {
     display: none;
   }
 
@@ -1432,6 +1431,16 @@ button:disabled {
 }
 
 @media (max-width: 520px) {
+
+  /* Nhường chỗ cho nút Đổi mật khẩu, Đăng xuất; tên trang đã có ở tiêu đề trang. */
+  .top-header .breadcrumb {
+    display: none;
+  }
+
+  .top-header .header-actions {
+    justify-content: flex-end;
+    width: 100%;
+  }
 
   .page-heading {
     align-items: flex-start;

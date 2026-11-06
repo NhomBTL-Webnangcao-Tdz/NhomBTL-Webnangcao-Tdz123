@@ -26,7 +26,7 @@ Quy ước:
 * US-04 Là người dùng, tôi muốn đăng xuất để người khác dùng chung máy không vào được tài khoản của tôi.
   Màn hình: header. Code: có. Đăng xuất xóa token ở trình duyệt; token cũ tự hết hạn sau 1 giờ, server không thu hồi sớm.
 * US-05 Là người dùng, tôi muốn đổi mật khẩu để giữ an toàn cho tài khoản.
-  Code: chưa (checklist 5.7).
+  API `PATCH /auth/password`. Màn hình: header (nút Đổi mật khẩu). Code: có.
 * US-06 Là người dùng, tôi muốn nhận thông báo trong hệ thống khi có việc liên quan đến mình để không bỏ lỡ hóa đơn hay kết quả duyệt đơn.
   API `GET /notifications/me`, `PATCH /notifications/me/:id/read`. Màn hình: header (chấm báo chưa đọc). Code: có.
 
@@ -79,9 +79,9 @@ Quy ước:
 
 ## Tổng hợp
 
-* Có code: 21 câu (US-01 đến 04, 06 đến 15, 17 đến 20, 22 đến 24)
+* Có code: 22 câu (US-01 đến 15, 17 đến 20, 22 đến 24)
 * Một phần: 1 câu (US-16)
-* Chưa: 2 câu (US-05, 21)
+* Chưa: 1 câu (US-21)
 
 Nếu nhóm chỉ giữ các câu đã có code, vẫn đủ 12 câu.
 

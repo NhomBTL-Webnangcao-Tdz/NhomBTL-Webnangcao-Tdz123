@@ -56,6 +56,12 @@ const endpoints: Record<string, EndpointDoc> = {
     response: { message: 'Đăng nhập thành công!', access_token: '<JWT>' },
   },
   'GET /auth/profile': { summary: 'Xem tài khoản đang đăng nhập', roles: LOGGED_IN },
+  'PATCH /auth/password': {
+    summary: 'Đổi mật khẩu của tài khoản đang đăng nhập',
+    roles: LOGGED_IN,
+    request: { currentPassword: '<mật khẩu hiện tại>', newPassword: 'mat-khau-moi' },
+    response: { message: 'Đã đổi mật khẩu.' },
+  },
 
   'GET /users': { summary: 'Danh sách tài khoản', roles: ADMIN },
   'POST /users': {

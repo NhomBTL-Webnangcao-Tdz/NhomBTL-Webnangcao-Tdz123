@@ -10,4 +10,8 @@ export const authApi = {
     body: JSON.stringify(credentials),
   }),
   profile: () => apiRequest('/auth/profile'),
+  changePassword: (details) => apiRequest('/auth/password', {
+    method: 'PATCH',
+    body: JSON.stringify(details),
+  }),
 };

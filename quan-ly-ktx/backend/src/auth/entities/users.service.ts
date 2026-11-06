@@ -34,6 +34,11 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { id } });
   }
 
+  /** Lưu mật khẩu đã băm mới */
+  async updatePassword(id: number, hashedPassword: string): Promise<void> {
+    await this.usersRepository.update({ id }, { password: hashedPassword });
+  }
+
   /** Danh sách tài khoản cho ADMIN, không gồm mật khẩu */
   async findAll(): Promise<User[]> {
     return this.usersRepository.find({

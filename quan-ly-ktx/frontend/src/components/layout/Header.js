@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { notificationApi } from '../../api/notification.api';
+import ChangePasswordForm from '../common/ChangePasswordForm';
+import Modal from '../common/Modal';
 import { useAuth } from '../../context/AuthContext';
 
 const pageNames = {
@@ -23,6 +25,7 @@ export default function Header({ currentPage }) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [notificationError, setNotificationError] = useState('');
+  const [passwordOpen, setPasswordOpen] = useState(false);
   const unreadCount = notifications.filter((notification) => !notification.isRead).length;
   const userId = user?.id;
   const userRole = user?.role;
@@ -108,6 +111,7 @@ export default function Header({ currentPage }) {
           <div className="account-menu">
             <span className="account-avatar">{(user.username || user.role || 'A').slice(0, 1).toUpperCase()}</span>
             <span className="account-copy"><strong>{user.username}</strong><small>{user.role}</small></span>
+            <Button variant="outline-secondary" className="button button-quiet" onClick={() => setPasswordOpen(true)}>Đổi mật khẩu</Button>
             <Button variant="outline-secondary" className="button button-quiet" onClick={logout}>Đăng xuất</Button>
           </div>
         ) : (
@@ -117,6 +121,7 @@ export default function Header({ currentPage }) {
           </>
         )}
       </div>
+      {passwordOpen && <Modal title="Đổi mật khẩu" onClose={() => setPasswordOpen(false)}><ChangePasswordForm onDone={() => setPasswordOpen(false)} /></Modal>}
     </header>
   );
 }
