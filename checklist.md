@@ -200,7 +200,7 @@ Quy tắc R1–R10 xem `docs/ke-hoach.md` mục 4.
 ## 9. Kiểm thử & triển khai
 
 * [x] 9.1 (FE) Rà soát toàn bộ giao diện: 375px, không lỗi console, không render HTML từ dữ liệu người dùng, không `console.log` dữ liệu người dùng [Đề 3d, 7e]. Thử với backend giả; sửa tải ảnh bỏ qua 401, thông báo tiếng Nga, tắt source map. Log `docs/Phan 9/9.1-ra-soat-frontend.md`
-* [ ] 9.2 (FE, Sơn) Test component chính ở frontend (form, guard, xử lý phiên) [Đề 7e]
+* [x] 9.2 (FE, Sơn) Test component chính ở frontend (form, guard, xử lý phiên) [Đề 7e]
 * [x] 9.3 (Nhóm, Tân) E2E luồng chính: lập HĐ → nhập điện nước → SV xem hóa đơn → ghi thanh toán → kết thúc HĐ [Đề 7c]. Đạt 32/33 ca trên DB thử, ca còn lại thuộc 5.8. Log `docs/Phan 9/9.3-gop-main-e2e.md`. Chạy lại trên bản online ở 9.5
 * [x] 9.4 (Nhóm, Tân) Triển khai backend, frontend, DB lên cloud; cấu hình CORS + biến môi trường. Đã có `render.yaml`, hướng dẫn `docs/trien-khai.md`, log `docs/Phan 9/9.4-chuan-bi-trien-khai.md`. Link: `https://ktx-care.vercel.app`, `https://ktx-care-api.onrender.com`
 * [~] 9.5 (Nhóm, Tân) Kiểm thử trên bản đã triển khai với 3 tài khoản demo. Đã kiểm không đăng nhập: API có code Nam, 401, 404, CORS. Log `docs/Phan 9/9.5-kiem-thu-ban-online.md`. Còn: Tân thử lại 3 vai trò sau khi Nam, Sơn push
