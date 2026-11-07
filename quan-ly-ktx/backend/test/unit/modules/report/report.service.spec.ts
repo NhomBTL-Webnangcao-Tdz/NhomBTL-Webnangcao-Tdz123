@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { ReportService } from './report.service';
+import { ReportService } from '../../../../src/modules/report/report.service';
 
 function makeQueryBuilder(result: {
   count?: number;

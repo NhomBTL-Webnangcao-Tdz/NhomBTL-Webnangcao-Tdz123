@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import './RoomPicker.css';
 
 function getRoomFloor(roomNumber) {
-  const number = String(roomNumber);
-  return number.length >= 3 && /^\d+$/.test(number) ? Number(number.slice(0, -2)) : null;
+  // Số phòng có thể có tiền tố tòa (A101, B102). Tầng là phần số trước 2 chữ số cuối.
+  const digits = String(roomNumber || '').match(/\d+/)?.[0];
+  return digits && digits.length >= 3 ? Number(digits.slice(0, -2)) : 1;
 }
 
 function getRoomAvailability(room) {
